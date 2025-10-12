@@ -110,9 +110,6 @@ Format: `list tutors`  |  `list students`
 
 Examples: `list tutors` , `list students`
 
-
-
-
 ### Finding student/tutor: `find`
 
 Returns a filtered list of students/tutors from our database based on one condition (subject, level, or price).
@@ -157,6 +154,28 @@ Examples:
 * `match t1 s1` matches the 1st tutor in the tutor list with the 1st student in the student list.
 * `unmatch t1` unmatch the 1st tutor in the tutor list with its corresponding matched student.
   ![result for 'match t1 s1'](images/MatchResult.png)
+
+### Sorting student/tutor list : `sort`
+Sorts the displayed list of students or tutors based on specified field(s) in ascending order.
+
+Format: `sort <tutors/students> <criteria>/`
+* `<tutors/students>`: specifies whether to sort the tutor or the student list.
+* `<criteria>`: must be one of the following keywords:
+  * `p/`: price range
+  * `l/`: level
+* Criteria is applied in the order specified. For example, `p/ l/` sorts by price first, then by level for entries with the same price
+
+Examples:
+* `sort tutors p/`: sorts all tutors by price only
+* `sort students l/`: sorts all students by level only
+* `sort tutors p/ l/`: sorts all tutors by price, then level
+* `sort students l/ p/`: sorts all students by level, then price
+  ![result for 'sort tutors p/'](images/SortResult.png)
+
+Notes:
+* The sort command filters the list to show only tutors or students (based on your selection) before sorting 
+* For price ranges (e.g., `10-20`), sorting uses the lower bound value (`10`)
+* For level ranges (e.g., `3-5`), sorting uses the lower bound value (`3`)
 
 ### Deleting a person : `delete`
 
@@ -222,10 +241,11 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** |`add <tutor/student> <name> /hp <phone> /a <address> /s <subject> /l <level_or_range> /p <min-max>` e.g., `add student aaron /hp 91234567 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30`
+**Add** |`add <tutor/student> <name> hp/ <phone> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add student aaron hp/ 91234567 a/ Blk 30 Geylang Street 29, #06-40 s/ mathematics l/ 3 p/ 20-30`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Find** | `find <tutor/student> /<field> <filter_value>`<br> e.g., `find student /s chinese`
+**Find** | `find <tutor/student> <field>/ <filter_value>`<br> e.g., `find student s/ chinese`
 **Match/Unmatch** | `match t<INDEX> s<INDEX> / unmatch t<INDEX> or s<INDEX> `<br> e.g., `match t1 s2 / unmatch t1`
 **List** | `list students / list tutors`
+**Sort** | `sort <students/tutors> <filter_criteria>`<br> e.g., `sort students p/`
 **Help** | `help`

@@ -68,7 +68,7 @@ public class PersonCard extends UiPart<Region> {
         Person mp = person.getMatchedPerson();
         if (mp != null) {
             String mpName = mp.getName().fullName;
-            String mpId = " #" + mp.getPersonId();
+            String mpId = "#" + mp.getPersonId();
             matched.setText("matched: " + mpName + " (" + mpId + ")");
         } else {
             matched.setText("matched: —");

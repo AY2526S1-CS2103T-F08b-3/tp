@@ -16,6 +16,7 @@ import seedu.address.model.tag.Tag;
  */
 public class Person {
 
+    private static int index = 1;
     // Identity fields
     private final Name name;
     private final Phone phone;
@@ -31,7 +32,7 @@ public class Person {
     private Level level;
     private Price price;
     private boolean isMatched = false;
-
+    private int personId;
     /**
      * Every field must be present and not null.
      */
@@ -51,8 +52,31 @@ public class Person {
         } else {
             this.isStudent = true;
         }
+        this.personId = index;
+        index++;
     }
 
+    /**
+     * Non-incrementing constructor for edits/storage: preserves existing ID and does NOT bump static index.
+     */
+    public Person(String role, Name name, Phone phone, Email email, Address address,
+            Subject subject, Level level, Price price, Set<Tag> tags, int existingPersonId) {
+        requireAllNonNull(name, phone, email, address, subject, level, price, tags);
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.subject = subject;
+        this.level = level;
+        this.price = price;
+        this.tags.addAll(tags);
+        if (role.equals("tutor")) {
+            this.isTutor = true;
+        } else {
+            this.isStudent = true;
+        }
+        this.personId = existingPersonId; // no index++
+    }
     public String getRole() {
         if (isTutor) {
             return "tutor";
@@ -96,6 +120,10 @@ public class Person {
         return price;
     }
 
+    public int getPersonId() {
+        return personId;
+    }
+
     public void setPrice(Price price) {
         this.price = price;
     }
@@ -124,6 +152,16 @@ public class Person {
         this.matchedPerson = person;
     }
 
+    public Person getMatchedPerson() {
+        return matchedPerson;
+    }
+    public void setPersonId(int id) {
+        this.personId = id;
+    }
+
+    public static void setIndex(int newIndex) {
+        index = newIndex;
+    }
     /**
      * Attempts to match this person with another person.
      * Rules:

@@ -55,6 +55,11 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(newData);
 
         setPersons(newData.getPersonList());
+
+        int maxId = newData.getPersonList().stream()
+             .mapToInt(Person::getPersonId)
+             .max().orElse(0);
+        Person.setIndex(maxId + 1);
     }
 
     //// person-level operations

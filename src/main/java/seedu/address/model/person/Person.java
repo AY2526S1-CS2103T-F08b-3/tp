@@ -8,7 +8,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -36,8 +35,8 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(String role, Name name, Phone phone, Email email, Address address, Subject subject, Level level, Price price,
-                   Set<Tag> tags) {
+    public Person(String role, Name name, Phone phone, Email email, Address address,
+                  Subject subject, Level level, Price price, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, subject, level, price, tags);
         this.name = name;
         this.phone = phone;

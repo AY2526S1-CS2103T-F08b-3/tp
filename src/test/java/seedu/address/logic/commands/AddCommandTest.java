@@ -141,6 +141,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public String getRepeatedEntry(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void deletePerson(Person target) {
             throw new AssertionError("This method should not be called.");
         }
@@ -177,6 +182,12 @@ public class AddCommandTest {
             requireNonNull(person);
             return this.person.isSamePerson(person);
         }
+
+        @Override
+        public String getRepeatedEntry(Person person) {
+            requireNonNull(person);
+            return this.person.getName().toString();
+        }
     }
 
     /**
@@ -189,6 +200,17 @@ public class AddCommandTest {
         public boolean hasPerson(Person person) {
             requireNonNull(person);
             return personsAdded.stream().anyMatch(person::isSamePerson);
+        }
+
+        @Override
+        public String getRepeatedEntry(Person person) {
+            requireNonNull(person);
+            for (Person p : personsAdded) {
+                if (p.isSamePerson(person)) {
+                    return p.getName().toString();
+                }
+            }
+            return "";
         }
 
         @Override

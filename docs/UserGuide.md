@@ -15,15 +15,15 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+2. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+3. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar connected.jar` command to run the application.<br>
+4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar connected.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
     * `list tutors` : Lists all tutors (use `list students` to list all students).
@@ -38,7 +38,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+6. Refer to the [Features](#features) below for details of each command.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -50,21 +50,21 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 
 * Parameters & placeholders  
   Commands follow the below exactly:  
-  • Add: `add <tutor/student> <name> /hp <phone> /a <address> /s <subject> /l <level> /p <min-max>`  
+  • Add: `add r/<tutor/student> n/<name> hp/ <phone> a/ <address> s/ <subject> l/ <level> p/ <min-max>`  
   • List: `list <tutors/students>`  
-  • Find: `find <tutor/student> /<field> <filter_value>` where `<field>` is `/s`, `/l`, or `/p`  
+  • Find: `find <tutor/student> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`  
   • Match/Unmatch: `match t<INDEX> s<INDEX>` · `unmatch t<INDEX>` or `unmatch s<INDEX>` 
 
 
 * Accepted values (validators)  
   • `<tutor/student>`: exactly “tutor” or “student” (case-insensitive).  
   • `<tutors/students>` for `list`: exactly “tutors” or “students” (case-insensitive).  
-  • `/hp` phone: 8 digits (spaces allowed), digits only.  
-  • `/s` subject: one of {english, mathematics, chinese, science} (case-insensitive).  
-  • `/l` level:  
+  • `hp/` phone: 8 digits (spaces allowed), digits only.  
+  • `s/` subject: one of {english, mathematics, chinese, science} (case-insensitive).  
+  • `l/` level:  
   – Student: single integer 1–6  
   – Tutor: single integer 1–6 **or** range `x-y` (1–6 to 1–6; no internal spaces)  
-  • `/p` price range: `min-max`, integers 1–200.  
+  • `p/` price range: `min-max`, integers 1–200.  
 
 
 * Typed indices  
@@ -95,13 +95,13 @@ Format: `help`
 
 Adds a **tutor** or **student** with subject, level, and price range.
 
-Format: `add <tutor/student> <name> /hp <phone> /a <address> /s <subject> /l <level> /p <min-max>`
+Format: `add r/<tutor/student> n/<name> hp/<phone> a/<address> s/<subject> l/<level> p/<min-max>`
 
 
 
 Examples:
-* `add student aaron /hp 91234567 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30`  
-* `add tutor Mary /hp 98765432 /a Tampines Ave 1 /s english /l 2-5 /p 25-40`
+* `add r/student n/aaron hp/91234567 a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`  
+* `add r/tutor n/Mary hp/98765432 a/Tampines Ave 1 s/english l/2-5 p/25-40`
 ### Listing all persons : `list`
 
 Shows a list of either tutors or students.
@@ -182,6 +182,20 @@ Examples:
 * `unmatch t1` unmatch the 1st tutor in the tutor list with its corresponding matched student.
   ![result for 'match t1 s1'](images/MatchResult.png)
 
+### Recommending persons : `recommend`
+Recommends a list of tutors to a student or a list of students to a tutor based on subject, level, and/or price range.
+
+Format: `recommend INDEX [s/] [l/] [p/]`
+* Recommends tutors to a student or students to a tutor at the specified `INDEX`.
+* The index refers to the index number shown in the current displayed list.
+* The index **must be a positive integer** 1, 2, 3, …​
+* Optional fields can be specified to filter the recommendations based on subject (`s/`), level (`l/`), and/or price range (`p/`).
+* If no optional fields are specified, recommendations will be based on all three criteria (subject, level, and price range).
+
+Examples:
+* `recommend 1` recommends all tutors/students that matches the subject, level, and price range of person at index 1
+* `recommend 2 s/` recommends all tutors/students that matches the subject of person at index 2
+
 ### Deleting a person : `delete`
 
 Deletes a person (student/tutor) from the ConnectEd database
@@ -251,5 +265,6 @@ Action | Format, Examples
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Find** | `find <tutor/student> /<field> <filter_value>`<br> e.g., `find student /s chinese`
 **Match/Unmatch** | `match t<INDEX> s<INDEX> / unmatch t<INDEX> or s<INDEX> `<br> e.g., `match t1 s2 / unmatch t1`
+**Recommend** | `recommend INDEX [s/] [l/] [p/]`<br> e.g., `recommend 1 s/ l/`
 **List** | `list students / list tutors`
 **Help** | `help`

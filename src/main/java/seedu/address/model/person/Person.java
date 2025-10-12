@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -35,8 +36,8 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(String role, Name name, Phone phone, Email email, Address address,
-                  Subject subject, Level level, Price price, Set<Tag> tags) {
+    public Person(String role, Name name, Phone phone, Email email, Address address, Subject subject, Level level, Price price,
+                   Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, subject, level, price, tags);
         this.name = name;
         this.phone = phone;
@@ -48,7 +49,7 @@ public class Person {
         this.tags.addAll(tags);
         if (role.equals("tutor")) {
             this.isTutor = true;
-        } else {
+        } else if (role.equals("student")) {
             this.isStudent = true;
         }
     }
@@ -56,8 +57,9 @@ public class Person {
     public String getRole() {
         if (isTutor) {
             return "tutor";
+        } else {
+            return "student";
         }
-        return "student";
     }
 
     public Name getName() {
@@ -126,6 +128,7 @@ public class Person {
 
     /**
      * Attempts to match this person with another person.
+     *
      * Rules:
      * - If either person is already matched, do nothing.
      * - A match is created only if one is a tutor and the other is a student.
@@ -154,7 +157,7 @@ public class Person {
     }
 
     /**
-     * Returns true if both persons have the same name.
+     * Returns true if both persons have the same name, phone, or email.
      * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
@@ -163,7 +166,36 @@ public class Person {
         }
 
         return otherPerson != null
+                && (otherPerson.getName().equals(getName())
+                || otherPerson.getPhone().equals(getPhone())
+                || otherPerson.getEmail().equals(getEmail()));
+    }
+
+    /**
+     * Returns true if both persons have the same name.
+     */
+    public boolean isSameName(Person otherPerson) {
+
+        return otherPerson != null
                 && otherPerson.getName().equals(getName());
+    }
+
+    /**
+     * Returns true if both persons have the same phone number.
+     */
+    public boolean isSamePhone(Person otherPerson) {
+
+        return otherPerson != null
+                && otherPerson.getPhone().equals(getPhone());
+    }
+
+    /**
+     * Returns true if both persons have the same number.
+     */
+    public boolean isSameEmail(Person otherPerson) {
+
+        return otherPerson != null
+                && otherPerson.getEmail().equals(getEmail());
     }
 
     /**

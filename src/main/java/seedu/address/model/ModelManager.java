@@ -94,6 +94,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public String getRepeatedEntry(Person person) {
+        return addressBook.getRepeatedEntry(person);
+    }
+
+    @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
     }

@@ -154,8 +154,8 @@ Format:
 * The id **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `match 1 2` matches the tutor with id of #1 with the student with the id of #2 in the list.
-* `unmatch 1` unmatch the tutor with id of #1 with its corresponding matched student.
+* `match 1 2` For a tutor with Id 1 and student with Id 2, matches the tutor with the student in the list.
+* `unmatch 1` For a tutor with Id 1, unmatch the tutor with its corresponding matched student.
   ![result for 'match t1 s1'](images/MatchResult.png)
 
 ### Deleting a person : `delete`

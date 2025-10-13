@@ -53,10 +53,6 @@ public class UnmatchCommand extends Command {
         updatedTarget.setMatchedPerson(null);
         updatedMatched.setMatchedPerson(null);
 
-        // If you also track a boolean flag, clear it
-        // updatedTarget.setMatched(false);
-        // updatedMatched.setMatched(false);
-
         // Persist both sides
         model.setPerson(target, updatedTarget);
         model.setPerson(matched, updatedMatched);

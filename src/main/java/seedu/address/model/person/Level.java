@@ -62,6 +62,15 @@ public class Level {
     }
 
     /**
+     * Checks if this level range intersects with another level range.
+     * @param other The other level object.
+     * @return True if the ranges overlap at all.
+     */
+    public boolean intersects(Level other) {
+        return this.start <= other.end && this.end >= other.start;
+    }
+
+    /**
      * Check if the Level value is a single value (mainly for students).
      * @return true if it is a single value.
      */
@@ -88,4 +97,3 @@ public class Level {
         return start == other.start && end == other.end;
     }
 }
-

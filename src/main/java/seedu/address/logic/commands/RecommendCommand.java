@@ -90,6 +90,7 @@ public class RecommendCommand extends Command {
         if (filterSubject && userSubject != null) {
             predicate = predicate.and(new MatchingSubjectPredicate(List.of(userSubject)));
         }
+
         if (user.isStudent()) {
             if (filterLevel && userLevel != null) {
                 predicate = predicate.and(new MatchingLevelPredicate(List.of(userLevel)));
@@ -101,8 +102,11 @@ public class RecommendCommand extends Command {
             model.updateFilteredPersonList(tutorPredicate);
             return new CommandResult(MESSAGE_SUCCESS_TUTORS);
         } else if (user.isTutor()) {
+            if (filterLevel && userLevel != null) {
+                predicate = predicate.and(p -> p.getLevel() != null && userLevel.intersects(p.getLevel()));
+            }
             if (filterPrice && userPrice != null) {
-                predicate = predicate.and(new MatchingPricePredicate(List.of(userPrice)));
+                predicate = predicate.and(p -> p.getPrice() != null && userPrice.overlaps(p.getPrice()));
             }
             Predicate<Person> studentPredicate = p -> p.isStudent() && predicate.test(p);
             model.updateFilteredPersonList(studentPredicate);

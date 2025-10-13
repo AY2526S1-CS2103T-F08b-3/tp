@@ -110,10 +110,7 @@ Format: `list tutors`  |  `list students`
 
 Examples: `list tutors` , `list students`
 
-
-
-
-### Finding student/tutor: `find`
+### Finding *tutors* or *students*: `find`
 
 Returns a filtered list of students/tutors from our database based on one condition (subject, level, or price).
 
@@ -170,16 +167,16 @@ Link one Tutor and one Student so both are flagged as Matched and hold a bidirec
 Supports undoing via unmatch.
 
 Format:
-* Match: `match t<INDEX> s<INDEX>`
-* Unmatch: `unmatch t<INDEX> or s<INDEX>`
-* Matches the student and tutor at the specified `INDEX`.
-* Unmatch the student/tutor at the specified `INDEX` and its corresponding matched tutor/student.
-* The index refers to the index number shown in the displayed tutor/student list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* Match: `match <ID of Person 1> <ID of Person 2> (Order of student teacher does not matter)`
+* Unmatch: `unmatch <ID of Person> (Only require index of one of the matched pair)`
+* Matches the student and tutor at the specified `ID`.
+* Unmatch the student/tutor at the specified `ID` and its corresponding matched tutor/student.
+* The id refers to the unique id number associated with each student and tutor.
+* The id **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `match t1 s1` matches the 1st tutor in the tutor list with the 1st student in the student list.
-* `unmatch t1` unmatch the 1st tutor in the tutor list with its corresponding matched student.
+* `match 1 2` For a tutor with Id 1 and student with Id 2, matches the tutor with the student in the list.
+* `unmatch 1` For a tutor with Id 1, unmatch the tutor with its corresponding matched student.
   ![result for 'match t1 s1'](images/MatchResult.png)
 
 ### Recommending persons : `recommend`
@@ -195,6 +192,27 @@ Format: `recommend INDEX [s/] [l/] [p/]`
 Examples:
 * `recommend 1` recommends all tutors/students that matches the subject, level, and price range of person at index 1
 * `recommend 2 s/` recommends all tutors/students that matches the subject of person at index 2
+### Sorting student/tutor list : `sort`
+Sorts the displayed list of students or tutors based on specified field(s) in ascending order.
+
+Format: `sort <tutors/students> <criteria>/`
+* `<tutors/students>`: specifies whether to sort the tutor or the student list.
+* `<criteria>`: must be one of the following keywords:
+  * `p/`: price range
+  * `l/`: level
+* Criteria is applied in the order specified. For example, `p/ l/` sorts by price first, then by level for entries with the same price
+
+Examples:
+* `sort tutors p/`: sorts all tutors by price only
+* `sort students l/`: sorts all students by level only
+* `sort tutors p/ l/`: sorts all tutors by price, then level
+* `sort students l/ p/`: sorts all students by level, then price
+  ![result for 'sort tutors p/'](images/SortResult.png)
+
+Notes:
+* The sort command filters the list to show only tutors or students (based on your selection) before sorting 
+* For price ranges (e.g., `10-20`), sorting uses the lower bound value (`10`)
+* For level ranges (e.g., `3-5`), sorting uses the lower bound value (`3`)
 
 ### Deleting a person : `delete`
 
@@ -260,11 +278,12 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** |`add <tutor/student> <name> /hp <phone> /a <address> /s <subject> /l <level_or_range> /p <min-max>` e.g., `add student aaron /hp 91234567 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30`
+**Add** |`add r/<tutor/student> <name> hp/ <phone> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add student aaron hp/ 91234567 a/ Blk 30 Geylang Street 29, #06-40 s/ mathematics l/ 3 p/ 20-30`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Find** | `find <tutor/student> /<field> <filter_value>`<br> e.g., `find student /s chinese`
-**Match/Unmatch** | `match t<INDEX> s<INDEX> / unmatch t<INDEX> or s<INDEX> `<br> e.g., `match t1 s2 / unmatch t1`
-**Recommend** | `recommend INDEX [s/] [l/] [p/]`<br> e.g., `recommend 1 s/ l/`
+**Find** | `find <tutor/student> <field>/ <filter_value>`<br> e.g., `find student s/ chinese`
+**Match/Unmatch** | `match <Id> <Id> / unmatch <Id> `<br> e.g., `match 1 2 / unmatch 1`
 **List** | `list students / list tutors`
+**Sort** | `sort <students/tutors> <filter_criteria>`<br> e.g., `sort students p/`
+**Recommend** | `recommend INDEX [s/] [l/] [p/]`<br> e.g., `recommend 1 s/ l/`
 **Help** | `help`

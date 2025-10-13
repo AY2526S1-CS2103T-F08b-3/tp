@@ -16,6 +16,7 @@ import seedu.address.model.tag.Tag;
  */
 public class Person {
 
+    private static int index = 1;
     // Identity fields
     private final Name name;
     private final Phone phone;
@@ -31,7 +32,7 @@ public class Person {
     private Level level;
     private Price price;
     private boolean isMatched = false;
-
+    private int personId = -1;
     /**
      * Every field must be present and not null.
      */
@@ -48,16 +49,38 @@ public class Person {
         this.tags.addAll(tags);
         if (role.equals("tutor")) {
             this.isTutor = true;
-        } else {
+        } else if (role.equals("student")) {
             this.isStudent = true;
         }
     }
 
+    /**
+     * Non-incrementing constructor for edits/storage: preserves existing ID and does NOT bump static index.
+     */
+    public Person(String role, Name name, Phone phone, Email email, Address address,
+            Subject subject, Level level, Price price, Set<Tag> tags, int existingPersonId) {
+        requireAllNonNull(name, phone, email, address, subject, level, price, tags);
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.subject = subject;
+        this.level = level;
+        this.price = price;
+        this.tags.addAll(tags);
+        if (role.equals("tutor")) {
+            this.isTutor = true;
+        } else {
+            this.isStudent = true;
+        }
+        this.personId = existingPersonId; // no index++
+    }
     public String getRole() {
         if (isTutor) {
             return "tutor";
+        } else {
+            return "student";
         }
-        return "student";
     }
 
     public Name getName() {
@@ -96,6 +119,10 @@ public class Person {
         return price;
     }
 
+    public int getPersonId() {
+        return personId;
+    }
+
     public void setPrice(Price price) {
         this.price = price;
     }
@@ -124,8 +151,22 @@ public class Person {
         this.matchedPerson = person;
     }
 
+    public Person getMatchedPerson() {
+        return matchedPerson;
+    }
+    public void setPersonId(int id) {
+        this.personId = id;
+    }
+
+    public static void setIndex(int newIndex) {
+        index = newIndex;
+    }
+    public static int allocateNextId() {
+        return index++;
+    }
     /**
      * Attempts to match this person with another person.
+     *
      * Rules:
      * - If either person is already matched, do nothing.
      * - A match is created only if one is a tutor and the other is a student.
@@ -154,7 +195,7 @@ public class Person {
     }
 
     /**
-     * Returns true if both persons have the same name.
+     * Returns true if both persons have the same name, phone, or email.
      * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
@@ -163,7 +204,36 @@ public class Person {
         }
 
         return otherPerson != null
+                && (otherPerson.getName().equals(getName())
+                || otherPerson.getPhone().equals(getPhone())
+                || otherPerson.getEmail().equals(getEmail()));
+    }
+
+    /**
+     * Returns true if both persons have the same name.
+     */
+    public boolean isSameName(Person otherPerson) {
+
+        return otherPerson != null
                 && otherPerson.getName().equals(getName());
+    }
+
+    /**
+     * Returns true if both persons have the same phone number.
+     */
+    public boolean isSamePhone(Person otherPerson) {
+
+        return otherPerson != null
+                && otherPerson.getPhone().equals(getPhone());
+    }
+
+    /**
+     * Returns true if both persons have the same number.
+     */
+    public boolean isSameEmail(Person otherPerson) {
+
+        return otherPerson != null
+                && otherPerson.getEmail().equals(getEmail());
     }
 
     /**

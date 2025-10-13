@@ -46,6 +46,12 @@ public class PersonCard extends UiPart<Region> {
     private Label level;
     @FXML
     private Label price;
+    @FXML
+    private Label personId;
+    @FXML
+    private Label matched;
+    @FXML
+    private FlowPane rolePane;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -55,6 +61,18 @@ public class PersonCard extends UiPart<Region> {
         this.person = person;
         id.setText(displayedIndex + ". ");
         name.setText(person.getName().fullName);
+        personId.setText("id: #" + person.getPersonId());
+        Label roleChip = new Label(person.getRole()); // "tutor" or "student"
+        roleChip.getStyleClass().addAll("tag", "role-" + person.getRole().toLowerCase());
+        rolePane.getChildren().setAll(roleChip); // ensure only the role chip is here
+        Person mp = person.getMatchedPerson();
+        if (mp != null) {
+            String mpName = mp.getName().fullName;
+            String mpId = "#" + mp.getPersonId();
+            matched.setText("matched: " + mpName + " (" + mpId + ")");
+        } else {
+            matched.setText("matched: —");
+        }
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);

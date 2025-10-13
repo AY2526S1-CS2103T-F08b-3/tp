@@ -10,6 +10,7 @@ import static seedu.address.testutil.TypicalPersons.ALICE;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
@@ -141,6 +142,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public String getRepeatedEntry(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void deletePerson(Person target) {
             throw new AssertionError("This method should not be called.");
         }
@@ -157,6 +163,11 @@ public class AddCommandTest {
 
         @Override
         public void updateFilteredPersonList(Predicate<Person> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void sortPersons(List<String> sortFields) {
             throw new AssertionError("This method should not be called.");
         }
     }
@@ -177,6 +188,12 @@ public class AddCommandTest {
             requireNonNull(person);
             return this.person.isSamePerson(person);
         }
+
+        @Override
+        public String getRepeatedEntry(Person person) {
+            requireNonNull(person);
+            return this.person.getName().toString();
+        }
     }
 
     /**
@@ -189,6 +206,17 @@ public class AddCommandTest {
         public boolean hasPerson(Person person) {
             requireNonNull(person);
             return personsAdded.stream().anyMatch(person::isSamePerson);
+        }
+
+        @Override
+        public String getRepeatedEntry(Person person) {
+            requireNonNull(person);
+            for (Person p : personsAdded) {
+                if (p.isSamePerson(person)) {
+                    return p.getName().toString();
+                }
+            }
+            return "";
         }
 
         @Override

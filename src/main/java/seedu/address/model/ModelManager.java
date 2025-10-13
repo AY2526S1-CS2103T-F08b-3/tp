@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -94,6 +96,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public String getRepeatedEntry(Person person) {
+        return addressBook.getRepeatedEntry(person);
+    }
+
+    @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
     }
@@ -143,6 +150,59 @@ public class ModelManager implements Model {
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
                 && filteredPersons.equals(otherModelManager.filteredPersons);
+    }
+
+    @Override
+    public void sortPersons(List<String> sortedBy) {
+        requireNonNull(sortedBy);
+
+        Comparator<Person> comparator = null;
+
+        for (int i = 0; i < sortedBy.size(); i++) {
+            Comparator<Person> criteriaComparator = getComparatorForCriteria(sortedBy.get(i));
+
+            if (comparator == null) {
+                comparator = criteriaComparator;
+            } else {
+                comparator = comparator.thenComparing(criteriaComparator);
+            }
+        }
+
+        if (comparator == null) {
+            return;
+        }
+
+        addressBook.sortPersons(comparator);
+    }
+
+    /**
+     * Creates a comparator for Person objects based on price or level.
+     * Uses the first number for hyphenated values.
+     *
+     * @param criteria "p/" for price, "l/" for level comparison
+     * @return Comparator for sorting Persons
+     */
+    public Comparator<Person> getComparatorForCriteria(String criteria) {
+        switch(criteria) {
+        case "p/":
+            return Comparator.comparingInt(person -> {
+                String priceString = person.getPrice().toString();
+                if (priceString.contains("-")) {
+                    return Integer.parseInt(priceString.split("-")[0]);
+                }
+                return Integer.parseInt(priceString);
+            });
+        case "l/":
+            return Comparator.comparingInt(person -> {
+                String levelString = person.getLevel().toString();
+                if (levelString.contains("-")) {
+                    return Integer.parseInt(levelString.split("-")[0]);
+                }
+                return Integer.parseInt(levelString);
+            });
+        default:
+            return (p1, p2) -> 0;
+        }
     }
 
 }

@@ -341,9 +341,9 @@ Use case ends.
 **Extensions**
 
 * 2a. One or more fields are missing or in the wrong format.
- 
+
     ConnectEd shows an error message indicating the invalid/missing field(s).
- 
+
     Use case resumes at step 1 with corrected input.
 
 * 2b. A duplicate person (same role, same name, same phone) exists.

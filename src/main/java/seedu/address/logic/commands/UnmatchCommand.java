@@ -68,12 +68,24 @@ public class UnmatchCommand extends Command {
         return new CommandResult(msg);
     }
 
+    /**
+     * Retrieves the Person object associated with the id.
+     * @param model {@code Model} which the command should operate on.
+     * @param id personId of the person trying to retrieve.
+     * @return Person object associated with the given id.
+     */
     private Optional<Person> getById(Model model, int id) {
         return model.getAddressBook().getPersonList().stream()
                 .filter(p -> p.getPersonId() == id)
                 .findFirst();
     }
 
+    /**
+     * Creates a clone of the given {@code Person} object while preserving its unique identifier.
+     * This method reuses the same {@code personId} from the original code parameters.
+     * @param p The {@code Person} to clone.
+     * @return A new {@code Person} instance with identical field values and the same {@code personId}.
+     */
     private Person clonePreservingId(Person p) {
         return new Person(
                 p.getRole(),

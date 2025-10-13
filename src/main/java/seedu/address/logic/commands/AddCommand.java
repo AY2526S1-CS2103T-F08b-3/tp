@@ -68,7 +68,9 @@ public class AddCommand extends Command {
             throw new CommandException(
                     String.format(MESSAGE_DUPLICATE_PERSON, model.getRepeatedEntry(toAdd), toAdd.getSubject()));
         }
-
+        if (toAdd.getPersonId() == -1) {
+            toAdd.setPersonId(Person.allocateNextId());
+        }
         model.addPerson(toAdd);
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }

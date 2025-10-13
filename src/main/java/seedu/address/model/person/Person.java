@@ -32,7 +32,7 @@ public class Person {
     private Level level;
     private Price price;
     private boolean isMatched = false;
-    private int personId;
+    private int personId = -1;
     /**
      * Every field must be present and not null.
      */
@@ -52,8 +52,6 @@ public class Person {
         } else if (role.equals("student")) {
             this.isStudent = true;
         }
-        this.personId = index;
-        index++;
     }
 
     /**
@@ -162,6 +160,9 @@ public class Person {
 
     public static void setIndex(int newIndex) {
         index = newIndex;
+    }
+    public static int allocateNextId() {
+        return index++;
     }
     /**
      * Attempts to match this person with another person.

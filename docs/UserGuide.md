@@ -146,16 +146,16 @@ Link one Tutor and one Student so both are flagged as Matched and hold a bidirec
 Supports undoing via unmatch.
 
 Format:
-* Match: `match t<INDEX> s<INDEX>`
-* Unmatch: `unmatch t<INDEX> or s<INDEX>`
-* Matches the student and tutor at the specified `INDEX`.
-* Unmatch the student/tutor at the specified `INDEX` and its corresponding matched tutor/student.
-* The index refers to the index number shown in the displayed tutor/student list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* Match: `match <ID of Person 1> <ID of Person 2> (Order of student teacher does not matter)`
+* Unmatch: `unmatch <ID of Person> (Only require index of one of the matched pair)`
+* Matches the student and tutor at the specified `ID`.
+* Unmatch the student/tutor at the specified `ID` and its corresponding matched tutor/student.
+* The id refers to the unique id number associated with each student and tutor.
+* The id **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `match t1 s1` matches the 1st tutor in the tutor list with the 1st student in the student list.
-* `unmatch t1` unmatch the 1st tutor in the tutor list with its corresponding matched student.
+* `match 1 2` matches the tutor with id of #1 with the student with the id of #2 in the list.
+* `unmatch 1` unmatch the tutor with id of #1 with its corresponding matched student.
   ![result for 'match t1 s1'](images/MatchResult.png)
 
 ### Deleting a person : `delete`
@@ -226,6 +226,6 @@ Action | Format, Examples
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Find** | `find <tutor/student> /<field> <filter_value>`<br> e.g., `find student /s chinese`
-**Match/Unmatch** | `match t<INDEX> s<INDEX> / unmatch t<INDEX> or s<INDEX> `<br> e.g., `match t1 s2 / unmatch t1`
+**Match/Unmatch** | `match <Id> <Id> / unmatch <Id> `<br> e.g., `match 1 2 / unmatch 1`
 **List** | `list students / list tutors`
 **Help** | `help`

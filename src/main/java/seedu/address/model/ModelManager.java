@@ -170,6 +170,13 @@ public class ModelManager implements Model {
         addressBook.sortPersons(comparator);
     }
 
+    /**
+     * Creates a comparator for Person objects based on price or level.
+     * Uses the first number for hyphenated values.
+     *
+     * @param criteria "p/" for price, "l/" for level comparison
+     * @return Comparator for sorting Persons
+     */
     public Comparator<Person> getComparatorForCriteria(String criteria) {
         switch(criteria) {
         case "p/":

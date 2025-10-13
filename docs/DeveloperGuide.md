@@ -307,20 +307,20 @@ The following sequence diagram shows how a find operation goes through the `Logi
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
-| -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *` | coordinator | **add** a *student* with phone, address, subject, level, price | track requests consistently |
-| `* * *` | coordinator | **add** a *tutor* with phone, address, subject, level(s), price | track offers consistently |
-| `* * *` | coordinator | **list tutors** / **list students** | focus on one category at a time |
-| `* * *` | coordinator | **find** tutors/students by **/s** subject | shortlist relevant candidates |
-| `* * *` | coordinator | **find** by **/l** level | ensure level suitability |
-| `* * *` | coordinator | **find** by **/p** price range | respect budget constraints |
-| `* * *` | coordinator | **match** `t<INDEX>` with `s<INDEX>` | record a pairing |
-| `* * *` | coordinator | **unmatch** a tutor or student | correct/undo a pairing |
-| `* * *` | coordinator | **delete** `t<INDEX>` or `s<INDEX>` | remove obsolete entries |
-| `* *` | coordinator | see clear error messages for invalid inputs | fix mistakes quickly |
-| `* *` | coordinator | prevent duplicates by name+phone+type | keep data clean |
-| `*` | coordinator | edit entries after creation | adjust details without re-adding |
+| Priority | As a …​                                    | I want to …​                                                    | So that I can…​                  |
+| -------- | ------------------------------------------ |-----------------------------------------------------------------|----------------------------------|
+| `* * *` | coordinator | **add** a *student* with phone, address, subject, level, price  | track requests consistently      |
+| `* * *` | coordinator | **add** a *tutor* with phone, address, subject, level(s), price | track offers consistently        |
+| `* * *` | coordinator | **list** all *tutors* or *students*                            | focus on one role at a time      |
+| `* * *` | coordinator | **find** tutors/students by **/s** subject                      | shortlist relevant candidates    |
+| `* * *` | coordinator | **find** by **/l** level                                        | ensure level suitability         |
+| `* * *` | coordinator | **find** by **/p** price range                                  | respect budget constraints       |
+| `* * *` | coordinator | **match** `t<INDEX>` with `s<INDEX>`                            | record a pairing                 |
+| `* * *` | coordinator | **unmatch** a tutor or student                                  | correct/undo a pairing           |
+| `* * *` | coordinator | **delete** `t<INDEX>` or `s<INDEX>`                             | remove obsolete entries          |
+| `* *` | coordinator | see clear error messages for invalid inputs                     | fix mistakes quickly             |
+| `* *` | coordinator | prevent duplicates by name+phone+type                           | keep data clean                  |
+| `*` | coordinator | edit entries after creation                                     | adjust details without re-adding |
 
 *{More to be added}*
 

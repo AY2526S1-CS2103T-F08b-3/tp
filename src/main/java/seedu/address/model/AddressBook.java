@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Comparator;
 import java.util.List;
 
 import javafx.collections.ObservableList;
@@ -73,6 +74,14 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Returns repeated entry if a person with the same identity as {@code person} exists in the address book.
+     */
+    public String getRepeatedEntry(Person person) {
+        requireNonNull(person);
+        return persons.getRepeatedEntry(person);
+    }
+
+    /**
      * Adds a person to the address book.
      * The person must not already exist in the address book.
      */
@@ -97,6 +106,15 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removePerson(Person key) {
         persons.remove(key);
+    }
+
+    /**
+     * Sorts the person list using the given comparator.
+     * The ObservableList is sorted in place, triggering UI updates automatically.
+     */
+    public void sortPersons(Comparator<Person> comparator) {
+        requireNonNull(comparator);
+        persons.sort(comparator);
     }
 
     //// util methods

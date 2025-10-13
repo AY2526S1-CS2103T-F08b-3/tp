@@ -3,6 +3,7 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,6 +35,23 @@ public class UniquePersonList implements Iterable<Person> {
     public boolean contains(Person toCheck) {
         requireNonNull(toCheck);
         return internalList.stream().anyMatch(toCheck::isSamePerson);
+    }
+
+    /**
+     * Returns true if the list contains an equivalent person as the given argument.
+     */
+    public String getRepeatedEntry(Person toCheck) {
+        requireNonNull(toCheck);
+        String repeated;
+        if (internalList.stream().anyMatch(toCheck::isSameName)) {
+            repeated = toCheck.getName().fullName;
+        } else if (internalList.stream().anyMatch(toCheck::isSamePhone)) {
+            repeated = toCheck.getPhone().value;
+        } else {
+            repeated = toCheck.getEmail().value;
+        }
+
+        return repeated;
     }
 
     /**
@@ -95,6 +113,10 @@ public class UniquePersonList implements Iterable<Person> {
         }
 
         internalList.setAll(persons);
+    }
+
+    public void sort(Comparator<Person> comparator) {
+        internalList.sort(comparator);
     }
 
     /**

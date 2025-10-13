@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -64,6 +65,11 @@ public interface Model {
     boolean hasPerson(Person person);
 
     /**
+     * Returns the repeated entry if a person with the same identity as {@code person} exists in the address book.
+     */
+    String getRepeatedEntry(Person person);
+
+    /**
      * Deletes the given person.
      * The person must exist in the address book.
      */
@@ -90,4 +96,11 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Sorts the persons in the address book by the specified fields in order.
+     *
+     * @param sortFields list of fields to sort by (e.g., "/p" for price, "/l" for level)
+     */
+    void sortPersons(List<String> sortFields);
 }

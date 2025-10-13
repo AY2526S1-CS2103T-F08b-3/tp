@@ -95,14 +95,14 @@ Format: `help`
 
 Adds a **tutor** or **student** with subject, level, and price range.
 
-Format: `add <tutor/student> <name> /hp <phone> /a <address> /s <subject> /l <level> /p <min-max>`
+Format: `add r/<tutor/student> <name> /hp <phone> /a <address> /s <subject> /l <level> /p <min-max>`
 
 
 
 Examples:
-* `add student aaron /hp 91234567 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30`  
-* `add tutor Mary /hp 98765432 /a Tampines Ave 1 /s english /l 2-5 /p 25-40`
-### Listing all persons : `list`
+* `add r/student Aaron /hp 91234567 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30`  
+* `add r/tutor Mary /hp 98765432 /a Tampines Ave 1 /s english /l 2-5 /p 25-40`
+### Listing all *tutors* or *students* : `list`
 
 Shows a list of either tutors or students.
 
@@ -110,7 +110,7 @@ Format: `list tutors`  |  `list students`
 
 Examples: `list tutors` , `list students`
 
-### Finding student/tutor: `find`
+### Finding *tutors* or *students*: `find`
 
 Returns a filtered list of students/tutors from our database based on one condition (subject, level, or price).
 
@@ -265,7 +265,7 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** |`add <tutor/student> <name> hp/ <phone> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add student aaron hp/ 91234567 a/ Blk 30 Geylang Street 29, #06-40 s/ mathematics l/ 3 p/ 20-30`
+**Add** |`add r/<tutor/student> <name> hp/ <phone> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add student aaron hp/ 91234567 a/ Blk 30 Geylang Street 29, #06-40 s/ mathematics l/ 3 p/ 20-30`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Find** | `find <tutor/student> <field>/ <filter_value>`<br> e.g., `find student s/ chinese`

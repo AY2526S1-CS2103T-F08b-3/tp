@@ -65,6 +65,11 @@ public interface Model {
     boolean hasPerson(Person person);
 
     /**
+     * Returns the repeated entry if a person with the same identity as {@code person} exists in the address book.
+     */
+    String getRepeatedEntry(Person person);
+
+    /**
      * Deletes the given person.
      * The person must exist in the address book.
      */

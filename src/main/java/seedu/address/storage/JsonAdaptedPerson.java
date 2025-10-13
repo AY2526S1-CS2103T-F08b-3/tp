@@ -36,6 +36,8 @@ class JsonAdaptedPerson {
     private final String subject;
     private final String level;
     private final String price;
+    private final Integer personId;
+    private final Integer matchedPersonId;
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -45,7 +47,8 @@ class JsonAdaptedPerson {
                              @JsonProperty("phone") String phone, @JsonProperty("email") String email,
                              @JsonProperty("address") String address, @JsonProperty("subject") String subject,
                              @JsonProperty("level") String level, @JsonProperty("price") String price,
-                             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+                             @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("personId") int personId,
+                             @JsonProperty("matchedPersonId") Integer matchedPersonId) {
         this.role = role;
         this.name = name;
         this.phone = phone;
@@ -57,6 +60,9 @@ class JsonAdaptedPerson {
         if (tags != null) {
             this.tags.addAll(tags);
         }
+        this.personId = personId;
+        this.matchedPersonId = matchedPersonId;
+
     }
 
     /**
@@ -74,8 +80,19 @@ class JsonAdaptedPerson {
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
+        this.personId = source.getPersonId();
+        this.matchedPersonId = (source.getMatchedPerson() == null) ? null : source.getMatchedPerson().getPersonId();
     }
 
+    @JsonProperty("personId")
+    public Integer getPersonId() {
+        return personId;
+    }
+
+    @JsonProperty("matchedPersonId")
+    public Integer getMatchedPersonId() {
+        return matchedPersonId;
+    }
     /**
      * Converts this Jackson-friendly adapted person object into the model's {@code Person} object.
      *
@@ -149,8 +166,12 @@ class JsonAdaptedPerson {
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
 
-        return new Person(role, modelName, modelPhone, modelEmail, modelAddress,
+        Person person = new Person(role, modelName, modelPhone, modelEmail, modelAddress,
                 modelSubject, modelLevel, modelPrice, modelTags);
+        if (this.personId != null) {
+            person.setPersonId(personId);
+        }
+        return person;
     }
 
 }

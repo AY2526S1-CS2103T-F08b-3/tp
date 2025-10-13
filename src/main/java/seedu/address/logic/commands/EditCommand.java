@@ -113,9 +113,10 @@ public class EditCommand extends Command {
         Level updatedLevel = editPersonDescriptor.getLevel().orElse(personToEdit.getLevel());
         Price updatedPrice = editPersonDescriptor.getPrice().orElse(personToEdit.getPrice());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+        int personId = personToEdit.getPersonId();
 
         return new Person(updatedRole, updatedName, updatedPhone, updatedEmail, updatedAddress, updatedSubject,
-                updatedLevel, updatedPrice, updatedTags);
+                updatedLevel, updatedPrice, updatedTags, personId);
     }
 
     @Override

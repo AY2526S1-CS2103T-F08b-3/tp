@@ -33,38 +33,38 @@ public class TypicalPersons {
     public static final Person BENSON = new PersonBuilder().withName("Benson Meier")
             .withAddress("311, Clementi Ave 2, #02-25")
             .withEmail("johnd@example.com").withPhone("98765432")
-            .withRole("student")
-            .withSubject("science").withLevel("1-2").withPrice("30-40")
+            .withRole("tutor")
+            .withSubject("mathematics").withLevel("2").withPrice("10-30")
             .withTags("owesMoney", "friends").build();
 
     public static final Person CARL = new PersonBuilder().withName("Carl Kurz")
             .withPhone("95352563").withEmail("heinz@example.com")
             .withAddress("wall street").withRole("tutor")
-            .withSubject("science").withLevel("1-2").withPrice("30-40")
+            .withSubject("english").withLevel("3-6").withPrice("50-100")
             .build();
 
     public static final Person DANIEL = new PersonBuilder().withName("Daniel Meier")
             .withPhone("87652533").withEmail("cornelia@example.com")
-            .withAddress("10th street").withRole("tutor")
-            .withSubject("science").withLevel("1-2").withPrice("30-40")
+            .withAddress("10th street").withRole("student")
+            .withSubject("science").withLevel("1").withPrice("30-40")
             .withTags("friends").build();
 
     public static final Person ELLE = new PersonBuilder().withName("Elle Meyer")
             .withPhone("9482224").withEmail("werner@example.com")
-            .withAddress("michegan ave").withRole("tutor")
-            .withSubject("science").withLevel("1-2").withPrice("30-40")
+            .withAddress("michegan ave").withRole("student")
+            .withSubject("english").withLevel("3").withPrice("30-40")
             .build();
 
     public static final Person FIONA = new PersonBuilder().withName("Fiona Kunz")
             .withPhone("9482427").withEmail("lydia@example.com")
-            .withAddress("little tokyo").withRole("tutor")
-            .withSubject("science").withLevel("1-2").withPrice("30-40")
+            .withAddress("little tokyo").withRole("student")
+            .withSubject("mathematics").withLevel("5").withPrice("30-45")
             .build();
 
     public static final Person GEORGE = new PersonBuilder().withName("George Best")
             .withPhone("9482442").withEmail("anna@example.com")
-            .withAddress("4th street").withRole("tutor")
-            .withSubject("science").withLevel("1-2").withPrice("30-40")
+            .withAddress("4th street").withRole("student")
+            .withSubject("science").withLevel("2").withPrice("20-30")
             .build();
 
     // Manually added

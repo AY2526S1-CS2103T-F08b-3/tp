@@ -30,7 +30,6 @@ public class PersonBuilder {
 
     private String role;
     private Name name;
-    private int id;
     private Phone phone;
     private Email email;
     private Address address;
@@ -139,11 +138,6 @@ public class PersonBuilder {
      */
     public PersonBuilder withRole(String role) {
         this.role = role;
-        return this;
-    }
-
-    public PersonBuilder withId(int id) {
-        this.id = id;
         return this;
     }
 

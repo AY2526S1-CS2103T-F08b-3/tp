@@ -115,8 +115,8 @@ public class EditCommand extends Command {
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         int personId = personToEdit.getPersonId();
 
-        return new Person(updatedRole, updatedName, updatedPhone, updatedEmail, updatedAddress, updatedSubject,
-                updatedLevel, updatedPrice, updatedTags, personId);
+        return new Person(updatedRole, updatedName, updatedPhone, updatedEmail,
+                updatedAddress, updatedSubject, updatedLevel, updatedPrice, updatedTags, personId);
     }
 
     @Override
@@ -125,7 +125,6 @@ public class EditCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof EditCommand)) {
             return false;
         }
@@ -180,7 +179,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, subject, level, price);
         }
 
         public void setRole(String role) {
@@ -256,9 +255,7 @@ public class EditCommand extends Command {
         }
 
         /**
-         * Returns an unmodifiable tag set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code tags} is null.
+         * Returns an unmodifiable tag set, or empty if {@code tags} is null.
          */
         public Optional<Set<Tag>> getTags() {
             return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
@@ -270,7 +267,6 @@ public class EditCommand extends Command {
                 return true;
             }
 
-            // instanceof handles nulls
             if (!(other instanceof EditPersonDescriptor)) {
                 return false;
             }
@@ -280,6 +276,9 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
+                    && Objects.equals(subject, otherEditPersonDescriptor.subject)
+                    && Objects.equals(level, otherEditPersonDescriptor.level)
+                    && Objects.equals(price, otherEditPersonDescriptor.price)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }
 

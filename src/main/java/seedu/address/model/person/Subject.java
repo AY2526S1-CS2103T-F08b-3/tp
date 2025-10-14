@@ -7,8 +7,8 @@ import static java.util.Objects.requireNonNull;
  */
 @SuppressWarnings("checkstyle:Regexp")
 public class Subject {
-    public static final String MESSAGE_CONSTRAINTS = "Subject cannot be blank.";
-    public static final String VALIDATION_REGEX = "[A-Za-z ]+";
+    public static final String MESSAGE_CONSTRAINTS = "Invalid subject.";
+    public static final String VALIDATION_REGEX = "(?i)(english|science|mathematics)";
     public final String subject;
 
     /**

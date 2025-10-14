@@ -26,9 +26,23 @@ public class Level {
         this.end = end;
     }
 
-    public static boolean isValidLevel(String test) {
-        return test.matches(VALIDATION_REGEX);
+    /**
+     * Returns true if the given level string is valid.
+     * @param levelString Level inputted.
+     * @return boolean.
+     */
+    public static boolean isValidLevel(String levelString) {
+        requireNonNull(levelString);
+        try {
+            Level level = parse(levelString);
+            return level.start > 0 && level.end > 0
+                    && level.start <= 6 && level.end <= 6
+                    && level.start <= level.end;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
+
     /**
      * Calls the constructor when passed in a string.
      * Accepts "3", "03", "3-3", "1-6" (spaces allowed around '-').

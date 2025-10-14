@@ -122,7 +122,7 @@ find <tutor/student> <field>/ <filter_value> [<field>/ <filter_value> ...]
 ### Description
 - <tutor/student> specifies whether to search tutors or students.  
   This field is optional — omitting it searches all persons.
-- <field>/ must be one of the following prefixes:  
+- <field>/ must be one of the following prefixes:
   n/  for name  
   s/  for subject  
   l/  for level  

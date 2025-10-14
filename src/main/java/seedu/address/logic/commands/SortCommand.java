@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 
+import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.Model;
 
 /**
@@ -77,5 +78,41 @@ public class SortCommand extends Command {
             }
         }
         return description.toString();
+    }
+
+    /**
+     * Returns true if both SortCommand objects have the same role and sort criteria.
+     * This defines equality between two SortCommand objects.
+     *
+     * @param other the other object to compare to
+     * @return true if both objects are equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        // instanceof handles nulls
+        if (!(other instanceof SortCommand)) {
+            return false;
+        }
+
+        SortCommand otherSortCommand = (SortCommand) other;
+        return role.equals(otherSortCommand.role)
+                && sortedBy.equals(otherSortCommand.sortedBy);
+    }
+
+    /**
+     * Returns a string representation of this SortCommand.
+     *
+     * @return a string containing the role and sort criteria
+     */
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .add("role", role)
+                .add("sortedBy", sortedBy)
+                .toString();
     }
 }

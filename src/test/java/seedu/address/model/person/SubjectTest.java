@@ -29,7 +29,7 @@ public class SubjectTest {
         assertFalse(Subject.isValidSubject("math123")); // alphanumeric
         assertFalse(Subject.isValidSubject("math!")); // special character
 
-        // valid subjects
+        // valid subjects, change when restricting subjects
         assertTrue(Subject.isValidSubject("math"));
         assertTrue(Subject.isValidSubject("Mathematics"));
         assertTrue(Subject.isValidSubject("science"));

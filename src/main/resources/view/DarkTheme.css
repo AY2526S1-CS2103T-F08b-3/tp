@@ -13,14 +13,14 @@
 .label-bright {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-opacity: 1;
 }
 
 .label-header {
     -fx-font-size: 32pt;
     -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-opacity: 1;
 }
 
@@ -67,7 +67,7 @@
 .table-view .column-header .label {
     -fx-font-size: 20pt;
     -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-alignment: center-left;
     -fx-opacity: 1;
 }
@@ -117,7 +117,7 @@
 }
 
 .list-cell .label {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 
 .cell_big_label {
@@ -150,7 +150,7 @@
     -fx-background-color: transparent;
     -fx-font-family: "Segoe UI Light";
     -fx-font-size: 13pt;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 
 .result-display .label {
@@ -159,7 +159,7 @@
 
 .status-bar .label {
     -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-padding: 4px;
     -fx-pref-height: 30px;
 }
@@ -171,7 +171,7 @@
 }
 
 .status-bar-with-border .label {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 
 .grid-pane {
@@ -189,7 +189,7 @@
 }
 
 .context-menu .label {
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 
 .menu-bar {
@@ -199,7 +199,7 @@
 .menu-bar .label {
     -fx-font-size: 14pt;
     -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-opacity: 0.9;
 }
 
@@ -229,12 +229,12 @@
 }
 
 .button:pressed, .button:default:hover:pressed {
-  -fx-background-color: white;
+  -fx-background-color: black;
   -fx-text-fill: #1d1d1d;
 }
 
 .button:focused {
-    -fx-border-color: white, white;
+    -fx-border-color: black, black;
     -fx-border-width: 1, 1;
     -fx-border-style: solid, segments(1, 1);
     -fx-border-radius: 0, 0;
@@ -244,7 +244,7 @@
 .button:disabled, .button:default:disabled {
     -fx-opacity: 0.4;
     -fx-background-color: #1d1d1d;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 
 .button:default {
@@ -267,7 +267,7 @@
 .dialog-pane > *.label.content {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 
 .dialog-pane:header *.header-panel {
@@ -277,8 +277,8 @@
 .dialog-pane:header *.header-panel *.label {
     -fx-font-size: 18px;
     -fx-font-style: italic;
-    -fx-fill: white;
-    -fx-text-fill: white;
+    -fx-fill: black;
+    -fx-text-fill: black;
 }
 
 .scroll-bar {
@@ -325,7 +325,7 @@
     -fx-border-width: 1;
     -fx-font-family: "Segoe UI Light";
     -fx-font-size: 13pt;
-    -fx-text-fill: white;
+    -fx-text-fill: black;
 }
 
 #filterField, #personListPanel, #personWebpage {
@@ -372,4 +372,278 @@
 .tag.role-student {
     -fx-background-color: #1565c0;   /* blue */
     -fx-text-fill: white;
+}
+
+/* === Make person list + cards pink === */
+
+/* each cell (the background behind each contact) */
+.list-cell:filled:even,
+.list-cell:filled:odd,
+.list-cell:filled:selected {
+    -fx-background-color: #ffc0cb;  /* pink */
+}
+
+/* the actual card panel inside each cell */
+#cardPane {
+    -fx-background-color: #ffc0cb;  /* pink card background */
+    -fx-border-color: transparent;  /* remove dark border */
+}
+
+/* ensure person list container itself is pink too */
+#personList,
+#personListPanelPlaceholder {
+    -fx-background-color: #ffc0cb;
+}
+
+/* ===== Pink takeover (AB3 containers) ===== */
+.app-root,
+.app-root .stack-pane,
+.app-root .vbox {
+    -fx-background-color: #ffc0cb; /* pink */
+}
+
+/* AB3 gives these a dark bg — override to pink */
+.pane-with-border {
+    -fx-background-color: #ffc0cb;
+    -fx-border-color: #FF1493; /* blend the border */
+}
+
+/* Result display uses a layered bg — override both layers */
+#resultDisplay .content {
+    -fx-background-color: transparent, #ffc0cb, transparent, #ffc0cb;
+}
+
+/* List area */
+#personList,
+#personListPanelPlaceholder {
+    -fx-background-color: #ffc0cb;
+}
+
+/* Status bar strip */
+.status-bar,
+.status-bar-with-border {
+    -fx-background-color: #ffc0cb;
+    -fx-border-color: #FF1493;
+}
+
+/* Optional: command box border matches pink */
+#commandTextField {
+    -fx-background-color: transparent #ffc0cb transparent #ffc0cb;
+    -fx-border-color: #FF1493 #FF1493 #FF1493 #FF1493;
+}
+/* === Alternating pink rows === */
+.list-cell:filled:even {
+    -fx-background-color: #FFD1DC; /* lighter pink */
+}
+.list-cell:filled:odd {
+    -fx-background-color: #FFC0CB; /* light pink */
+}
+
+/* Selected row (slightly deeper pink + subtle border) */
+.list-cell:filled:selected {
+    -fx-background-color: #FFB0C5; /* selected shade */
+}
+.list-cell:filled:selected #cardPane {
+    -fx-border-color: #FF5793;   /* thin hot-pink outline on selection */
+    -fx-border-width: 1;
+}
+
+/* Make the card itself transparent so the row color shows */
+#cardPane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent; /* default; selection rule above will add border */
+}
+
+/* === Global pink scrollbars === */
+.scroll-bar {
+    -fx-background-color: #ffc0cb; /* base track background */
+}
+
+/* Track */
+.scroll-bar .track {
+    -fx-background-color: #ffd1dc; /* lighter track */
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+}
+
+/* Thumb (draggable part) */
+.scroll-bar .thumb {
+    -fx-background-color: #ff79a8; /* darker thumb */
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+    -fx-padding: 4;
+}
+.scroll-bar .thumb:hover {
+    -fx-background-color: #ff5c98;
+}
+.scroll-bar .thumb:pressed {
+    -fx-background-color: #ff3f88;
+}
+
+/* Buttons and arrows */
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 2;
+}
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: #ff5793;
+    -fx-shape: "M 0 0 L 6 6 L 12 0 Z";
+}
+
+/* Orientation-specific arrow rotations */
+.scroll-bar:vertical .increment-arrow { -fx-rotate: 180; }  /* down */
+.scroll-bar:horizontal .decrement-arrow { -fx-rotate: -90; } /* left */
+.scroll-bar:horizontal .increment-arrow { -fx-rotate: 90; }  /* right */
+
+/* Corner where bars meet */
+.corner {
+    -fx-background-color: #ffc0cb;
+}
+
+/* === Pink status bar fix === */
+.status-bar,
+.status-bar-with-border {
+    -fx-background-color: #ffc0cb; /* pink background strip */
+    -fx-border-color: #ff1493;     /* hot-pink border */
+}
+
+.status-bar .label,
+.status-bar-with-border .label {
+    -fx-text-fill: black;          /* readable text */
+    -fx-background-color: transparent;
+}
+
+/* === Slim pink scrollbars (for result box & others) === */
+
+/* overall scrollbar width (vertical) and height (horizontal) */
+.scroll-bar:vertical {
+    -fx-pref-width: 8px;   /* thinner vertical bar */
+}
+.scroll-bar:horizontal {
+    -fx-pref-height: 8px;  /* thinner horizontal bar */
+}
+
+/* adjust thumb shape (optional rounded ends) */
+.scroll-bar .thumb {
+    -fx-background-radius: 5px;
+    -fx-padding: 0; /* remove extra space inside the thumb */
+}
+
+/* for Result Display specifically */
+#resultDisplay .scroll-bar:vertical {
+    -fx-pref-width: 8px;
+}
+#resultDisplay .scroll-bar:horizontal {
+    -fx-pref-height: 8px;
+}
+
+/* ===== Pink MenuBar & Help menu ===== */
+
+/* MenuBar strip */
+.menu-bar {
+    -fx-background-color: #ffc0cb;            /* pink bar */
+    -fx-padding: 0 6 0 6;
+}
+.menu-bar .label {
+    -fx-text-fill: black;                      /* readable text */
+}
+
+/* Top-level menu buttons (File, Help) */
+.menu-bar .menu-button {
+    -fx-background-color: transparent;
+}
+.menu-bar .menu-button:hover,
+.menu-bar .menu-button:showing {               /* when Help is open */
+    -fx-background-color: #ff79a8;             /* medium pink highlight */
+}
+.menu-bar .menu-button .label {
+    -fx-text-fill: black;
+}
+
+/* The popup panel that shows “Help  F1” */
+.context-menu {
+    -fx-background-color: #ffd1dc;             /* light pink panel */
+    -fx-background-radius: 6;
+    -fx-border-color: #ff1493;                 /* hot-pink border */
+    -fx-border-radius: 6;
+}
+
+/* Items inside the popup */
+.menu-item .label {
+    -fx-text-fill: black;                       /* readable on pink */
+}
+.menu-item:focused {
+    -fx-background-color: #ff79a8;             /* focused row pink */
+}
+.menu-item:focused .label {
+    -fx-text-fill: white;                       /* better contrast on focus */
+}
+
+/* === Make entire person list area pink (no grey filler) === */
+
+/* The ListView background */
+.list-view {
+    -fx-background-color: #ffc0cb;     /* light pink */
+    -fx-control-inner-background: #ffc0cb; /* for empty space */
+}
+
+/* Each cell (even, odd) should blend with the background */
+.list-cell:filled:even,
+.list-cell:filled:odd {
+    -fx-background-color: #ffd6e0;     /* slightly lighter pink cells */
+}
+
+/* Selected cell highlight */
+.list-cell:filled:selected {
+    -fx-background-color: #ffb6c1;     /* hot pink highlight */
+}
+
+/* Make the scrollpane behind the ListView also pink */
+.scroll-pane,
+.scroll-pane .viewport {
+    -fx-background-color: #ffc0cb;
+}
+
+/* Remove the dark border under list area */
+#personListPanelPlaceholder,
+#personList {
+    -fx-background-color: #ffc0cb;
+}
+.list-cell:filled:even { -fx-background-color: #ffd6e0; }  /* lighter pink */
+.list-cell:filled:odd { -fx-background-color: #ffc0cb; }   /* base pink */
+
+/* --- Make ALL list internals pink, including empty space --- */
+
+/* the ListView itself */
+.list-view {
+    -fx-background-color: #ffc0cb;              /* base pink */
+    -fx-control-inner-background: #ffc0cb;      /* empty area */
+}
+
+/* internal containers used by ListView's skin */
+.list-view .virtual-flow,
+.list-view .clipped-container,
+.list-view .sheet,
+.list-view .placeholder {
+    -fx-background-color: #ffc0cb !important;
+}
+
+/* empty cells (the filler rows) */
+.list-cell:empty {
+    -fx-background-color: #ffc0cb !important;
+}
+
+/* keep your alternating pinks for real rows */
+.list-cell:filled:even { -fx-background-color: #ffd6e0; }
+.list-cell:filled:odd  { -fx-background-color: #ffc0cb; }
+
+/* selected row tint */
+.list-cell:filled:selected { -fx-background-color: #ffb6c1; }
+
+/* card pane should be transparent so row color shows through */
+#cardPane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
 }

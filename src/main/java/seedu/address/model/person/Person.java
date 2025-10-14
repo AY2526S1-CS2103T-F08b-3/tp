@@ -196,7 +196,6 @@ public class Person {
 
     /**
      * Returns true if both persons have the same name, phone, or email.
-     * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
         if (otherPerson == this) {
@@ -228,7 +227,7 @@ public class Person {
     }
 
     /**
-     * Returns true if both persons have the same number.
+     * Returns true if both persons have the same email.
      */
     public boolean isSameEmail(Person otherPerson) {
 

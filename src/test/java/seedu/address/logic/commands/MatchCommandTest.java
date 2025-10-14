@@ -46,8 +46,7 @@ public class MatchCommandTest {
         MatchCommand matchCommand = new MatchCommand(tutorId, 9999);
 
         assertThrows(CommandException.class,
-                String.format(MatchCommand.MESSAGE_NOT_FOUND, 9999),
-                () -> matchCommand.execute(model));
+                String.format(MatchCommand.MESSAGE_NOT_FOUND, 9999), () -> matchCommand.execute(model));
     }
 
     @Test

@@ -52,15 +52,15 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
   Commands follow the below exactly:  
   • Add: `add r/<tutor/student> n/<name> hp/<phone> a/<address> s/<subject> l/<level> p/<min-max>`  
   • List: `list <tutors/students>`  
-  • Find: `find <tutor/student> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`  
-  • Match: `match <INDEX_1> <INDEX_2>`
+  • Find: `find <tutors/students> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`  
+  • Match: `match <ID_1> <ID_2>`
 
-  • Unmatch: `unmatch <INDEX_1>` or `unmatch <INDEX_2>` 
+  • Unmatch: `unmatch <ID_1>` or `unmatch <ID_2>` 
 
 
 * Accepted values (validators)  
-  • `<tutor/student>` for `add` and `find`: exactly “tutor” or “student” (case-insensitive).  
-  • `<tutors/students>` for `list`: exactly “tutors” or “students” (case-insensitive).  
+  • `<tutor/student>` for `add`: exactly “tutor” or “student” (case-insensitive).  
+  • `<tutors/students>` for `list` and `find`: exactly “tutors” or “students” (case-insensitive).  
   • `hp/` phone: 8 digits (spaces allowed), digits only.  
   • `s/` subject: one of {english, mathematics, chinese, science} (case-insensitive).  
   • `l/` level:  
@@ -71,7 +71,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 
 * Typed indices  
   • Use `<INDEX>` persons (1-indexed; visible list indices; no spaces).  
-  • Examples: `delete 1`, `delete 2`, `match t1 s2`, `unmatch s2`.  
+  • Examples: `delete 1`, `delete 2`, `match 1 2`, `unmatch 2`.  
 
 * Errors (shape & value)  
   The app guides with specific messages on: wrong command format, missing/invalid `<tutor/student>` or `<tutors/students>`, invalid field (`/s` `/l` `/p`), malformed values (non-integer level, bad `min-max`, min>max), duplicates, and empty lists.  
@@ -119,7 +119,7 @@ Returns a filtered list of students/tutors from our database based on one condit
 Returns a filtered list of students or tutors from the database based on one or more conditions such as name, subject, level, or price.
 
 ### Format
-find <tutor/student> <field>/ <filter_value> [<field>/ <filter_value> ...]
+find <tutors/students> <field>/ <filter_value> [<field>/ <filter_value> ...]
 
 ### Description
 - <tutor/student> specifies whether to search tutors or students.  
@@ -149,11 +149,11 @@ Acceptable values:
     - p/ <range>: one or two integers separated by a dash (e.g. 10–20, 30)
 
 ### Examples
-- find tutor n/ Aaron — finds all tutors with “Aaron” in their name.
-- find tutor s/ Mathematics — finds all tutors teaching Mathematics.
-- find tutor l/ 3 — finds all tutors teaching Level 3 students.
-- find student p/ 10–20 — finds all students offering a price range of $10–20/hour.
-- find tutor s/ Mathematics l/ 2–4 p/ 25–50 — finds tutors teaching Math for Levels 2–4, charging $25–$50/hour.
+- find tutors n/ Aaron — finds all tutors with “Aaron” in their name.
+- find tutors s/ Mathematics — finds all tutors teaching Mathematics.
+- find tutors l/ 3 — finds all tutors teaching Level 3 students.
+- find students p/ 10–20 — finds all students offering a price range of $10–20/hour.
+- find tutors s/ Mathematics l/ 2–4 p/ 25–50 — finds tutors teaching Math for Levels 2–4, charging $25–$50/hour.
 - find students s/ English s/ Chinese p/ 15 — finds students needing English or Chinese at $15/hour.
 
 ### Notes
@@ -161,7 +161,7 @@ Acceptable values:
 - Prefixes can appear in any order.
 - The same prefix can appear multiple times with different values.
 - Invalid formats (e.g. p/ abc, l/ 10–5) will show an “Invalid command format” error.
-  ![result for 'find tutor /s mathematics'](images/FindTutorResult.png)
+  ![result for 'find tutors /s mathematics'](images/FindTutorResult.png)
 
 ### Match/Unmatch a student and a tutor : `match/unmatch`
 
@@ -229,7 +229,7 @@ Format:
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `delete 1` deletes the 1st person in the tutor list.
+* `delete 1` deletes the 1st person in the displayed list.
 
 
 ### Clearing all entries : `clear`
@@ -284,7 +284,7 @@ Action | Format, Examples
 **Add** |`add r/<tutor/student> <name> hp/ <phone> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add student aaron hp/ 91234567 a/ Blk 30 Geylang Street 29, #06-40 s/ mathematics l/ 3 p/ 20-30`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Find** | `find <tutor/student> <field>/ <filter_value>`<br> e.g., `find student s/ chinese`
+**Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students s/ chinese`
 **Match/Unmatch** | `match <Id> <Id> / unmatch <Id> `<br> e.g., `match 1 2 / unmatch 1`
 **List** | `list students / list tutors`
 **Sort** | `sort <students/tutors> <filter_criteria>`<br> e.g., `sort students p/`

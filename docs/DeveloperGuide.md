@@ -276,6 +276,59 @@ The following sequence diagram shows how a find operation goes through the `Logi
     * Pros: More convenient for users - single command to reassign. Fewer steps for common operation.
     * Cons: Risk of accidental match reassignment. Harder to undo mistakes. Less transparent to user what happened to previous match. Could cause confusion.
 
+### \[Proposed\] Sort Feature
+
+#### Proposed Implementation
+
+The proposed sort mechanism is facilitated by `SortCommand`, which allows users to sort tutors or students by specified criteria (price and/or level). The sorting supports:
+* Single criterion sorting (e.g., by price only)
+* Multi-criterion sorting with priority order (e.g., by price first, then by level)
+* Separate sorting for tutors and students 
+
+#### Key Components
+* `SortCommand`- Executes the sorting operation
+* `SortCommandParser`- Parses user input and creates `SortCommand` objects
+* `Model#sortPersons(List<String>)`- Applies the sort to the filtered person list
+* `ModelManager#getComparatorForCriteria(String)`- Creates comparators for each sort criterion
+* `AddressBook#sortPersons(Comparator<Person>)`- Performs the actual sorting on the person list
+
+#### Implementation Details
+1. **Parsing:** `SortCommandParser` validates that:
+    * The role is either "tutors" or "students"
+    * All field are either "p/" or "l/"
+    * There are no duplicate fields
+2. **Filtering:** Before sorting, the command filters the person list to show only the specified role (tutors or students)
+3. **Comparator Chaining:** Multiple sort criteria are handled by chaining comparators
+4. **Range Handling:** For level and price fields that support ranges (e.g., "1-3" or "20-30"), the comparator uses the first number for sorting
+
+#### Error Handling
+The sort command handles several error cases:
+1. **Invalid role:** Returns parse exception if role is not "tutors" or "students"
+2. **Invalid field:** Returns parse exception if field is not "p/" or "l/"
+3. **Duplicate fields:** Returns parse exception with message indicating which field is duplicated 
+4. **Missing parameters:** Returns parse exception if role or fields are not provided 
+
+#### Design Considerations
+**Aspect: How sorting is performed**
+
+* **Alternative 1 (current choice):** Sort the underlying `ObservableList` in place
+  * Pros: Changes automatically propagate to the UI through JavaFX bindings; simple implementation
+  * Cons: Modifies the original data structure permanently (within the session); sorting affects all views
+
+* **Alternative 2:** Create a sorted view without modifying the underlying list
+    * Pros: Preserves original order; allows multiple sorted views
+    * Cons: More complex implementation; requires additional data structures
+
+**Aspect: Sorting by ranges (Level and Price)**
+
+* **Alternative 1 (current choice):** Use the first number in hyphenated ranges (e.g., "20-30 -> 20)
+    * Pros: Simple and predictable behaviour; works consistently for both single values and ranges
+    * Cons: May not represent the "true" value for ranges (doesn't use midpoint or average)
+
+* **Alternative 2:** Calculate midpoint or average of ranges 
+    * Pros: More accurate representation of range values
+    * Cons: More complex logic; may be unintuitive for users
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**

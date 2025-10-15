@@ -25,6 +25,9 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
 
+    public static final String MESSAGE_CANNOT_DELETE_MATCHED =
+            "Cannot delete this person because they are currently matched. \nPlease unmatch them first.";
+
     private final Index targetIndex;
 
     public DeleteCommand(Index targetIndex) {
@@ -41,6 +44,10 @@ public class DeleteCommand extends Command {
         }
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
+
+        if (personToDelete.getMatchedPerson() != null) {
+            throw new CommandException(MESSAGE_CANNOT_DELETE_MATCHED);
+        }
         model.deletePerson(personToDelete);
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
     }

@@ -148,11 +148,12 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Find feature
+### [Proposed] Find feature
 
 #### Proposed Implementation
 
-The proposed find mechanism is facilitated by `FindCommand` and its associated predicate classes. It filters the person list based on specified criteria (subject, level, or price range) and displays matching results.
+The find mechanism is facilitated by the `FindCommand`, `FindCommandParser`, and a set of predicate classes (`MatchingSubjectPredicate`, `MatchingLevelPredicate`, and `MatchingPricePredicate`).
+It enables users to filter the list of tutors or students by one or more criteria — such as subject, level, or price range.
 
 * `FindCommand#execute()` — Executes the find operation by applying the appropriate predicate to filter the list.
 * `FindCommandParser#parse()` — Parses and validates user input to create a valid `FindCommand`.
@@ -165,7 +166,7 @@ Step 1. The user launches the application for the first time. The application di
 
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `find tutor /s maths` command to find tutors teaching mathematics. The `FindCommandParser` validates the input and creates a `FindCommand`. The command executes and calls `Model#getFilteredPersonList()` with the predicate, filtering the displayed list to show only tutors teaching mathematics.
+Step 2. The user executes `find tutors s/ Mathematics` command to find tutors teaching mathematics. The `FindCommandParser` validates the input and creates a `FindCommand`. The command executes and calls `Model#getFilteredPersonList()` with the predicate, filtering the displayed list to show only tutors teaching Mathematics.
 
 ![UndoRedoState1](images/FindState1.png)
 
@@ -176,7 +177,7 @@ Step 2. The user executes `find tutor /s maths` command to find tutors teaching 
 
 </div>
 
-Step 3. The user executes `list` to view all persons again. The `list` command resets the filter by calling `Model#getFilteredPersonList`, displaying the complete list of tutors and students.
+Step 3. The user executes `list students` or `list tutors` to view either all students or all tutors again. The `list students/tutors` command resets the filter by calling `Model#getFilteredPersonList`, displaying the complete list of tutors or students.
 
 The following sequence diagram shows how a find operation goes through the `Logic` component:
 
@@ -191,22 +192,14 @@ The following sequence diagram shows how a find operation goes through the `Logi
 **Aspect: How filtering is applied:**
 
 * **Alternative 1 (current choice):** Use JavaFX FilteredList with predicates.
-  * Pros: Efficient, leverages JavaFX's built-in filtering mechanism. Automatic UI updates when filter changes. Clean separation of filtering logic through predicate classes.
-  * Cons: Filter is stateless - each new find command replaces the previous filter completely.
+    * Pros: Efficient, leverages JavaFX's built-in filtering mechanism. Automatically updates the UI when filter changes. Clean separation of filtering logic through predicate classes (`MatchingSubjectPredicate`, `MatchingLevelPredicate`, and `MatchingPricePredicate`).
+    * Cons: Filter is stateless – each new find command replaces the previous filter completely.
 
 * **Alternative 2:** Maintain a separate filtered copy of the person list.
-  * Pros: More control over the filtering process. Could potentially support multiple simultaneous filters.
-  * Cons: More complex implementation. Need to manually sync filtered list with source list when data changes. Higher memory usage.
+    * Pros: Provides more control over the filtering process. Could potentially support multiple simultaneous filters (e.g., by subject and price together).
+    * Cons: More complex implementation. Requires manual synchronization with the main list when data changes. Increases memory usage due to duplicate lists.
 
-**Aspect: How to handle empty results:**
-
-* **Alternative 1 (current choice):** Display appropriate message, keep filter applied.
-    * Pros: User understands why list is empty. Clear feedback on search outcome.
-    * Cons: User must execute `list` to see full list again.
-
-* **Alternative 2:** Automatically reset to full list when no results found.
-    * Pros: User always sees something in the list.
-    * Cons: Confusing user experience - unclear whether search executed successfully or was ignored.
+---
 
 
 ### \[Proposed\] Match/Unmatch Feature
@@ -276,6 +269,127 @@ The following sequence diagram shows how a find operation goes through the `Logi
     * Pros: More convenient for users - single command to reassign. Fewer steps for common operation.
     * Cons: Risk of accidental match reassignment. Harder to undo mistakes. Less transparent to user what happened to previous match. Could cause confusion.
 
+### \[Proposed\] Recommend feature
+
+#### Proposed Implementation
+
+The proposed recommend mechanism is facilitated by `RecommendCommand` and its associated predicate classes. It recommends persons in the person list based on specified criteria (subject, level, or price range) and displays matching results.
+
+* `RecommendCommand#execute()` — Executes the recommend operation by applying the appropriate predicate to filter the list.
+* `RecommendCommandParser#parse()` — Parses and validates user input to create a valid `RecommendCommand`.
+
+These operations interact with the `Model` interface through `Model#getFilteredPersonList()` to updates the filtered person list, which is then displayed to the user as recommendations.
+
+Given below is an example usage scenario and how the recommend mechanism behaves at each step.
+
+Step 1. The user launches the application for the first time. The application displays the full list of tutors and students.
+
+Step 2. The user executes `recommend 2 s/` command to find tutors/students matching the subject of the student/tutor. The `RecommendCommandParser` validates the input and creates a `RecommendCommand`. The command retrieves the specified user, constructs a predicate based on the user's subject requirement, and applies it using `Model#updateFilteredPersonList(predicate)` to display recommended tutors matching the criteria.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If a recommend command fails validation (e.g., invalid parameters), the `RecommendCommandParser` will throw a `ParseException`, and the command will not execute. The user will see an appropriate error message.
+
+</div>
+
+#### Design considerations:
+
+**Aspect: How recommendations are generated:**
+
+* **Alternative 1 (current choice):** Use JavaFX FilteredList with dynamically constructed predicates based on the selected user's requirements (subject, level, price).
+  * Pros: Efficient, leverages JavaFX's built-in filtering and automatic UI updates. Predicate logic is modular and reusable. Recommendations are always up-to-date with the latest criteria.
+  * Cons: Recommendations are stateless, each new recommend command replaces the previous filter and results.
+
+* **Alternative 2:** Maintain a separate recommended list for each user.
+  * Pros: Allows caching and quick retrieval of previous recommendations. Could support multiple recommendation sets per user.
+  * Cons: More complex implementation. Requires manual synchronization with source data. Higher memory usage and risk of stale recommendations.
+
+**Aspect: How to handle empty results:**
+
+* **Alternative 1 (current choice):** Display appropriate message, keep filter applied.
+  * Pros: User understands why list is empty. Clear feedback on search outcome.
+  * Cons: User must execute `list tutors/students` to see full list again.
+
+* **Alternative 2:** Automatically reset to full list when no results found.
+  * Pros: User always sees something in the list.
+  * Cons: Confusing user experience - unclear whether search executed successfully or was ignored.
+
+### \[Proposed\] Sort Feature
+
+#### Proposed Implementation
+
+The proposed sort mechanism is facilitated by `SortCommand`, which allows users to sort tutors or students by specified criteria (price and/or level). The sorting supports:
+* Single criterion sorting (e.g., by price only)
+* Multi-criterion sorting with priority order (e.g., by price first, then by level)
+* Separate sorting for tutors and students 
+
+#### Key Components
+* `SortCommand`- Executes the sorting operation
+* `SortCommandParser`- Parses user input and creates `SortCommand` objects
+* `Model#sortPersons(List<String>)`- Applies the sort to the filtered person list
+* `ModelManager#getComparatorForCriteria(String)`- Creates comparators for each sort criterion
+* `AddressBook#sortPersons(Comparator<Person>)`- Performs the actual sorting on the person list
+
+The sort operation interacts with the `Model` interface through `Model#sortPersons(List<String>)` to sort the person list and `Model#updateFilteredPersonList(Predicate<Person>)` to filter by role
+
+Given below is an example usage scenario and how the sort mechanism behaves at each step.
+
+**Step 1.** The user launches the application for the first time. The application displays the full list of tutors and students in the order they were added to the address book.
+
+**Step 2.** The user executes `list tutors` to view only tutors. The `ListCommand` calls `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_TUTORS)` to filter the displayed list to show only tutors.
+
+**Step 3.** The user notices that tutors are not organized by price and wants to find affordable options. The user executes `sort tutors p/` command to sort tutors by their hourly rates. The `SortCommandParser` validates the input (checking that "tutors" is a valid role and "p/" is a valid field) and creates a `SortCommand` with role "tutors" and sort criteria ["p/"]. The command executes and performs the following:
+    1. Calls `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_TUTORS)` to ensure only tutors are displayed
+    2. Calls `Model#sortPersons(["p/"])` which creates a comparator for price
+    3. The comparator sorts tutors in ascending order by their minimum price value
+    4. Returns a success message: "Sorted all tutors by price"
+The tutors are now displayed sorted by price from lowest to highest.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If a sort command fails validation (e.g., invalid role like "tutor" instead of "tutors", invalid field like "x/", or duplicate fields like "p/ p/"), the `SortCommandParser` will throw a `ParseException`, and the command will not execute. The user will see an appropriate error message.
+</div>
+
+**Step 4.** The user wants to further refine the sorting by also considering education level. The user executes `sort tutors p/ l/` to sort by price first, then by level. The `SortCommand` creates a chained comparator that first compares by price, then by level for tutors with the same price. Tutors are now organized with the most affordable at the top, and within each price range, sorted by education level.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The sorted order persists across subsequent commands within the same session. For example, if the user executes `list tutors` again after sorting, the tutors will still be displayed in the sorted order. The sorting is only reset when the application is restarted or when a new sort command is executed with different criteria.
+</div>
+
+**Step 5.** The user executes `list students` to switch to viewing students. Since the sort was applied only to tutors, students are displayed in their original unsorted order.
+**Step 6.** The user executes `sort students l/ p/` to sort students by level first, then by price. Students are now organized by education level, with students at lower levels appearing first, and within each level, sorted by their budget (price range).
+
+#### Implementation Details
+1. **Parsing:** `SortCommandParser` validates that:
+    * The role is either "tutors" or "students"
+    * All field are either "p/" or "l/"
+    * There are no duplicate fields
+2. **Filtering:** Before sorting, the command filters the person list to show only the specified role (tutors or students)
+3. **Comparator Chaining:** Multiple sort criteria are handled by chaining comparators
+4. **Range Handling:** For level and price fields that support ranges (e.g., "1-3" or "20-30"), the comparator uses the first number for sorting
+
+#### Error Handling
+The sort command handles several error cases:
+1. **Invalid role:** Returns parse exception if role is not "tutors" or "students"
+2. **Invalid field:** Returns parse exception if field is not "p/" or "l/"
+3. **Duplicate fields:** Returns parse exception with message indicating which field is duplicated 
+4. **Missing parameters:** Returns parse exception if role or fields are not provided 
+
+#### Design Considerations
+**Aspect: How sorting is performed**
+
+* **Alternative 1 (current choice):** Sort the underlying `ObservableList` in place
+  * Pros: Changes automatically propagate to the UI through JavaFX bindings; simple implementation
+  * Cons: Modifies the original data structure permanently (within the session); sorting affects all views
+
+* **Alternative 2:** Create a sorted view without modifying the underlying list
+    * Pros: Preserves original order; allows multiple sorted views
+    * Cons: More complex implementation; requires additional data structures
+
+**Aspect: Sorting by ranges (Level and Price)**
+
+* **Alternative 1 (current choice):** Use the first number in hyphenated ranges (e.g., "20-30 -> 20)
+    * Pros: Simple and predictable behaviour; works consistently for both single values and ranges
+    * Cons: May not represent the "true" value for ranges (doesn't use midpoint or average)
+
+* **Alternative 2:** Calculate midpoint or average of ranges 
+    * Pros: More accurate representation of range values
+    * Cons: More complex logic; may be unintuitive for users
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
@@ -308,19 +422,20 @@ The following sequence diagram shows how a find operation goes through the `Logi
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
 | Priority | As a …​                                    | I want to …​                                                    | So that I can…​                  |
-| -------- | ------------------------------------------ |-----------------------------------------------------------------|----------------------------------|
-| `* * *` | coordinator | **add** a *student* with phone, address, subject, level, price  | track requests consistently      |
-| `* * *` | coordinator | **add** a *tutor* with phone, address, subject, level(s), price | track offers consistently        |
-| `* * *` | coordinator | **list** all *tutors* or *students*                            | focus on one role at a time      |
-| `* * *` | coordinator | **find** tutors/students by **/s** subject                      | shortlist relevant candidates    |
-| `* * *` | coordinator | **find** by **/l** level                                        | ensure level suitability         |
-| `* * *` | coordinator | **find** by **/p** price range                                  | respect budget constraints       |
-| `* * *` | coordinator | **match** `t<INDEX>` with `s<INDEX>`                            | record a pairing                 |
-| `* * *` | coordinator | **unmatch** a tutor or student                                  | correct/undo a pairing           |
-| `* * *` | coordinator | **delete** `t<INDEX>` or `s<INDEX>`                             | remove obsolete entries          |
-| `* *` | coordinator | see clear error messages for invalid inputs                     | fix mistakes quickly             |
-| `* *` | coordinator | prevent duplicates by name+phone+type                           | keep data clean                  |
-| `*` | coordinator | edit entries after creation                                     | adjust details without re-adding |
+|----------| ------------------------------------------ |-----------------------------------------------------------------|----------------------------------|
+| `* * *`  | coordinator | **add** a *student* with phone, address, subject, level, price  | track requests consistently      |
+| `* * *`  | coordinator | **add** a *tutor* with phone, address, subject, level(s), price | track offers consistently        |
+| `* * *`  | coordinator | **list** all *tutors* or *students*                            | focus on one role at a time      |
+| `* * *`  | coordinator | **find** tutors/students by **/s** subject                      | shortlist relevant candidates    |
+| `* * *`  | coordinator | **find** by **/l** level                                        | ensure level suitability         |
+| `* * *`  | coordinator | **find** by **/p** price range                                  | respect budget constraints       |
+| `* * *`  | coordinator | **match** `t<INDEX>` with `s<INDEX>`                            | record a pairing                 |
+| `* * *`  | coordinator | **unmatch** a tutor or student                                  | correct/undo a pairing           |
+| `* * *`  | coordinator | **delete** `t<INDEX>` or `s<INDEX>`                             | remove obsolete entries          |
+| `* *`    | coordinator | see clear error messages for invalid inputs                     | fix mistakes quickly             |
+| `* *`    | coordinator | prevent duplicates by name+phone+type                           | keep data clean                  |
+| `*`      | coordinator | edit entries after creation                                     | adjust details without re-adding |
+| `* *`    | coordinator | **recommend** tutors to a student / students to a tutor         | suggest good matches             |
 
 *{More to be added}*
 
@@ -348,12 +463,12 @@ Use case ends.
 
 * 2b. A duplicate person (same role, same name, same phone) exists.
   ConnectEd rejects the add and shows a duplicate warning.
-  
+
     Use case ends.
 
 * 3a. Storage fails (e.g., I/O error).
   * 3a1. ConnectEd shows “Error saving data: add”.
-  
+
     Use case ends.
 
 **Use case: List tutors/students**
@@ -377,46 +492,62 @@ Use case ends.
 
 * 2a. The requested list is empty.
   * 2a1. ConnectEd shows “No <tutors/students> in the list yet!”.
-  
+
     Use case ends.
 
 **Use case: Find tutors/students (by subject / level / price)**
 
 **MSS**
 
-1. User requests to find either tutors or students with a field filter (/s, /l, or /p) and a value.
+1. User enters a `find` command specifying an optional role (`tutor` or `student`) and one or more filters using prefixes `s/`, `l/`, or `p/` with their respective values.  
+   Examples:
+    * `find tutors s/ Mathematics`
+    * `find students l/ 3`
+    * `find tutors p/ 20-50 l/ 4`
 
-2. ConnectEd validates the role, field, and filter value.
+2. ConnectEd validates the role (if present), checks that at least one valid prefix is included, and ensures that the values follow the correct format.
 
-3. ConnectEd displays the filtered list with indices.
+3. ConnectEd constructs the appropriate predicates (`RolePredicate`, `MatchingSubjectPredicate`, `MatchingLevelPredicate`, `MatchingPricePredicate`) and combines them logically using **AND** conditions.
+
+4. ConnectEd updates the displayed list to show only persons (tutors or students) who match all provided filter criteria.
 
    Use case ends.
 
+---
+
 **Extensions**
 
-* 2a. Role is missing or not tutor/student.
-  * 2a1. ConnectEd shows “Please specify whether you are finding a tutor or student!”.
-  
-    Use case ends.
+* **2a.** Role is invalid or missing when required.
+    * **2a1.** ConnectEd shows:  
+      *“Invalid command format! Usage: find [tutor|student] [s/SUBJECT] [l/LEVEL] [p/PRICE].”*  
+      Use case ends.
 
-* 2b. Field is not one of /s, /l, /p.
-  * 2b1. ConnectEd shows “Field must be /s (subject), /l (level), or /p (price range)!”.
-    
-    Use case ends.
+* **2b.** No valid prefixes (`s/`, `l/`, `p/`) are provided.
+    * **2b1.** ConnectEd shows:  
+      *“Invalid command format! Usage: find [tutor|student] [s/SUBJECT] [l/LEVEL] [p/PRICE].”*  
+      Use case ends.
 
-* 2c. Filter value is malformed (e.g., level not 1–6; price not min-max).
-  * 2c1. ConnectEd shows “Filter must match the field type (e.g., /l <level>, /p <range>).”.
-  
-    Use case ends.
+* **2c.** Filter value is malformed (e.g., `l/` contains non-numeric text, `p/` contains invalid range such as `50-30`, or `s/` is empty).
+    * **2c1.** ConnectEd shows:  
+      *“Invalid command format! Usage: find [tutor|student] [s/SUBJECT] [l/LEVEL] [p/PRICE].”*  
+      Use case ends.
 
-* 3a. No entries match the filter.
-  * 3a1. ConnectEd shows “No <tutors/students> found matching the filter!”.
-  Use case ends.
+* **2d.** Extra or invalid arguments (e.g., missing spaces, wrong prefixes like `x/`, or incomplete command).
+    * **2d1.** ConnectEd shows:  
+      *“Invalid command format! Usage: find [tutor|student] [s/SUBJECT] [l/LEVEL] [p/PRICE].”*  
+      Use case ends.
 
-* 3b. The underlying list for that role is empty.
-  * 3b1. ConnectEd shows “There are no <tutors/students> yet!”.
-  
-    Use case ends.
+* **3a.** No persons match the provided filter criteria.
+    * **3a1.** ConnectEd displays an empty list (no matches found).  
+      Use case ends.
+
+* **3b.** The address book has no entries for the selected role (tutor/student).
+    * **3b1.** ConnectEd displays an empty list.  
+      Use case ends.
+
+* **3c.** Multiple valid filters are combined (e.g., `s/math l/3 p/20-40`).
+    * **3c1.** ConnectEd applies all filters together using logical **AND**, showing only persons who match all the specified conditions.  
+      Use case ends successfully.
 
 **Use case: Match a tutor to a student**
 
@@ -426,15 +557,15 @@ Use case ends.
 
 **MSS**
 
-1. User requests to match using visible indices: match `t<INDEX>` `s<INDEX>`.
+1. User requests to match using visible indices: match `<Id>` `s<Id>`.
 
-2. ConnectEd validates both indices against the currently displayed Tutor list and Student list.
+2. ConnectEd validates both indices against the list of persons.
 
 3. ConnectEd checks that neither party is already matched.
 
 4. ConnectEd links the tutor and student (one-to-one) and updates both profiles.
 
-5. ConnectEd shows success message (e.g., “Matched t1 Alice with s2 Ben”).
+5. ConnectEd shows success message (e.g., “Matched student Josh Low (id: #2) with tutor Aaron Tan (id: #1)”).
 
     Use case ends.
 
@@ -478,7 +609,7 @@ Use case ends.
 
 **MSS**
 
-1. User requests to unmatch by specifying one side: unmatch `t<INDEX>` or unmatch `s<INDEX>`.
+1. User requests to unmatch by specifying one side: unmatch `<Id of tutor>` or unmatch `<Id of student>`.
 
 2. ConnectEd validates the index against the currently displayed list for that role.
 
@@ -486,7 +617,7 @@ Use case ends.
 
 4. ConnectEd removes the bidirectional link and updates both profiles.
 
-5. ConnectEd shows success message (e.g., “Unmatched t1 Alice and s2 Ben”).
+5. ConnectEd shows success message (e.g., “Unmatched tutor Aaron Tan (id: #1) and student Josh Low (id: #2).”).
 
     Use case ends.
 
@@ -515,7 +646,7 @@ Use case ends.
 
 **MSS**
 
-1. User requests to delete a specific person using role + index: delete t<INDEX> or delete s<INDEX>.
+1. User requests to delete a specific person using role + index: delete <INDEX>
 
 2. ConnectEd validates the role and index.
 
@@ -530,28 +661,50 @@ Use case ends.
 **Extensions**
 
 * 2a. Role not specified or wrong format.
-  * 2a1. ConnectEd shows “Please specify tutor/student to be deleted using delete `t<index>` or delete `s<index>`!”.
-  
+  * 2a1. ConnectEd shows “Please specify tutor/student to be deleted using delete `<index>`!”.
+
     Use case ends.
 
 * 2b. Index invalid/out of range/not visible.
   * 2b1. ConnectEd shows “This person doesn’t exist! Please check the index again”.
-  
+
     Use case ends.
 
 * 3a. Person is matched.
   * 3a1. ConnectEd shows “<Tutor/Student> is matched, please unmatch before deleting …”.
-  
+
     Use case ends.
 
 * 4a. No entries exist for that role.
   * 4a1. ConnectEd shows “There are no <tutors/students> yet!”.
-  
+
     Use case ends.
 
 * 4b. Storage fails.
   * 4b1. ConnectEd shows “Error saving data: delete”.
-  
+
+    Use case ends.
+
+
+**Use case: Recommend tutors to a student / students to a tutor**
+**Preconditions: At least one tutor and one student exist in the database.**
+**Guarantees: On success, the user receives a list of recommended tutors for a student, or students for a tutor, based on subject, level, and price compatibility.**
+**MSS**
+1. User requests recommendations for a person using `recommend INDEX [subject] [level] [price]` (e.g., `recommend 1 /s /l`).
+2. ConnectEd validates the index and checks that it refers to a valid person in the current list.
+3. ConnectEd retrieves the profile of the specified student/tutor.
+4. ConnectEd determines the role (student or tutor) and applies the relevant filters:
+    * For students: recommends tutors matching subject, level, and price.
+    * For tutors: recommends students matching subject, level, and price.
+    * If no flags are specified, all requirements are used.
+5. ConnectEd displays a ranked list of recommended tutors (for a student) or students (for a tutor), with indices and key details.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. Index is invalid/out of range/not visible.
+    * 2a1. ConnectEd shows "The person index provided is invalid"
     Use case ends.
 
 **Use case: Save data (automatic)**
@@ -621,9 +774,10 @@ Use case ends.
 * **Subject** — One of `{english, maths, chinese, science}`.
 * **Level** — Integer 1–6 (students: single level; tutors: single level or range `x-y`, 1≤x≤y≤6).
 * **Price range** — `min-max` dollars/hour, integers 1–200, `min ≤ max`, no internal spaces.
-* **Typed index** — `t<INDEX>` (tutor) or `s<INDEX>` (student), where `INDEX` is 1-based on the **current** list view.
+* **Typed index** — `<INDEX>` (tutor) or `<INDEX>` (student), where `INDEX` is 1-based on the **current** list view.
 * **Match** — A one-to-one link between a tutor and a student; **Unmatch** removes that link.
-* **Duplicate (person)** — Same type **and** same name (case-insensitive) **and** same phone; duplicates are rejected. 
+* **Duplicate (person)** — Same type **and** same name (case-insensitive) **and** same phone; duplicates are rejected.
+* **Recommend** — Suggest tutors to a student, or students to a tutor, based on subject, level, and price compatibility.
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -643,16 +797,16 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
-1. Saving window preferences
+2. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
+   2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+3. _{ more test cases …​ }_
 
 ### Adding a tutor
 
@@ -661,10 +815,10 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `add tutor aaron /hp 91234567 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30`<br>
       Expected: Tutor is added to the list. Details of the added tutor shown in the status message. 
 
-   1. Test case: `add aaron`<br>
+   2. Test case: `add aaron`<br>
       Expected: No tutor is added. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect add commands to try: `add`, `add tutor aaron /hp 0 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30`<br>
+   3. Other incorrect add commands to try: `add`, `add tutor aaron /hp 0 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30`<br>
       Expected: Similar to previous.
 
 ### Deleting a tutor
@@ -673,14 +827,14 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: List all tutors using the `list tutors` command. Multiple tutors will be listed.
 
-    1. Test case: `delete t1`<br>
+    1. Test case: `delete 1`<br>
        Expected: First tutor is deleted from the list. Details of the deleted tutor shown in the status message.
 
-    1. Test case: `delete t0`<br>
+    1. Test case: `delete 0`<br>
        Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-    1. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size or smaller than 1)<br>
-       Expected: Similar to previous.
+    4. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size or smaller than 1)<br>
+        Expected: Similar to previous.
 
 ### Finding a student
 
@@ -689,11 +843,11 @@ testers are expected to do more *exploratory* testing.
     1. Test case: `find student /s english`<br>
        Expected: Students that have the 'english' subject are being listed. 
 
-    1. Test case: `find student`<br>
-       Expected: No student is listed. Error details shown in the status message. Status bar remains the same.
+    2. Test case: `find student`<br>
+        Expected: No student is listed. Error details shown in the status message. Status bar remains the same.
 
-    1. Other incorrect add commands to try: `find`, `find student /s eng`<br>
-       Expected: Similar to previous.
+    3. Other incorrect add commands to try: `find`, `find student /s eng`<br>
+        Expected: Similar to previous.
 
 ### Matching a student and tutor
 
@@ -701,18 +855,33 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: 
        1. Find tutor using the `find tutor ...` command. Take note of the index of the tutor (e.g. `t1`).
-       1. Find student using the `find student ...` command. Take note of the index of the student (e.g. `s1`).
+       2. Find student using the `find student ...` command. Take note of the index of the student (e.g. `s1`).
 
-    1. Test case: `match t1 s1`<br>
-       Expected: Tutor with index `t1` and student with index `s1` are being matched.
+    2. Test case: `match 1 2`<br>
+       Expected: Person with id `1` and student with id `2` are being matched.
 
-    1. Test case: `match t0 s0`<br>
+    3. Test case: `match 0 0`<br>
        Expected: No student and tutor matched. Error details shown in the status message. Status bar remains the same.
 
-    1. Other incorrect add commands to try: `match t1`, `match s1`<br>
+    4. Other incorrect add commands to try: `match 1`, `match 2`<br>
        Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
+2. _{ more test cases …​ }_
+
+### Recommending tutors to a student/ students to a tutor
+1. Recommending tutors to a student/ students to a tutor.
+
+   1. Test case: `recommend 3 /s /l`<br>
+        Expected: Tutors/Students that match the subject and level of person with index `3` are being listed.
+
+   2. Test case: `recommend 1 /s /p`<br>
+        Expected: Tutors/Students that match the subject and price range of person with index `1` are being listed.
+
+   3. Test case: `recommend 2`<br>
+        Expected: Tutors/Students that match the subject, level and price range of person with index `2` are being listed.
+
+   4. Other incorrect add commands to try: `recommend`, `recommend 5 e/`, `recommend x` (where x is larger than the list size or smaller than 1)<br>
+        Expected: Error message shown.
 
 ### Saving data
 
@@ -720,4 +889,4 @@ testers are expected to do more *exploratory* testing.
 
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
-1. _{ more test cases …​ }_
+2. _{ more test cases …​ }_

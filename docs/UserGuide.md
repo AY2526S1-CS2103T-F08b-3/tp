@@ -31,8 +31,8 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
    * `add student aaron /hp 91234567 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30` : Adds a **student** with subject, level, and price range.
      (Example for tutor: `add tutor Mary /hp 98765432 /a Tampines Ave 1 /s english /l 2-5 /p 25-40`)
 
-   * `delete t1` : Deletes the 1st **tutor** shown in the current list.  
-     (Use `delete s2` to delete the 2nd **student**.)
+   * `delete 1` : Deletes the 1st **person** shown in the current list.  
+   
 
    * `clear` : Deletes all entries.
 
@@ -68,8 +68,8 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 
 
 * Typed indices  
-  • Use `t<INDEX>` for tutors and `s<INDEX>` for students (1-indexed; visible list indices; no spaces).  
-  • Examples: `delete t1`, `delete s2`, `match t1 s2`, `unmatch s2`.  
+  • Use `<INDEX>` persons (1-indexed; visible list indices; no spaces).  
+  • Examples: `delete 1`, `delete 2`, `match t1 s2`, `unmatch s2`.  
 
 * Errors (shape & value)  
   The app guides with specific messages on: wrong command format, missing/invalid `<tutor/student>` or `<tutors/students>`, invalid field (`/s` `/l` `/p`), malformed values (non-integer level, bad `min-max`, min>max), duplicates, and empty lists.  
@@ -147,12 +147,12 @@ Acceptable values:
     - p/ <range>: one or two integers separated by a dash (e.g. 10–20, 30)
 
 ### Examples
-- find tutor n/ Aaron — finds all tutors with “Aaron” in their name.
-- find tutor s/ Mathematics — finds all tutors teaching Mathematics.
-- find tutor l/ 3 — finds all tutors teaching Level 3 students.
-- find student p/ 10–20 — finds all students offering a price range of $10–20/hour.
-- find tutor s/ Math l/ 2–4 p/ 25–50 — finds tutors teaching Math for Levels 2–4, charging $25–$50/hour.
-- find student s/ English s/ Chinese p/ 15 — finds students needing English or Chinese at $15/hour.
+- find tutors n/ Aaron — finds all tutors with “Aaron” in their name.
+- find tutors s/ Mathematics — finds all tutors teaching Mathematics.
+- find tutors l/ 3 — finds all tutors teaching Level 3 students.
+- find students p/ 10–20 — finds all students offering a price range of $10–20/hour.
+- find tutors s/ Mathematics l/ 2–4 p/ 25–50 — finds tutors teaching Math for Levels 2–4, charging $25–$50/hour.
+- find students s/ English s/ Chinese p/ 15 — finds students needing English or Chinese at $15/hour.
 
 ### Notes
 - You can combine multiple filters in one command.
@@ -177,7 +177,7 @@ Format:
 Examples:
 * `match 1 2` For a tutor with Id 1 and student with Id 2, matches the tutor with the student in the list.
 * `unmatch 1` For a tutor with Id 1, unmatch the tutor with its corresponding matched student.
-  ![result for 'match t1 s1'](images/MatchResult.png)
+  ![result for 'match 1 2'](images/MatchResult.png)
 
 ### Recommending persons : `recommend`
 Recommends a list of tutors to a student or a list of students to a tutor based on subject, level, and/or price range.
@@ -192,6 +192,8 @@ Format: `recommend INDEX [s/] [l/] [p/]`
 Examples:
 * `recommend 1` recommends all tutors/students that matches the subject, level, and price range of person at index 1
 * `recommend 2 s/` recommends all tutors/students that matches the subject of person at index 2
+  ![result for 'recommend 1 s/'](images/RecommendResult.png)
+
 ### Sorting student/tutor list : `sort`
 Sorts the displayed list of students or tutors based on specified field(s) in ascending order.
 
@@ -219,15 +221,14 @@ Notes:
 Deletes a person (student/tutor) from the ConnectEd database
 
 Format:
-* Delete tutor: `delete t<INDEX>`
-* Delete student: `delete s<INDEX>`
+* Delete person: `delete <INDEX>`
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed tutor/student list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `delete t1` deletes the 1st tutor in the tutor list.
-* `delete s2` deletes the 2nd student in the student list.
+* `delete 1` deletes the 1st person in the tutor list.
+
 
 ### Clearing all entries : `clear`
 

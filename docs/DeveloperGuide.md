@@ -377,9 +377,9 @@ Use case ends.
 
 1. User enters a `find` command specifying an optional role (`tutor` or `student`) and one or more filters using prefixes `s/`, `l/`, or `p/` with their respective values.  
    Examples:
-    * `find tutor s/math`
-    * `find student l/3`
-    * `find tutor p/20-50 l/4`
+    * `find tutors s/ Mathematics`
+    * `find students l/ 3`
+    * `find tutors p/ 20-50 l/ 4`
 
 2. ConnectEd validates the role (if present), checks that at least one valid prefix is included, and ensures that the values follow the correct format.
 

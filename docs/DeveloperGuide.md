@@ -148,11 +148,12 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Find feature
+### [Proposed] Find feature
 
 #### Proposed Implementation
 
-The proposed find mechanism is facilitated by `FindCommand` and its associated predicate classes. It filters the person list based on specified criteria (subject, level, or price range) and displays matching results.
+The find mechanism is facilitated by the `FindCommand`, `FindCommandParser`, and a set of predicate classes (`MatchingSubjectPredicate`, `MatchingLevelPredicate`, and `MatchingPricePredicate`).
+It enables users to filter the list of tutors or students by one or more criteria — such as subject, level, or price range.
 
 * `FindCommand#execute()` — Executes the find operation by applying the appropriate predicate to filter the list.
 * `FindCommandParser#parse()` — Parses and validates user input to create a valid `FindCommand`.
@@ -165,7 +166,7 @@ Step 1. The user launches the application for the first time. The application di
 
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `find tutor /s maths` command to find tutors teaching mathematics. The `FindCommandParser` validates the input and creates a `FindCommand`. The command executes and calls `Model#getFilteredPersonList()` with the predicate, filtering the displayed list to show only tutors teaching mathematics.
+Step 2. The user executes `find tutors s/ Mathematics` command to find tutors teaching mathematics. The `FindCommandParser` validates the input and creates a `FindCommand`. The command executes and calls `Model#getFilteredPersonList()` with the predicate, filtering the displayed list to show only tutors teaching Mathematics.
 
 ![UndoRedoState1](images/FindState1.png)
 
@@ -176,7 +177,7 @@ Step 2. The user executes `find tutor /s maths` command to find tutors teaching 
 
 </div>
 
-Step 3. The user executes `list` to view all persons again. The `list` command resets the filter by calling `Model#getFilteredPersonList`, displaying the complete list of tutors and students.
+Step 3. The user executes `list students` or `list tutors` to view either all students or all tutors again. The `list students/tutors` command resets the filter by calling `Model#getFilteredPersonList`, displaying the complete list of tutors or students.
 
 The following sequence diagram shows how a find operation goes through the `Logic` component:
 
@@ -191,22 +192,14 @@ The following sequence diagram shows how a find operation goes through the `Logi
 **Aspect: How filtering is applied:**
 
 * **Alternative 1 (current choice):** Use JavaFX FilteredList with predicates.
-  * Pros: Efficient, leverages JavaFX's built-in filtering mechanism. Automatic UI updates when filter changes. Clean separation of filtering logic through predicate classes.
-  * Cons: Filter is stateless - each new find command replaces the previous filter completely.
+    * Pros: Efficient, leverages JavaFX's built-in filtering mechanism. Automatically updates the UI when filter changes. Clean separation of filtering logic through predicate classes (`MatchingSubjectPredicate`, `MatchingLevelPredicate`, and `MatchingPricePredicate`).
+    * Cons: Filter is stateless – each new find command replaces the previous filter completely.
 
 * **Alternative 2:** Maintain a separate filtered copy of the person list.
-  * Pros: More control over the filtering process. Could potentially support multiple simultaneous filters.
-  * Cons: More complex implementation. Need to manually sync filtered list with source list when data changes. Higher memory usage.
+    * Pros: Provides more control over the filtering process. Could potentially support multiple simultaneous filters (e.g., by subject and price together).
+    * Cons: More complex implementation. Requires manual synchronization with the main list when data changes. Increases memory usage due to duplicate lists.
 
-**Aspect: How to handle empty results:**
-
-* **Alternative 1 (current choice):** Display appropriate message, keep filter applied.
-    * Pros: User understands why list is empty. Clear feedback on search outcome.
-    * Cons: User must execute `list` to see full list again.
-
-* **Alternative 2:** Automatically reset to full list when no results found.
-    * Pros: User always sees something in the list.
-    * Cons: Confusing user experience - unclear whether search executed successfully or was ignored.
+---
 
 
 ### \[Proposed\] Match/Unmatch Feature
@@ -382,39 +375,56 @@ Use case ends.
 
 **MSS**
 
-1. User requests to find either tutors or students with a field filter (/s, /l, or /p) and a value.
+1. User enters a `find` command specifying an optional role (`tutor` or `student`) and one or more filters using prefixes `s/`, `l/`, or `p/` with their respective values.  
+   Examples:
+    * `find tutor s/math`
+    * `find student l/3`
+    * `find tutor p/20-50 l/4`
 
-2. ConnectEd validates the role, field, and filter value.
+2. ConnectEd validates the role (if present), checks that at least one valid prefix is included, and ensures that the values follow the correct format.
 
-3. ConnectEd displays the filtered list with indices.
+3. ConnectEd constructs the appropriate predicates (`RolePredicate`, `MatchingSubjectPredicate`, `MatchingLevelPredicate`, `MatchingPricePredicate`) and combines them logically using **AND** conditions.
+
+4. ConnectEd updates the displayed list to show only persons (tutors or students) who match all provided filter criteria.
 
    Use case ends.
 
+---
+
 **Extensions**
 
-* 2a. Role is missing or not tutor/student.
-  * 2a1. ConnectEd shows “Please specify whether you are finding a tutor or student!”.
-  
-    Use case ends.
+* **2a.** Role is invalid or missing when required.
+    * **2a1.** ConnectEd shows:  
+      *“Invalid command format! Usage: find [tutor|student] [s/SUBJECT] [l/LEVEL] [p/PRICE].”*  
+      Use case ends.
 
-* 2b. Field is not one of /s, /l, /p.
-  * 2b1. ConnectEd shows “Field must be /s (subject), /l (level), or /p (price range)!”.
-    
-    Use case ends.
+* **2b.** No valid prefixes (`s/`, `l/`, `p/`) are provided.
+    * **2b1.** ConnectEd shows:  
+      *“Invalid command format! Usage: find [tutor|student] [s/SUBJECT] [l/LEVEL] [p/PRICE].”*  
+      Use case ends.
 
-* 2c. Filter value is malformed (e.g., level not 1–6; price not min-max).
-  * 2c1. ConnectEd shows “Filter must match the field type (e.g., /l <level>, /p <range>).”.
-  
-    Use case ends.
+* **2c.** Filter value is malformed (e.g., `l/` contains non-numeric text, `p/` contains invalid range such as `50-30`, or `s/` is empty).
+    * **2c1.** ConnectEd shows:  
+      *“Invalid command format! Usage: find [tutor|student] [s/SUBJECT] [l/LEVEL] [p/PRICE].”*  
+      Use case ends.
 
-* 3a. No entries match the filter.
-  * 3a1. ConnectEd shows “No <tutors/students> found matching the filter!”.
-  Use case ends.
+* **2d.** Extra or invalid arguments (e.g., missing spaces, wrong prefixes like `x/`, or incomplete command).
+    * **2d1.** ConnectEd shows:  
+      *“Invalid command format! Usage: find [tutor|student] [s/SUBJECT] [l/LEVEL] [p/PRICE].”*  
+      Use case ends.
 
-* 3b. The underlying list for that role is empty.
-  * 3b1. ConnectEd shows “There are no <tutors/students> yet!”.
-  
-    Use case ends.
+* **3a.** No persons match the provided filter criteria.
+    * **3a1.** ConnectEd displays an empty list (no matches found).  
+      Use case ends.
+
+* **3b.** The address book has no entries for the selected role (tutor/student).
+    * **3b1.** ConnectEd displays an empty list.  
+      Use case ends.
+
+* **3c.** Multiple valid filters are combined (e.g., `s/math l/3 p/20-40`).
+    * **3c1.** ConnectEd applies all filters together using logical **AND**, showing only persons who match all the specified conditions.  
+      Use case ends successfully.
+
 
 **Use case: Match a tutor to a student**
 

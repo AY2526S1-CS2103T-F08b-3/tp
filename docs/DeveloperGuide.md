@@ -424,15 +424,15 @@ Use case ends.
 
 **MSS**
 
-1. User requests to match using visible indices: match `t<INDEX>` `s<INDEX>`.
+1. User requests to match using visible indices: match `<Id>` `s<Id>`.
 
-2. ConnectEd validates both indices against the currently displayed Tutor list and Student list.
+2. ConnectEd validates both indices against the list of persons.
 
 3. ConnectEd checks that neither party is already matched.
 
 4. ConnectEd links the tutor and student (one-to-one) and updates both profiles.
 
-5. ConnectEd shows success message (e.g., “Matched t1 Alice with s2 Ben”).
+5. ConnectEd shows success message (e.g., “Matched student Josh Low (id: #2) with tutor Aaron Tan (id: #1)”).
 
     Use case ends.
 
@@ -476,7 +476,7 @@ Use case ends.
 
 **MSS**
 
-1. User requests to unmatch by specifying one side: unmatch `t<INDEX>` or unmatch `s<INDEX>`.
+1. User requests to unmatch by specifying one side: unmatch `<Id of tutor>` or unmatch `<Id of student>`.
 
 2. ConnectEd validates the index against the currently displayed list for that role.
 
@@ -484,7 +484,7 @@ Use case ends.
 
 4. ConnectEd removes the bidirectional link and updates both profiles.
 
-5. ConnectEd shows success message (e.g., “Unmatched t1 Alice and s2 Ben”).
+5. ConnectEd shows success message (e.g., “Unmatched tutor Aaron Tan (id: #1) and student Josh Low (id: #2).”).
 
     Use case ends.
 
@@ -513,7 +513,7 @@ Use case ends.
 
 **MSS**
 
-1. User requests to delete a specific person using role + index: delete t<INDEX> or delete s<INDEX>.
+1. User requests to delete a specific person using role + index: delete <INDEX>
 
 2. ConnectEd validates the role and index.
 
@@ -528,7 +528,7 @@ Use case ends.
 **Extensions**
 
 * 2a. Role not specified or wrong format.
-  * 2a1. ConnectEd shows “Please specify tutor/student to be deleted using delete `t<index>` or delete `s<index>`!”.
+  * 2a1. ConnectEd shows “Please specify tutor/student to be deleted using delete `<index>`!”.
   
     Use case ends.
 
@@ -619,7 +619,7 @@ Use case ends.
 * **Subject** — One of `{english, maths, chinese, science}`.
 * **Level** — Integer 1–6 (students: single level; tutors: single level or range `x-y`, 1≤x≤y≤6).
 * **Price range** — `min-max` dollars/hour, integers 1–200, `min ≤ max`, no internal spaces.
-* **Typed index** — `t<INDEX>` (tutor) or `s<INDEX>` (student), where `INDEX` is 1-based on the **current** list view.
+* **Typed index** — `<INDEX>` (tutor) or `<INDEX>` (student), where `INDEX` is 1-based on the **current** list view.
 * **Match** — A one-to-one link between a tutor and a student; **Unmatch** removes that link.
 * **Duplicate (person)** — Same type **and** same name (case-insensitive) **and** same phone; duplicates are rejected. 
 
@@ -671,10 +671,10 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: List all tutors using the `list tutors` command. Multiple tutors will be listed.
 
-    1. Test case: `delete t1`<br>
+    1. Test case: `delete 1`<br>
        Expected: First tutor is deleted from the list. Details of the deleted tutor shown in the status message.
 
-    1. Test case: `delete t0`<br>
+    1. Test case: `delete 0`<br>
        Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
     1. Other incorrect delete commands to try: `delete`, `delete x` (where x is larger than the list size or smaller than 1)<br>
@@ -701,13 +701,13 @@ testers are expected to do more *exploratory* testing.
        1. Find tutor using the `find tutor ...` command. Take note of the index of the tutor (e.g. `t1`).
        1. Find student using the `find student ...` command. Take note of the index of the student (e.g. `s1`).
 
-    1. Test case: `match t1 s1`<br>
-       Expected: Tutor with index `t1` and student with index `s1` are being matched.
+    1. Test case: `match 1 2`<br>
+       Expected: Person with id `1` and student with id `2` are being matched.
 
-    1. Test case: `match t0 s0`<br>
+    1. Test case: `match 0 0`<br>
        Expected: No student and tutor matched. Error details shown in the status message. Status bar remains the same.
 
-    1. Other incorrect add commands to try: `match t1`, `match s1`<br>
+    1. Other incorrect add commands to try: `match 1`, `match 2`<br>
        Expected: Similar to previous.
 
 1. _{ more test cases …​ }_

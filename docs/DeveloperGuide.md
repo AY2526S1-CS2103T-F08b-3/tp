@@ -269,6 +269,84 @@ The following sequence diagram shows how a find operation goes through the `Logi
     * Pros: More convenient for users - single command to reassign. Fewer steps for common operation.
     * Cons: Risk of accidental match reassignment. Harder to undo mistakes. Less transparent to user what happened to previous match. Could cause confusion.
 
+### \[Proposed\] Sort Feature
+
+#### Proposed Implementation
+
+The proposed sort mechanism is facilitated by `SortCommand`, which allows users to sort tutors or students by specified criteria (price and/or level). The sorting supports:
+* Single criterion sorting (e.g., by price only)
+* Multi-criterion sorting with priority order (e.g., by price first, then by level)
+* Separate sorting for tutors and students 
+
+#### Key Components
+* `SortCommand`- Executes the sorting operation
+* `SortCommandParser`- Parses user input and creates `SortCommand` objects
+* `Model#sortPersons(List<String>)`- Applies the sort to the filtered person list
+* `ModelManager#getComparatorForCriteria(String)`- Creates comparators for each sort criterion
+* `AddressBook#sortPersons(Comparator<Person>)`- Performs the actual sorting on the person list
+
+The sort operation interacts with the `Model` interface through `Model#sortPersons(List<String>)` to sort the person list and `Model#updateFilteredPersonList(Predicate<Person>)` to filter by role
+
+Given below is an example usage scenario and how the sort mechanism behaves at each step.
+
+**Step 1.** The user launches the application for the first time. The application displays the full list of tutors and students in the order they were added to the address book.
+
+**Step 2.** The user executes `list tutors` to view only tutors. The `ListCommand` calls `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_TUTORS)` to filter the displayed list to show only tutors.
+
+**Step 3.** The user notices that tutors are not organized by price and wants to find affordable options. The user executes `sort tutors p/` command to sort tutors by their hourly rates. The `SortCommandParser` validates the input (checking that "tutors" is a valid role and "p/" is a valid field) and creates a `SortCommand` with role "tutors" and sort criteria ["p/"]. The command executes and performs the following:
+    1. Calls `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_TUTORS)` to ensure only tutors are displayed
+    2. Calls `Model#sortPersons(["p/"])` which creates a comparator for price
+    3. The comparator sorts tutors in ascending order by their minimum price value
+    4. Returns a success message: "Sorted all tutors by price"
+The tutors are now displayed sorted by price from lowest to highest.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If a sort command fails validation (e.g., invalid role like "tutor" instead of "tutors", invalid field like "x/", or duplicate fields like "p/ p/"), the `SortCommandParser` will throw a `ParseException`, and the command will not execute. The user will see an appropriate error message.
+</div>
+
+**Step 4.** The user wants to further refine the sorting by also considering education level. The user executes `sort tutors p/ l/` to sort by price first, then by level. The `SortCommand` creates a chained comparator that first compares by price, then by level for tutors with the same price. Tutors are now organized with the most affordable at the top, and within each price range, sorted by education level.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The sorted order persists across subsequent commands within the same session. For example, if the user executes `list tutors` again after sorting, the tutors will still be displayed in the sorted order. The sorting is only reset when the application is restarted or when a new sort command is executed with different criteria.
+</div>
+
+**Step 5.** The user executes `list students` to switch to viewing students. Since the sort was applied only to tutors, students are displayed in their original unsorted order.
+**Step 6.** The user executes `sort students l/ p/` to sort students by level first, then by price. Students are now organized by education level, with students at lower levels appearing first, and within each level, sorted by their budget (price range).
+
+#### Implementation Details
+1. **Parsing:** `SortCommandParser` validates that:
+    * The role is either "tutors" or "students"
+    * All field are either "p/" or "l/"
+    * There are no duplicate fields
+2. **Filtering:** Before sorting, the command filters the person list to show only the specified role (tutors or students)
+3. **Comparator Chaining:** Multiple sort criteria are handled by chaining comparators
+4. **Range Handling:** For level and price fields that support ranges (e.g., "1-3" or "20-30"), the comparator uses the first number for sorting
+
+#### Error Handling
+The sort command handles several error cases:
+1. **Invalid role:** Returns parse exception if role is not "tutors" or "students"
+2. **Invalid field:** Returns parse exception if field is not "p/" or "l/"
+3. **Duplicate fields:** Returns parse exception with message indicating which field is duplicated 
+4. **Missing parameters:** Returns parse exception if role or fields are not provided 
+
+#### Design Considerations
+**Aspect: How sorting is performed**
+
+* **Alternative 1 (current choice):** Sort the underlying `ObservableList` in place
+  * Pros: Changes automatically propagate to the UI through JavaFX bindings; simple implementation
+  * Cons: Modifies the original data structure permanently (within the session); sorting affects all views
+
+* **Alternative 2:** Create a sorted view without modifying the underlying list
+    * Pros: Preserves original order; allows multiple sorted views
+    * Cons: More complex implementation; requires additional data structures
+
+**Aspect: Sorting by ranges (Level and Price)**
+
+* **Alternative 1 (current choice):** Use the first number in hyphenated ranges (e.g., "20-30 -> 20)
+    * Pros: Simple and predictable behaviour; works consistently for both single values and ranges
+    * Cons: May not represent the "true" value for ranges (doesn't use midpoint or average)
+
+* **Alternative 2:** Calculate midpoint or average of ranges 
+    * Pros: More accurate representation of range values
+    * Cons: More complex logic; may be unintuitive for users
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**

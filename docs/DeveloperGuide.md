@@ -484,8 +484,10 @@ Use case ends.
 **Extensions**
 
 * 1a. The parameter is missing or invalid.
-    * 1a1. ConnectEd shows “Wrong command format! Please use ‘list <tutors/students>’ ”.
-
+    * 1a1. ConnectEd shows “Invalid command format!
+      list: Lists all tutors or students and displays them as a list with index numbers.
+      Parameter: 'tutors' / 'students'”.
+        
         Use case ends.
 
 * 2a. The requested list is empty.

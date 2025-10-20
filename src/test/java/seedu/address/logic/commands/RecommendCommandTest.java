@@ -7,6 +7,8 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SIXTH_PERSON;
+import static seedu.address.testutil.TypicalPersons.DANIEL;
+import static seedu.address.testutil.TypicalPersons.GEORGE;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Collections;
@@ -92,7 +94,8 @@ public class RecommendCommandTest {
         String expectedMessage = RecommendCommand.MESSAGE_SUCCESS_STUDENTS;
         assertCommandSuccess(command, model, expectedMessage, model);
         List<Person> result = model.getFilteredPersonList();
-        assertTrue(result.stream().allMatch(Person::isStudent));
+        List<Person> expectedStudents = List.of(DANIEL, GEORGE);
+        assertEquals(expectedStudents, result);
     }
 
     @Test

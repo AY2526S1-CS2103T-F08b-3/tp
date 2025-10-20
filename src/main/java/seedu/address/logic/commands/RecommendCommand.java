@@ -16,6 +16,8 @@ import seedu.address.model.person.Level;
 import seedu.address.model.person.MatchingLevelPredicate;
 import seedu.address.model.person.MatchingPricePredicate;
 import seedu.address.model.person.MatchingSubjectPredicate;
+import seedu.address.model.person.OverlappingLevelPredicate;
+import seedu.address.model.person.OverlappingPricePredicate;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Price;
 import seedu.address.model.person.Subject;
@@ -103,10 +105,10 @@ public class RecommendCommand extends Command {
             return new CommandResult(MESSAGE_SUCCESS_TUTORS);
         } else if (user.isTutor()) {
             if (filterLevel && userLevel != null) {
-                predicate = predicate.and(p -> p.getLevel() != null && userLevel.intersects(p.getLevel()));
+                predicate = predicate.and(new OverlappingLevelPredicate(List.of(userLevel)));
             }
             if (filterPrice && userPrice != null) {
-                predicate = predicate.and(p -> p.getPrice() != null && userPrice.overlaps(p.getPrice()));
+                predicate = predicate.and(new OverlappingPricePredicate(List.of(userPrice)));
             }
             Predicate<Person> studentPredicate = p -> p.isStudent() && predicate.test(p);
             model.updateFilteredPersonList(studentPredicate);

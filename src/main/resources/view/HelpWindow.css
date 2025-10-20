@@ -17,3 +17,38 @@
 #helpMessageContainer {
     -fx-background-color: derive(#1d1d1d, 20%);
 }
+/* Text inside the Help window */
+#helpMessage {
+    -fx-text-fill: black; /* readable on pink */
+    -fx-font-family: "Poppins";
+}
+
+/* Copy button */
+#copyButton {
+    -fx-background-color: #ff79a8;    /* medium pink */
+    -fx-text-fill: white;             /* white text for contrast */
+    -fx-font-family: "Poppins SemiBold";
+    -fx-background-radius: 6;
+    -fx-padding: 5 14 5 14;
+    -fx-cursor: hand;
+}
+
+/* Hover: brighter pink highlight */
+#copyButton:hover {
+    -fx-background-color: #ff5c98;    /* lighter pink hover */
+}
+
+/* Pressed state: deeper pink */
+#copyButton:armed {
+    -fx-background-color: #ff3f88;    /* dark pink press */
+}
+
+/* Help message background container */
+#helpMessageContainer {
+    -fx-background-color: #ffd1dc;    /* soft pastel pink background */
+    -fx-border-color: #ff1493;        /* deep pink border */
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 10;
+}
+

@@ -7,10 +7,14 @@ import java.util.stream.Stream;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Level;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Price;
+import seedu.address.model.person.Subject;
 import seedu.address.model.tag.Tag;
+
 
 /**
  * A utility class to help with building EditPersonDescriptor objects.
@@ -71,6 +75,100 @@ public class EditPersonDescriptorBuilder {
         descriptor.setAddress(new Address(address));
         return this;
     }
+
+    /**
+     * Sets the subject for this EditPersonDescriptorBuilder using the given string.
+     *
+     * @param subjectString the subject name to set
+     * @return this builder with the subject field set
+     */
+    public EditPersonDescriptorBuilder withSubject(String subjectString) {
+        descriptor.setSubject(new Subject(subjectString));
+        return this;
+    }
+
+
+    /**
+     * Sets the level for this EditPersonDescriptorBuilder using the given string.
+     * Accepts a positive integer or a range (e.g. "3" or "1-6").
+     *
+     * @param levelString the level string to set
+     * @return this builder with the level field set
+     */
+    public EditPersonDescriptorBuilder withLevel(String levelString) {
+        if (levelString == null || levelString.isBlank()) {
+            descriptor.setLevel(new Level(1, 1));
+            return this;
+        }
+
+        try {
+            int start;
+            int end;
+
+            if (levelString.contains("-")) {
+                String[] parts = levelString.split("-");
+                start = Integer.parseInt(parts[0].trim());
+                end = Integer.parseInt(parts[1].trim());
+            } else {
+                start = Integer.parseInt(levelString.trim());
+                end = start;
+            }
+
+            if (start <= 0 || end <= 0 || start > end) {
+                // fall back to a safe default
+                descriptor.setLevel(new Level(1, 1));
+            } else {
+                descriptor.setLevel(new Level(start, end));
+            }
+
+        } catch (NumberFormatException e) {
+            descriptor.setLevel(new Level(1, 1));
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Sets the price for this EditPersonDescriptorBuilder using the given string.
+     * Accepts a positive integer or a range (e.g. "30" or "20-40").
+     *
+     * @param priceString the price string to set
+     * @return this builder with the price field set
+     */
+    public EditPersonDescriptorBuilder withPrice(String priceString) {
+        if (priceString == null || priceString.isBlank()) {
+            descriptor.setPrice(new Price(1, 1));
+            return this;
+        }
+
+        try {
+            int start;
+            int end;
+
+            if (priceString.contains("-")) {
+                String[] parts = priceString.split("-");
+                start = Integer.parseInt(parts[0].trim());
+                end = Integer.parseInt(parts[1].trim());
+            } else {
+                start = Integer.parseInt(priceString.trim());
+                end = start;
+            }
+
+            if (start <= 0 || end <= 0 || start > end) {
+                descriptor.setPrice(new Price(1, 1));
+            } else {
+                descriptor.setPrice(new Price(start, end));
+            }
+
+        } catch (NumberFormatException e) {
+            descriptor.setPrice(new Price(1, 1));
+        }
+
+        return this;
+    }
+
+
 
     /**
      * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code EditPersonDescriptor}

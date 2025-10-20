@@ -44,6 +44,8 @@ public class RecommendCommand extends Command {
 
     public static final String MESSAGE_SUCCESS_TUTORS = "Recommended tutors based on your requirements!";
     public static final String MESSAGE_SUCCESS_STUDENTS = "Recommended students based on your requirements!";
+    public static final String MESSAGE_NO_MATCH_TUTORS = "No tutors match your requirements.";
+    public static final String MESSAGE_NO_MATCH_STUDENTS = "No students match your requirements.";
 
     private final Index index;
     private final boolean useSubject;
@@ -102,6 +104,11 @@ public class RecommendCommand extends Command {
             }
             Predicate<Person> tutorPredicate = p -> p.isTutor() && predicate.test(p);
             model.updateFilteredPersonList(tutorPredicate);
+
+            if (model.getFilteredPersonList().isEmpty()) {
+                model.updateFilteredPersonList(p -> true); // show all persons
+                return new CommandResult(MESSAGE_NO_MATCH_TUTORS);
+            }
             return new CommandResult(MESSAGE_SUCCESS_TUTORS);
         } else if (user.isTutor()) {
             if (filterLevel && userLevel != null) {
@@ -112,6 +119,10 @@ public class RecommendCommand extends Command {
             }
             Predicate<Person> studentPredicate = p -> p.isStudent() && predicate.test(p);
             model.updateFilteredPersonList(studentPredicate);
+            if (model.getFilteredPersonList().isEmpty()) {
+                model.updateFilteredPersonList(p -> true); // show all persons
+                return new CommandResult(MESSAGE_NO_MATCH_STUDENTS);
+            }
             return new CommandResult(MESSAGE_SUCCESS_STUDENTS);
         }
         return new CommandResult(

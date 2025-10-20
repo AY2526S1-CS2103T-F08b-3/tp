@@ -7,6 +7,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SIXTH_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SEVENTH_PERSON;
 import static seedu.address.testutil.TypicalPersons.DANIEL;
 import static seedu.address.testutil.TypicalPersons.GEORGE;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -26,7 +27,6 @@ import seedu.address.model.person.Person;
  */
 public class RecommendCommandTest {
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-    private Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void equals() {
@@ -55,9 +55,9 @@ public class RecommendCommandTest {
 
     @Test
     public void execute_noCriteria_recommendTutors() {
-        // FIONA is a student, recommend tutors based on all criteria
+        // GEORGE is a student, recommend tutors based on all criteria
         RecommendCommand command =
-                new RecommendCommand(INDEX_SIXTH_PERSON, false, false, false);
+                new RecommendCommand(INDEX_SEVENTH_PERSON, false, false, false);
         String expectedMessage = RecommendCommand.MESSAGE_SUCCESS_TUTORS;
         assertCommandSuccess(command, model, expectedMessage, model);
         List<Person> result = model.getFilteredPersonList();
@@ -103,10 +103,11 @@ public class RecommendCommandTest {
         // FIONA is a student, recommend tutors with impossible criteria (using FIONA's index)
         RecommendCommand command =
                 new RecommendCommand(INDEX_SIXTH_PERSON, true, true, true);
-        String expectedMessage = RecommendCommand.MESSAGE_SUCCESS_TUTORS;
-        expectedModel.updateFilteredPersonList(p -> false); // No match
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Collections.emptyList(), model.getFilteredPersonList());
+        String expectedMessage = RecommendCommand.MESSAGE_NO_MATCH_TUTORS;
+        List<Person> result = model.getFilteredPersonList();
+        assertCommandSuccess(command, model, expectedMessage, model);
+        List<Person> expected = model.getAddressBook().getPersonList();
+        assertEquals(expected, result);
     }
 
     @Test

@@ -77,7 +77,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
   The app guides with specific messages on: wrong command format, missing/invalid `<tutor/student>` or `<tutors/students>`, invalid field (`/s` `/l` `/p`), malformed values (non-integer level, bad `min-max`, min>max), duplicates, and empty lists.  
 
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `exit` and `clear`) will be ignored.<br>
+* Extraneous parameters for commands that do not take in parameters (such as `help`, `exit`, `clear` and `stats`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
 
@@ -99,11 +99,10 @@ Adds a **tutor** or **student** with subject, level, and price range.
 
 Format: `add r/<tutor/student> n/<name> hp/<phone> a/<address> s/<subject> l/<level> p/<min-max>`
 
-
-
 Examples:
 * `add r/student n/aaron hp/91234567 a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`  
 * `add r/tutor n/Mary hp/98765432 a/Tampines Ave 1 s/english l/2-5 p/25-40`
+
 ### Listing all persons : `list`
 
 Shows a list of either tutors or students.
@@ -118,10 +117,9 @@ Returns a filtered list of students/tutors from our database based on one condit
 
 Returns a filtered list of students or tutors from the database based on one or more conditions such as name, subject, level, or price.
 
-### Format
-find <tutors/students> <field>/ <filter_value> [<field>/ <filter_value> ...]
+Format: find <tutors/students> <field>/ <filter_value> [<field>/ <filter_value> ...]
 
-### Description
+Description:
 - <tutor/student> specifies whether to search tutors or students.  
   This field is optional — omitting it searches all persons.
 - <field>/ must be one of the following prefixes:
@@ -134,8 +132,7 @@ find <tutors/students> <field>/ <filter_value> [<field>/ <filter_value> ...]
 - Multiple prefixes of the same type are allowed (e.g. s/ math s/ science).
 - All conditions are combined with logical AND, meaning all must match.
 
-### Parameter Specifications
-Acceptable values:
+Parameter Specifications:
 - <tutor/student> must be exactly tutor or student (case-insensitive).
 - <field>/ must be one of the following:
     - n/  for name
@@ -148,7 +145,7 @@ Acceptable values:
     - l/ <level>: single integer from 1–6 or a range like 2–4
     - p/ <range>: one or two integers separated by a dash (e.g. 10–20, 30)
 
-### Examples
+Examples:
 - find tutors n/ Aaron — finds all tutors with “Aaron” in their name.
 - find tutors s/ Mathematics — finds all tutors teaching Mathematics.
 - find tutors l/ 3 — finds all tutors teaching Level 3 students.
@@ -156,7 +153,7 @@ Acceptable values:
 - find tutors s/ Mathematics l/ 2–4 p/ 25–50 — finds tutors teaching Math for Levels 2–4, charging $25–$50/hour.
 - find students s/ English s/ Chinese p/ 15 — finds students needing English or Chinese at $15/hour.
 
-### Notes
+Notes:
 - You can combine multiple filters in one command.
 - Prefixes can appear in any order.
 - The same prefix can appear multiple times with different values.
@@ -238,6 +235,11 @@ Clears all entries from the ConnectEd.
 
 Format: `clear`
 
+### Viewing statistics : `stats`
+Displays statistics about the current tutors and students in ConnectEd, including total counts, average prices, subject distributions, and matched pairs.
+
+Format: `stats`
+
 ### Exiting the program : `exit`
 
 Exits the program.
@@ -289,4 +291,5 @@ Action | Format, Examples
 **List** | `list students / list tutors`
 **Sort** | `sort <students/tutors> <filter_criteria>`<br> e.g., `sort students p/`
 **Recommend** | `recommend INDEX [s/] [l/] [p/]`<br> e.g., `recommend 1 s/ l/`
+**Stats** | `stats`
 **Help** | `help`

@@ -53,18 +53,18 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
   * List: `list <tutors/students>`
   * Find: `find <tutors/students> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`
   * Match: `match <ID_1> <ID_2>`
-  * Unmatch: `unmatch <ID_1>` or `unmatch <ID_2>` 
+  * Unmatch: `unmatch <ID_1>` or `unmatch <ID_2>`
 
 
-* Accepted values (validators)  
-  * `<tutor/student>` for `add`: exactly “tutor” or “student” (case-insensitive).  
-  * `<tutors/students>` for `list` and `find`: exactly “tutors” or “students” (case-insensitive).  
-  * `hp/` phone: 8 digits (spaces allowed), digits only.  
-  * `s/` subject: one of {english, mathematics, chinese, science} (case-insensitive).  
-  * `l/` level:  
-    * Student: single integer 1–6  
-    * Tutor: single integer 1–6 **or** range `x-y` (1–6 to 1–6; no internal spaces)  
-  * `p/` price range: `min-max`, integers 1–200.  
+* Accepted values (validators)
+  * `<tutor/student>` for `add`: exactly “tutor” or “student” (case-insensitive).
+  * `<tutors/students>` for `list` and `find`: exactly “tutors” or “students” (case-insensitive).
+  * `hp/` phone: 8 digits (spaces allowed), digits only.
+  * `s/` subject: one of {english, mathematics, chinese, science} (case-insensitive).
+  * `l/` level:
+    * Student: single integer 1–6
+    * Tutor: single integer 1–6 **or** range `x-y` (1–6 to 1–6; no internal spaces)
+  * `p/` price range: `min-max`, integers 1–200.
 
 
 * Typed indices

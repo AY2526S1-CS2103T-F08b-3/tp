@@ -2,12 +2,15 @@ package seedu.address.storage;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.person.Price;
 import seedu.address.model.person.Session;
+import seedu.address.model.person.Subject;
 
 /**
  * Jackson-friendly version of {@link Session}.
@@ -28,7 +31,7 @@ public class JsonAdaptedSession {
     private final String time;
     private final Long durationMinutes;
     private final String subject;
-    private final Double price;
+    private final String price;
 
     /**
      * Constructs a {@code JsonAdaptedSession} with the provided values.
@@ -45,7 +48,7 @@ public class JsonAdaptedSession {
                               @JsonProperty("time") String time,
                               @JsonProperty("durationMinutes") Long durationMinutes,
                               @JsonProperty("subject") String subject,
-                              @JsonProperty("price") Double price) {
+                              @JsonProperty("price") String price) {
         this.day = day;
         this.time = time;
         this.durationMinutes = durationMinutes;
@@ -61,10 +64,10 @@ public class JsonAdaptedSession {
      */
     public JsonAdaptedSession(Session source) {
         this.day = source.getDay().name();
-        this.time = source.getTime();
+        this.time = source.getTime().toString();
         this.durationMinutes = source.getDuration().toMinutes();
         this.subject = source.getSubject().toString();
-        this.price = source.getPrice();
+        this.price = source.getPrice().toString();
     }
 
     /**
@@ -97,12 +100,22 @@ public class JsonAdaptedSession {
             throw new IllegalValueException("Invalid day value for session: " + day);
         }
 
+        LocalTime modelTime;
+        try {
+            modelTime = LocalTime.parse(time);
+        } catch (Exception e) {
+            throw new IllegalValueException("Invalid time value for session: " + time);
+        }
+
         if (durationMinutes <= 0) {
             throw new IllegalValueException("Session durationMinutes must be positive");
         }
         Duration modelDuration = Duration.ofMinutes(durationMinutes);
+        Subject modelSubject = new Subject(subject);
+        int intPrice = Integer.parseInt(price);
+        Price modelPrice = new Price(intPrice, intPrice);
 
-        return new Session(modelDay, time, modelDuration, subject, price);
+        return new Session(modelDay, modelTime, modelDuration, modelSubject, modelPrice);
     }
 
 }

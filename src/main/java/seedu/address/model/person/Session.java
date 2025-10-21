@@ -2,6 +2,7 @@ package seedu.address.model.person;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Objects;
 
 /**
@@ -13,10 +14,10 @@ import java.util.Objects;
 
 public class Session {
     private final DayOfWeek day;
-    private final String time;
+    private final LocalTime time;
     private final Duration duration;
-    private final String subject;
-    private final double price;
+    private final Subject subject;
+    private final Price price;
 
     /**
      * Constructs a {@code Session} object.
@@ -27,7 +28,7 @@ public class Session {
      * @param subject   The subject taught in this session.
      * @param price     The price charged for the session.
      */
-    public Session(DayOfWeek day, String time, Duration duration, String subject, double price) {
+    public Session(DayOfWeek day, LocalTime time, Duration duration, Subject subject, Price price) {
         this.day = day;
         this.time = time;
         this.duration = duration;
@@ -41,7 +42,7 @@ public class Session {
     }
 
     /** Returns the start time of the session as a string (e.g. "15:00"). */
-    public String getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
@@ -51,12 +52,12 @@ public class Session {
     }
 
     /** Returns the subject taught in the session. */
-    public String getSubject() {
+    public Subject getSubject() {
         return subject;
     }
 
     /** Returns the price of the session. */
-    public double getPrice() {
+    public Price getPrice() {
         return price;
     }
 
@@ -84,14 +85,14 @@ public class Session {
 
         Session s = (Session) other;
         return day.equals(s.day)
-                && time.equalsIgnoreCase(s.time)
+                && time.equals(s.time)
                 && duration.equals(s.duration)
                 && subject.equals(s.subject)
-                && price == (s.price);
+                && price.equals(s.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(day, time.toLowerCase(), duration, subject, price);
+        return Objects.hash(day, time, duration, subject, price);
     }
 }

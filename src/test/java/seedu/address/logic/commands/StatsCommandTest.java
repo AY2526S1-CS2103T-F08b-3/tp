@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.statistics.TutorStatistics;
+import seedu.address.model.statistics.Statistics;
 import seedu.address.model.statistics.TutorStatisticsCalculator;
 import seedu.address.testutil.TypicalPersons;
 
@@ -21,7 +21,7 @@ public class StatsCommandTest {
 
         TutorStatisticsCalculator tutorCalc =
                 new TutorStatisticsCalculator(model.getAddressBook().getPersonList());
-        TutorStatistics tutorStats = tutorCalc.calculate();
+        Statistics tutorStats = tutorCalc.calculate();
         String studentStats = "students hereeeeeeeeeeeee"; // TODO: CHANGE THIS FOR STUDENT IMPLEMENTATION
 
         String expected = "================ CONNECTED STATISTICS ================\n"

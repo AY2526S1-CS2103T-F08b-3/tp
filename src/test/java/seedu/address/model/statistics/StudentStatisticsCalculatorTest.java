@@ -15,7 +15,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.TypicalPersons;
 
-public class TutorStatisticsCalculatorTest {
+public class StudentStatisticsCalculatorTest {
 
     private int parseMidpoint(String priceRange) {
         String[] parts = priceRange.split("-");
@@ -27,21 +27,21 @@ public class TutorStatisticsCalculatorTest {
     @Test
     public void calculate_typicalAddressBook_returnsExpectedStatistics() {
         List<Person> persons = TypicalPersons.getTypicalAddressBook().getPersonList();
-        StatisticsCalculator tutorCalculator = new TutorStatisticsCalculator(persons);
-        Statistics stats = tutorCalculator.calculate();
+        StatisticsCalculator studentCalculator = new StudentStatisticsCalculator(persons);
+        Statistics stats = studentCalculator.calculate();
 
-        List<Person> tutors = persons.stream()
-                .filter(Person::isTutor)
+        List<Person> students = persons.stream()
+                .filter(Person::isStudent)
                 .toList();
 
-        int expectedTotal = tutors.size();
+        int expectedTotal = students.size();
         int expectedAveragePrice = (int) Math.round(
-                tutors.stream()
+                students.stream()
                       .mapToInt(t -> parseMidpoint(t.getPrice().toString()))
                       .average()
                       .orElse(0));
         Map<String, Integer> freq = new LinkedHashMap<>();
-        for (Person t : tutors) {
+        for (Person t : students) {
             String subj = t.getSubject().toString();
             freq.put(subj, freq.getOrDefault(subj, 0) + 1);
         }
@@ -57,18 +57,18 @@ public class TutorStatisticsCalculatorTest {
     }
 
     @Test
-    public void calculate_noTutors_returnsZeroAndNaSubject() {
+    public void calculate_noStudents_returnsZeroAndNaSubject() {
         AddressBook ab = new AddressBook();
-        // add only students from TypicalPersons
+        // add only tutors from TypicalPersons so the student calculator sees no students
         for (Person p : TypicalPersons.getTypicalPersons()) {
-            if (p.isStudent()) {
+            if (p.isTutor()) {
                 ab.addPerson(p);
             }
         }
 
         List<Person> persons = ab.getPersonList();
-        TutorStatisticsCalculator tutorCalculator = new TutorStatisticsCalculator(persons);
-        Statistics stats = tutorCalculator.calculate();
+        StudentStatisticsCalculator studentCalculator = new StudentStatisticsCalculator(persons);
+        Statistics stats = studentCalculator.calculate();
 
         assertEquals(0, stats.getTotalPersons());
         assertEquals(0, stats.getAveragePrice());

@@ -45,14 +45,14 @@ public class TutorStatisticsTest {
                 .map(Map.Entry::getKey)
                 .orElse(null);
 
-        int matchedTutors = 0;
+        int matchedPersons = 0;
 
-        TutorStatistics stats = new TutorStatistics(totalTutors, averagePrice, mostCommonSubject, matchedTutors);
+        TutorStatistics stats = new TutorStatistics(totalTutors, averagePrice, mostCommonSubject, matchedPersons);
 
         assertEquals(totalTutors, stats.getTotalTutors());
         assertEquals(averagePrice, stats.getAveragePrice());
         assertEquals(mostCommonSubject, stats.getMostCommonSubject());
-        assertEquals(matchedTutors, stats.getMatchedTutors());
+        assertEquals(matchedPersons, stats.getMatchedPerson());
     }
 
     @Test
@@ -83,7 +83,7 @@ public class TutorStatisticsTest {
         assertTrue(output.contains(String.format("Total Tutors: %d", totalTutors)));
         assertTrue(output.contains(String.format("Average Price: %d", averagePrice)));
         assertTrue(output.contains(String.format("Most Common Subject: %s", mostCommonSubject)));
-        assertTrue(output.contains("Matched Tutors: 0"));
+        assertTrue(output.contains("Matched Persons: 0"));
     }
 
     @Test

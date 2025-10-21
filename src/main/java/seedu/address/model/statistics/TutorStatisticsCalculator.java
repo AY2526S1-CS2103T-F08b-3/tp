@@ -10,7 +10,7 @@ import seedu.address.model.person.Person;
 /**
  * A utility class for calculating statistics about tutors in the address book.
  */
-public class TutorStatisticsCalculator {
+public class TutorStatisticsCalculator extends StatisticsCalculator {
 
     private final List<Person> tutors;
 
@@ -22,7 +22,8 @@ public class TutorStatisticsCalculator {
      * Calculates statistics about tutors from the given list of persons.
      * @return A TutorStatistics object containing the calculated statistics.
      */
-    public TutorStatistics calculate() {
+    @Override
+    public Statistics calculate() {
         int totalTutors = tutors.size();
         int averagePrice = getAveragePrice();
         String mostCommonSubject = getMostCommonSubject();

@@ -3,11 +3,11 @@ package seedu.address.model.statistics;
 /**
  * Represents statistics about tutors in the address book.
  */
-public class TutorStatistics {
+public class TutorStatistics extends Statistics {
     private final int totalTutors;
     private final int averagePrice;
     private final String mostCommonSubject;
-    private final int matchedTutors;
+    private final int matchedPerson;
 
     /**
      * Constructs a TutorStatistics object with the given statistics.
@@ -15,38 +15,42 @@ public class TutorStatistics {
      * @param totalTutors       Total number of tutors.
      * @param averagePrice      Average price of tutors.
      * @param mostCommonSubject Most common subject among tutors.
-     * @param matchedTutors     Number of tutors matching specific criteria.
+     * @param matchedPerson     Number of matched persons (tutors).
      */
-    public TutorStatistics(int totalTutors, int averagePrice, String mostCommonSubject, int matchedTutors) {
+    public TutorStatistics(int totalTutors, int averagePrice, String mostCommonSubject, int matchedPerson) {
         this.totalTutors = totalTutors;
         this.averagePrice = averagePrice;
         this.mostCommonSubject = mostCommonSubject;
-        this.matchedTutors = matchedTutors;
+        this.matchedPerson = matchedPerson;
     }
 
-    public int getTotalTutors() {
+    @Override
+    public int getTotalPersons() {
         return totalTutors;
     }
 
+    @Override
     public int getAveragePrice() {
         return averagePrice;
     }
 
+    @Override
     public String getMostCommonSubject() {
         return mostCommonSubject;
     }
 
-    public int getMatchedTutors() {
-        return matchedTutors;
+    @Override
+    public int getMatchedPerson() {
+        return matchedPerson;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Total Tutors: %d\n", totalTutors));
+        sb.append(String.format("Total Tutor(s): %d\n", totalTutors));
         sb.append(String.format("Average Price: %d\n", averagePrice));
         sb.append(String.format("Most Common Subject: %s\n", mostCommonSubject));
-        sb.append(String.format("Matched Tutors: %d\n", matchedTutors));
+        sb.append(String.format("Matched Person(s): %d\n", matchedPerson));
         return sb.toString();
     }
 }

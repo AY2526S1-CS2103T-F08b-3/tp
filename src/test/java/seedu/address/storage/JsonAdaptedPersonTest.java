@@ -46,7 +46,7 @@ public class JsonAdaptedPersonTest {
     private static final Integer VALID_MATCHED_PERSON_ID = null;
     private static final Session VALID_SESSION = new Session(
             DayOfWeek.of(3),
-            LocalTime.of(16,30),
+            LocalTime.of(16, 30),
             Duration.ofHours(2),
             new Subject("Mathematics"),
             new Price(50, 50)

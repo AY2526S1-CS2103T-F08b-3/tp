@@ -234,16 +234,36 @@ public class ParserUtil {
      */
     public static Duration parseDuration(String durationStr) throws ParseException {
         requireNonNull(durationStr);
+        String trimmed = durationStr.trim();
+
+        if (!trimmed.matches("\\d{1,2}:\\d{2}")) {
+            throw new ParseException("Invalid duration format! Use HH:mm (e.g. dur/01:30).");
+        }
+
         try {
-            LocalTime time = LocalTime.parse(durationStr.trim(), DateTimeFormatter.ofPattern("HH:mm"));
-            long totalMinutes = time.getHour() * 60L + time.getMinute();
-            if (totalMinutes <= 0) {
-                throw new ParseException("Duration must be greater than 00:00.");
-            }
+            final long totalMinutes = getTotalMinutes(trimmed);
+
             return Duration.ofMinutes(totalMinutes);
-        } catch (DateTimeParseException e) {
-            throw new ParseException("Invalid duration format! Use HH:mm (e.g. dur/ 01:30).");
+        } catch (NumberFormatException e) {
+            throw new ParseException("Invalid duration numbers! Use HH:mm (e.g. dur/ 01:30).");
         }
     }
+
+    private static long getTotalMinutes(String trimmed) throws ParseException {
+        String[] parts = trimmed.split(":");
+        int hours = Integer.parseInt(parts[0]);
+        int minutes = Integer.parseInt(parts[1]);
+
+        if (hours < 0 || minutes < 0 || minutes >= 60) {
+            throw new ParseException("Invalid duration! Hours must be >= 0 and minutes between 00–59.");
+        }
+
+        long totalMinutes = hours * 60L + minutes;
+        if (totalMinutes == 0) {
+            throw new ParseException("Duration must be greater than 00:00.");
+        }
+        return totalMinutes;
+    }
+
 
 }

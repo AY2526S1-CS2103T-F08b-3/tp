@@ -27,9 +27,10 @@ public class TutorStatisticsCalculator extends StatisticsCalculator {
         int totalTutors = tutors.size();
         int averagePrice = getAveragePrice();
         String mostCommonSubject = getMostCommonSubject();
+        String allSubjects = getAllSubjects();
         int matchedTutors = countMatchedTutors(tutors);
 
-        return new TutorStatistics(totalTutors, averagePrice, mostCommonSubject, matchedTutors);
+        return new TutorStatistics(totalTutors, averagePrice, mostCommonSubject, allSubjects, matchedTutors);
     }
 
     private int getAveragePrice() {
@@ -51,6 +52,25 @@ public class TutorStatisticsCalculator extends StatisticsCalculator {
                 .collect(Collectors.groupingBy(t -> t.getSubject().toString(), Collectors.counting()));
 
         return Collections.max(frequencyMap.entrySet(), Map.Entry.comparingByValue()).getKey();
+    }
+    private String getAllSubjects() {
+        Map<String, Integer> subjectCounts = new java.util.LinkedHashMap<>();
+
+        for (Person p : tutors) {
+            String subject = p.getSubject().toString();
+            subjectCounts.put(subject, subjectCounts.getOrDefault(subject, 0) + 1);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        boolean isFirst = true;
+        for (Map.Entry<String, Integer> entry : subjectCounts.entrySet()) {
+            if (!isFirst) {
+                sb.append(", ");
+            }
+            isFirst = false;
+            sb.append(String.format("%s (%d)", entry.getKey(), entry.getValue()));
+        }
+        return sb.toString().trim();
     }
 
     private int countMatchedTutors(List<Person> tutors) {

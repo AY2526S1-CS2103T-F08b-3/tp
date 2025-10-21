@@ -5,8 +5,6 @@ package seedu.address.model.statistics;
  */
 public abstract class Statistics {
 
-    public abstract int getTotalPersons();
-
     public abstract int getAveragePrice();
 
     public abstract String getMostCommonSubject();

@@ -6,13 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
-import static seedu.address.testutil.TypicalIndexes.INDEX_SIXTH_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SEVENTH_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SIXTH_PERSON;
 import static seedu.address.testutil.TypicalPersons.DANIEL;
 import static seedu.address.testutil.TypicalPersons.GEORGE;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;

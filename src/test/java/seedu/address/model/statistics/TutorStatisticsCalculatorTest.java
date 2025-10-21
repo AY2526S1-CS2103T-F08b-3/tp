@@ -29,7 +29,7 @@ public class TutorStatisticsCalculatorTest {
     public void calculate_typicalAddressBook_returnsExpectedStatistics() {
         List<Person> persons = TypicalPersons.getTypicalAddressBook().getPersonList();
         TutorStatisticsCalculator tutorCalculator = new TutorStatisticsCalculator(persons);
-        TutorStatistics stats = tutorCalculator.calculate();
+        Statistics stats = tutorCalculator.calculate();
 
         List<Person> tutors = persons.stream()
                 .filter(Person::isTutor)
@@ -52,7 +52,7 @@ public class TutorStatisticsCalculatorTest {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
 
-        assertEquals(expectedTotal, stats.getTotalTutors());
+        assertEquals(expectedTotal, stats.getTotalPersons());
         assertEquals(expectedAveragePrice, stats.getAveragePrice());
         assertTrue(topSubjects.contains(stats.getMostCommonSubject()));
     }
@@ -69,9 +69,9 @@ public class TutorStatisticsCalculatorTest {
 
         List<Person> persons = ab.getPersonList();
         TutorStatisticsCalculator tutorCalculator = new TutorStatisticsCalculator(persons);
-        TutorStatistics stats = tutorCalculator.calculate();
+        Statistics stats = tutorCalculator.calculate();
 
-        assertEquals(0, stats.getTotalTutors());
+        assertEquals(0, stats.getTotalPersons());
         assertEquals(0, stats.getAveragePrice());
         assertEquals("N/A", stats.getMostCommonSubject());
     }

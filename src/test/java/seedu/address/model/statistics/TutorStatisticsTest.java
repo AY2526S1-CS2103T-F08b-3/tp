@@ -40,18 +40,26 @@ public class TutorStatisticsTest {
             String subj = t.getSubject().toString();
             freq.put(subj, freq.getOrDefault(subj, 0) + 1);
         }
+
         String mostCommonSubject = freq.entrySet().stream()
                 .max(Comparator.comparingInt(Map.Entry::getValue))
                 .map(Map.Entry::getKey)
                 .orElse(null);
 
+        String allSubjects = String.join(", ",
+                freq.entrySet().stream()
+                    .map(e -> e.getKey() + " (" + e.getValue() + ")")
+                    .collect(Collectors.toList()));
+
         int matchedPersons = 0;
 
-        TutorStatistics stats = new TutorStatistics(totalTutors, averagePrice, mostCommonSubject, matchedPersons);
+        Statistics stats = new TutorStatistics(totalTutors, averagePrice, mostCommonSubject,
+                allSubjects, matchedPersons);
 
-        assertEquals(totalTutors, stats.getTotalTutors());
+        assertEquals(totalTutors, stats.getTotalPersons());
         assertEquals(averagePrice, stats.getAveragePrice());
         assertEquals(mostCommonSubject, stats.getMostCommonSubject());
+        assertEquals(allSubjects, stats.getAllSubjects());
         assertEquals(matchedPersons, stats.getMatchedPerson());
     }
 
@@ -67,28 +75,36 @@ public class TutorStatisticsTest {
                       .mapToInt(t -> parseMidpoint(t.getPrice().toString()))
                       .average()
                       .orElse(0));
+
         Map<String, Integer> freq = new LinkedHashMap<>();
         for (Person t : tutors) {
             String subj = t.getSubject().toString();
             freq.put(subj, freq.getOrDefault(subj, 0) + 1);
         }
+
         String mostCommonSubject = freq.entrySet().stream()
                 .max(Comparator.comparingInt(Map.Entry::getValue))
                 .map(Map.Entry::getKey)
                 .orElse(null);
 
-        TutorStatistics stats = new TutorStatistics(totalTutors, averagePrice, mostCommonSubject, 0);
+        String allSubjects = String.join(", ",
+                freq.entrySet().stream()
+                        .map(e -> e.getKey() + " (" + e.getValue() + ")")
+                        .collect(Collectors.toList()));
+
+        Statistics stats = new TutorStatistics(totalTutors, averagePrice, mostCommonSubject, allSubjects, 0);
         String output = stats.toString();
 
         assertTrue(output.contains(String.format("Total Tutors: %d", totalTutors)));
-        assertTrue(output.contains(String.format("Average Price: %d", averagePrice)));
+        assertTrue(output.contains(String.format("Average Price: $%d", averagePrice)));
         assertTrue(output.contains(String.format("Most Common Subject: %s", mostCommonSubject)));
+        assertTrue(output.contains(String.format("All Subjects: %s", allSubjects)));
         assertTrue(output.contains("Matched Persons: 0"));
     }
 
     @Test
     public void toString_handlesNullSubject() {
-        TutorStatistics stats = new TutorStatistics(0, 0, null, 0);
+        TutorStatistics stats = new TutorStatistics(0, 0, null, "", 0);
         String output = stats.toString();
 
         assertTrue(output.contains("Most Common Subject: null"));

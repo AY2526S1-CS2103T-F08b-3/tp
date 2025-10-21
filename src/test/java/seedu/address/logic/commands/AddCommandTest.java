@@ -142,6 +142,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public List<Person> getAllPersonList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public String getRepeatedEntry(Person person) {
             throw new AssertionError("This method should not be called.");
         }

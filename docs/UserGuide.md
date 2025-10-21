@@ -31,8 +31,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
    * `add r/student aaron hp/91234567 a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30` : Adds a **student** with subject, level, and price range.
      (Example for tutor: `add r/tutor Mary hp/98765432 a/Tampines Ave 1 s/english l/2-5 p/25-40`)
 
-   * `delete 1` : Deletes the 1st **person** shown in the current list.  
-   
+   * `delete 1` : Deletes the 1st **person** shown in the current list.
 
    * `clear` : Deletes all entries.
 
@@ -48,33 +47,33 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 
 **:information_source: Notes about the command format:**<br>
 
-* Parameters & placeholders  
-  Commands follow the below exactly:  
-  • Add: `add r/<tutor/student> n/<name> hp/<phone> a/<address> s/<subject> l/<level> p/<min-max>`  
-  • List: `list <tutors/students>`  
-  • Find: `find <tutors/students> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`  
-  • Match: `match <ID_1> <ID_2>`
-
-  • Unmatch: `unmatch <ID_1>` or `unmatch <ID_2>` 
+* Parameters & placeholders
+  Commands follow the below exactly:
+  * Add: `add r/<tutor/student> n/<name> hp/<phone> a/<address> s/<subject> l/<level> p/<min-max>`
+  * List: `list <tutors/students>`
+  * Find: `find <tutors/students> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`
+  * Match: `match <ID_1> <ID_2>`
+  * Unmatch: `unmatch <ID_1>` or `unmatch <ID_2>` 
 
 
 * Accepted values (validators)  
-  • `<tutor/student>` for `add`: exactly “tutor” or “student” (case-insensitive).  
-  • `<tutors/students>` for `list` and `find`: exactly “tutors” or “students” (case-insensitive).  
-  • `hp/` phone: 8 digits (spaces allowed), digits only.  
-  • `s/` subject: one of {english, mathematics, chinese, science} (case-insensitive).  
-  • `l/` level:  
-  – Student: single integer 1–6  
-  – Tutor: single integer 1–6 **or** range `x-y` (1–6 to 1–6; no internal spaces)  
-  • `p/` price range: `min-max`, integers 1–200.  
+  * `<tutor/student>` for `add`: exactly “tutor” or “student” (case-insensitive).  
+  * `<tutors/students>` for `list` and `find`: exactly “tutors” or “students” (case-insensitive).  
+  * `hp/` phone: 8 digits (spaces allowed), digits only.  
+  * `s/` subject: one of {english, mathematics, chinese, science} (case-insensitive).  
+  * `l/` level:  
+    * Student: single integer 1–6  
+    * Tutor: single integer 1–6 **or** range `x-y` (1–6 to 1–6; no internal spaces)  
+  * `p/` price range: `min-max`, integers 1–200.  
 
 
-* Typed indices  
-  • Use `<INDEX>` persons (1-indexed; visible list indices; no spaces).  
-  • Examples: `delete 1`, `delete 2`, `match 1 2`, `unmatch 2`.  
+* Typed indices
+  * Use `<INDEX>` persons (1-indexed; visible list indices; no spaces).
+  * Examples: `delete 1`, `delete 2`, `match 1 2`, `unmatch 2`.
 
-* Errors (shape & value)  
-  The app guides with specific messages on: wrong command format, missing/invalid `<tutor/student>` or `<tutors/students>`, invalid field (`/s` `/l` `/p`), malformed values (non-integer level, bad `min-max`, min>max), duplicates, and empty lists.  
+
+* Errors (shape & value)
+  <br>The app guides with specific messages on: wrong command format, missing/invalid `<tutor/student>` or `<tutors/students>`, invalid field (`/s` `/l` `/p`), malformed values (non-integer level, bad `min-max`, min>max), duplicates, and empty lists.
 
 
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `exit`, `clear` and `stats`) will be ignored.<br>
@@ -100,7 +99,7 @@ Adds a **tutor** or **student** with subject, level, and price range.
 Format: `add r/<tutor/student> n/<name> hp/<phone> a/<address> s/<subject> l/<level> p/<min-max>`
 
 Examples:
-* `add r/student n/aaron hp/91234567 a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`  
+* `add r/student n/aaron hp/91234567 a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
 * `add r/tutor n/Mary hp/98765432 a/Tampines Ave 1 s/english l/2-5 p/25-40`
 
 ### Listing all persons : `list`
@@ -120,12 +119,12 @@ Returns a filtered list of students or tutors from the database based on one or 
 Format: find <tutors/students> <field>/ <filter_value> [<field>/ <filter_value> ...]
 
 Description:
-- <tutor/student> specifies whether to search tutors or students.  
+- <tutor/student> specifies whether to search tutors or students.<br>
   This field is optional — omitting it searches all persons.
 - <field>/ must be one of the following prefixes:
-  - n/  for name  
-  - s/  for subject  
-  - l/  for level  
+  - n/  for name
+  - s/  for subject
+  - l/  for level
   - p/  for price range
 - <filter_value> is the keyword, number, or range to match for the field.
 - Prefix order does not matter.
@@ -150,7 +149,7 @@ Examples:
 - find tutors s/ Mathematics — finds all tutors teaching Mathematics.
 - find tutors l/ 3 — finds all tutors teaching Level 3 students.
 - find students p/ 10–20 — finds all students offering a price range of $10–20/hour.
-- find tutors s/ Mathematics l/ 2–4 p/ 25–50 — finds tutors teaching Math for Levels 2–4, charging $25–$50/hour.
+- find tutors s/ Mathematics l/ 2–4 p/ 25–50 — finds tutors teaching Math for Levels 2–4, charging $25–50/hour.
 - find students s/ English s/ Chinese p/ 15 — finds students needing English or Chinese at $15/hour.
 
 Notes:
@@ -162,7 +161,7 @@ Notes:
 
 ### Match/Unmatch a student and a tutor : `match/unmatch`
 
-Link one Tutor and one Student so both are flagged as Matched and hold a bidirectional reference to each other. 
+Link one Tutor and one Student so both are flagged as Matched and hold a bidirectional reference to each other.
 Supports undoing via unmatch.
 
 Format:
@@ -211,7 +210,7 @@ Examples:
   ![result for 'sort tutors p/'](images/SortResult.png)
 
 Notes:
-* The sort command filters the list to show only tutors or students (based on your selection) before sorting 
+* The sort command filters the list to show only tutors or students (based on your selection) before sorting
 * For price ranges (e.g., `10-20`), sorting uses the lower bound value (`10`)
 * For level ranges (e.g., `3-5`), sorting uses the lower bound value (`3`)
 

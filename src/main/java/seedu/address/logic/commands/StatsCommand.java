@@ -28,10 +28,11 @@ public class StatsCommand extends Command {
         Statistics studentStats = studentCalc.calculate();
 
         String result = "================ CONNECTED STATISTICS ================\n"
-                + "Tutors\n"
+                + "TUTORS\n"
                 + "-----------------------------------------------------\n"
                 + tutorStats + "\n"
-                + "Students\n"
+                + "======================================================\n"
+                + "STUDENTS\n"
                 + "-----------------------------------------------------\n"
                 + studentStats + "\n"
                 + "======================================================\n";

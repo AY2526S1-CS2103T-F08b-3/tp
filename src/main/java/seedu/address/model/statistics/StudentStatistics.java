@@ -48,9 +48,9 @@ public class StudentStatistics extends Statistics {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("Total Student(s): %d\n", totalStudents));
-        sb.append(String.format("Average Price: %d\n", averagePrice));
+        sb.append(String.format("Average Price: $%d\n", averagePrice));
         sb.append(String.format("Most Common Subject: %s\n", mostCommonSubject));
-        sb.append(String.format("Matched Person(s): %d\n", matchedPerson));
+        sb.append(String.format("Matched Person(s): %d", matchedPerson));
         return sb.toString();
     }
 }

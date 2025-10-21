@@ -22,8 +22,8 @@ public class StatsCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
 
-        StatisticsCalculator tutorCalc = new TutorStatisticsCalculator(model.getAddressBook().getPersonList());
-        StatisticsCalculator studentCalc = new StudentStatisticsCalculator(model.getAddressBook().getPersonList());
+        StatisticsCalculator tutorCalc = new TutorStatisticsCalculator(model.getAllPersonList());
+        StatisticsCalculator studentCalc = new StudentStatisticsCalculator(model.getAllPersonList());
         Statistics tutorStats = tutorCalc.calculate();
         Statistics studentStats = studentCalc.calculate();
 
@@ -35,7 +35,7 @@ public class StatsCommand extends Command {
                 + "STUDENTS\n"
                 + "-----------------------------------------------------\n"
                 + studentStats + "\n"
-                + "======================================================\n";
+                + "======================================================";
 
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(result);

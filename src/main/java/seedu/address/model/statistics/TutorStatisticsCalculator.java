@@ -14,7 +14,7 @@ public class TutorStatisticsCalculator {
 
     private final List<Person> tutors;
 
-    private TutorStatisticsCalculator(List<Person> persons) {
+    public TutorStatisticsCalculator(List<Person> persons) {
         this.tutors = persons.stream().filter(Person::isTutor).toList();
     }
 
@@ -31,7 +31,7 @@ public class TutorStatisticsCalculator {
         return new TutorStatistics(totalTutors, averagePrice, mostCommonSubject, matchedTutors);
     }
 
-    public int getAveragePrice() {
+    private int getAveragePrice() {
         if (tutors.isEmpty()) {
             return 0;
         }
@@ -41,7 +41,7 @@ public class TutorStatisticsCalculator {
         return total / tutors.size();
     }
 
-    public String getMostCommonSubject() {
+    private String getMostCommonSubject() {
         if (tutors.isEmpty()) {
             return "N/A";
         }

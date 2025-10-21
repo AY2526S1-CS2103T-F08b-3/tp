@@ -219,6 +219,7 @@ public class ParserUtil {
      */
     public static LocalTime parseTime(String time) throws ParseException {
         requireNonNull(time);
+        System.out.println("DEBUG Time received: [" + time + "]");
         try {
             return LocalTime.parse(time.trim(), DateTimeFormatter.ofPattern("HH:mm"));
         } catch (DateTimeParseException e) {

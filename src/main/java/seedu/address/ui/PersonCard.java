@@ -8,6 +8,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Session;
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -52,6 +53,8 @@ public class PersonCard extends UiPart<Region> {
     private Label matched;
     @FXML
     private FlowPane rolePane;
+    @FXML
+    private Label session;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -69,9 +72,15 @@ public class PersonCard extends UiPart<Region> {
         if (mp != null) {
             String mpName = mp.getName().fullName;
             String mpId = "#" + mp.getPersonId();
-            matched.setText("matched: " + mpName + " (" + mpId + ")");
+            matched.setText("Matched: " + mpName + " (" + mpId + ")");
         } else {
-            matched.setText("matched: —");
+            matched.setText("Matched: —");
+        }
+        Session s = person.getSession();
+        if (s != null) {
+            session.setText(formatSession(s));
+        } else {
+            session.setText("—");
         }
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
@@ -82,5 +91,26 @@ public class PersonCard extends UiPart<Region> {
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+    }
+
+    private String formatSession(Session s) {
+        // Day: "MONDAY" -> "Monday"
+        String day = s.getDay().toString().charAt(0) + s.getDay().toString().substring(1).toLowerCase();
+
+        // Time: LocalTime -> "HH:mm"
+        String time = s.getTime().toString(); // already "HH:mm"; or use .format(DateTimeFormatter.ofPattern("HH:mm"))
+
+        // Duration -> "HH:mm"
+        java.time.Duration d = s.getDuration();
+        long hours = d.toHours();
+        long minutes = d.minusHours(hours).toMinutes();
+        String dur = String.format("%02d:%02d", hours, minutes);
+
+        // Subject / Price as strings (adjust to your API)
+        String subj = s.getSubject().toString();
+        String price = s.getPrice().toString();
+
+        // Final string (drop the literal "Session:" here because your FXML already shows "Session:")
+        return String.format("%s | %s | %s hrs | %s | %s", day, time, dur, subj, price);
     }
 }

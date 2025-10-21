@@ -27,6 +27,7 @@ public class SessionAddCommandParser implements Parser<SessionAddCommand> {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 CliSyntax.PREFIX_DAY,
                 CliSyntax.PREFIX_TIME,
+                CliSyntax.PREFIX_DURATION,
                 CliSyntax.PREFIX_SUBJECT,
                 CliSyntax.PREFIX_PRICE);
 
@@ -38,7 +39,7 @@ public class SessionAddCommandParser implements Parser<SessionAddCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, SessionAddCommand.MESSAGE_USAGE), pe);
         }
 
-        if (arePrefixesPresent(argMultimap,
+        if (!arePrefixesPresent(argMultimap,
                 CliSyntax.PREFIX_DAY, CliSyntax.PREFIX_TIME,
                 CliSyntax.PREFIX_SUBJECT, CliSyntax.PREFIX_PRICE,
                 CliSyntax.PREFIX_DURATION)) {

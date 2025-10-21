@@ -50,8 +50,8 @@ public class UnmatchCommand extends Command {
         Person updatedMatched = clonePreservingId(matched);
 
         // Clear their links
-        updatedTarget.setMatchedPerson(null);
-        updatedMatched.setMatchedPerson(null);
+        updatedTarget.unsetMatchedPerson();
+        updatedMatched.unsetMatchedPerson();
 
         // Persist both sides
         model.setPerson(target, updatedTarget);

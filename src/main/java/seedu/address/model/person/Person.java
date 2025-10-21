@@ -119,6 +119,10 @@ public class Person {
         return price;
     }
 
+    public Price getAveragePrice() {
+        return price.getAveragePrice();
+    }
+
     public int getPersonId() {
         return personId;
     }
@@ -149,11 +153,25 @@ public class Person {
 
     public void setMatchedPerson(Person person) {
         this.matchedPerson = person;
+        this.isMatched = true;
+    }
+
+    /**
+     * Unsets the matched person for this person.
+     */
+    public void unsetMatchedPerson() {
+        this.matchedPerson = null;
+        this.isMatched = false;
     }
 
     public Person getMatchedPerson() {
         return matchedPerson;
     }
+
+    public boolean isMatched() {
+        return isMatched;
+    }
+
     public void setPersonId(int id) {
         this.personId = id;
     }

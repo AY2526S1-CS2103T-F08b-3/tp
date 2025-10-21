@@ -86,6 +86,16 @@ public class Price {
     public boolean isSingle() {
         return min == max;
     }
+
+    /**
+     * Gets the average price as a single Price object to be used for statistical purposes.
+     * @return Price object with average price as both min and max.
+     */
+    public Price getAveragePrice() {
+        int average = (min + max) / 2;
+        return new Price(average, average);
+    }
+
     @Override public String toString() {
         return isSingle() ? Integer.toString(min) : (min + "-" + max);
     }

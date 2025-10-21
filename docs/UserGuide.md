@@ -226,7 +226,7 @@ Each session contains the day, time, duration, subject, and price, and is stored
 Format:
 
 * Add a Session:
-`sessionadd <ID> d/<DAY> t/<TIME> dur/<DURATION> s/<SUBJECT> p/<PRICE>`
+`sessionadd <INDEX> d/<DAY> t/<TIME> dur/<DURATION> s/<SUBJECT> p/<PRICE>`
 * Adds a new session to the person (must already be matched).
 
 * Delete a Session:
@@ -250,11 +250,12 @@ Details:
 Examples:
 
 * `sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/40`
-Adds a 2-hour Monday 4 PM Mathematics session with a price of $40 for the tutor (at index 1) and their matched student.
+Adds a 2-hour Monday 4 PM Mathematics session with a price of $40 for the person (at index 1) and their matched 
+counterpart.
 
 
 * `sessiondelete 1`
-Deletes the existing session for the tutor (at index 1) and their matched student.
+Deletes the existing session for the person (at index 1) and their matched counterpart.
 
 ### Deleting a person : `delete`
 

@@ -38,6 +38,7 @@ class JsonAdaptedPerson {
     private final String price;
     private final Integer personId;
     private final Integer matchedPersonId;
+    private final JsonAdaptedSession session;
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -48,7 +49,8 @@ class JsonAdaptedPerson {
                              @JsonProperty("address") String address, @JsonProperty("subject") String subject,
                              @JsonProperty("level") String level, @JsonProperty("price") String price,
                              @JsonProperty("tags") List<JsonAdaptedTag> tags, @JsonProperty("personId") int personId,
-                             @JsonProperty("matchedPersonId") Integer matchedPersonId) {
+                             @JsonProperty("matchedPersonId") Integer matchedPersonId,
+                             @JsonProperty("session") JsonAdaptedSession session) {
         this.role = role;
         this.name = name;
         this.phone = phone;
@@ -62,6 +64,7 @@ class JsonAdaptedPerson {
         }
         this.personId = personId;
         this.matchedPersonId = matchedPersonId;
+        this.session = session;
 
     }
 
@@ -82,6 +85,7 @@ class JsonAdaptedPerson {
                 .collect(Collectors.toList()));
         this.personId = source.getPersonId();
         this.matchedPersonId = (source.getMatchedPerson() == null) ? null : source.getMatchedPerson().getPersonId();
+        this.session = (source.getSession() == null) ? null : new JsonAdaptedSession(source.getSession());
     }
 
     @JsonProperty("personId")
@@ -171,7 +175,11 @@ class JsonAdaptedPerson {
         if (this.personId != null) {
             person.setPersonId(personId);
         }
+        if (this.session != null) {
+            person.setSession(session.toModelType());
+        }
         return person;
     }
 
 }
+

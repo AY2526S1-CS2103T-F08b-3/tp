@@ -54,12 +54,15 @@ public class TutorStatistics extends Statistics {
 
     @Override
     public String toString() {
+        String avgPriceStr = averagePrice == 0 ? "N/A" : String.format("$%d", averagePrice);
+        String matchedStr = totalTutors == 0 ? "N/A" : String.format("%d", matchedPerson);
+
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("Total Tutors: %d\n", totalTutors));
-        sb.append(String.format("Average Price: $%d\n", averagePrice));
+        sb.append(String.format("Average Price: %s\n", avgPriceStr));
         sb.append(String.format("Most Common Subject: %s\n", mostCommonSubject));
         sb.append(String.format("All Subjects: %s\n", allSubjects));
-        sb.append(String.format("Matched Persons: %d", matchedPerson));
+        sb.append(String.format("Matched Persons: %s", matchedStr));
         return sb.toString();
     }
 }

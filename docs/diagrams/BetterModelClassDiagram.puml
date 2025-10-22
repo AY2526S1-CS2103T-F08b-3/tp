@@ -22,4 +22,5 @@ Person *--> Address
 Person *--> Subject
 Person *--> Level
 Person *--> Price
+Person *--> Session
 @enduml

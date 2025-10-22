@@ -21,7 +21,6 @@ checkstyle {
 }
 
 test {
-    ignoreFailures = true
     useJUnitPlatform()
     finalizedBy jacocoTestReport
 }
@@ -68,6 +67,10 @@ dependencies {
 
 shadowJar {
     archiveFileName = 'ConnectEd.jar'
+}
+
+run {
+    enableAssertions = true
 }
 
 defaultTasks 'clean', 'test'

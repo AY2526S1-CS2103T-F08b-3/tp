@@ -92,11 +92,9 @@ public class PersonTest {
 
     @Test
     public void toStringMethod() {
-        String matchedWith = ALICE.getMatchedPerson() == null ? "None" : ALICE.getMatchedPerson().getName().toString();
-        String session = ALICE.getSession() == null ? "None" : ALICE.getSession().toString();
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags()
-                + ", matchedWith=" + matchedWith + ", session=" + session + "}";
+                + ", matchedWith=" + ALICE.getMatchedPerson() + ", session=" + ALICE.getSession() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

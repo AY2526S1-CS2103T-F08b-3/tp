@@ -14,8 +14,12 @@ UniquePersonList -right-> Person
 
 Person -up-> "*" Tag
 
+Person *--> Role
 Person *--> Name
 Person *--> Phone
 Person *--> Email
 Person *--> Address
+Person *--> Subject
+Person *--> Level
+Person *--> Price
 @enduml

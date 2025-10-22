@@ -33,6 +33,7 @@ public class Person {
     private Price price;
     private boolean isMatched = false;
     private int personId = -1;
+    private Session session;
     /**
      * Every field must be present and not null.
      */
@@ -212,6 +213,19 @@ public class Person {
         return Collections.unmodifiableSet(tags);
     }
 
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public void clearSession() {
+        this.session = null;
+    }
+
+
     /**
      * Returns true if both persons have the same name, phone, or email.
      */
@@ -290,6 +304,8 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("matchedWith", matchedPerson == null ? "None" : matchedPerson.getName().toString())
+                .add("session", session == null ? "None" : session.toString())
                 .toString();
     }
 

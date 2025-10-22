@@ -65,6 +65,11 @@ public interface Model {
     boolean hasPerson(Person person);
 
     /**
+     * Returns the list of persons in address book.
+     */
+    List<Person> getAllPersonList();
+
+    /**
      * Returns the repeated entry if a person with the same identity as {@code person} exists in the address book.
      */
     String getRepeatedEntry(Person person);

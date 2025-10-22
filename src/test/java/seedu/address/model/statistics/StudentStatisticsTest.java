@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.TypicalPersons;
 
-public class TutorStatisticsTest {
+public class StudentStatisticsTest {
 
     private int parseMidpoint(String priceRange) {
         String[] parts = priceRange.split("-");
@@ -26,17 +26,17 @@ public class TutorStatisticsTest {
     @Test
     public void constructor_getters_returnValues() {
         List<Person> persons = TypicalPersons.getTypicalPersons();
-        List<Person> tutors = persons.stream().filter(Person::isTutor).collect(Collectors.toList());
+        List<Person> students = persons.stream().filter(Person::isStudent).collect(Collectors.toList());
 
-        int totalTutors = tutors.size();
+        int totalStudents = students.size();
         int averagePrice = (int) Math.round(
-                tutors.stream()
+                students.stream()
                       .mapToInt(t -> parseMidpoint(t.getPrice().toString()))
                       .average()
                       .orElse(0));
 
         Map<String, Integer> freq = new LinkedHashMap<>();
-        for (Person t : tutors) {
+        for (Person t : students) {
             String subj = t.getSubject().toString();
             freq.put(subj, freq.getOrDefault(subj, 0) + 1);
         }
@@ -53,10 +53,10 @@ public class TutorStatisticsTest {
 
         int matchedPersons = 0;
 
-        Statistics stats = new TutorStatistics(totalTutors, averagePrice, mostCommonSubject,
+        Statistics stats = new StudentStatistics(totalStudents, averagePrice, mostCommonSubject,
                 allSubjects, matchedPersons);
 
-        assertEquals(totalTutors, stats.getTotalPersons());
+        assertEquals(totalStudents, stats.getTotalPersons());
         assertEquals(averagePrice, stats.getAveragePrice());
         assertEquals(mostCommonSubject, stats.getMostCommonSubject());
         assertEquals(allSubjects, stats.getAllSubjects());
@@ -65,19 +65,19 @@ public class TutorStatisticsTest {
 
     @Test
     public void toString_containsFormattedInfo() {
-        List<Person> tutors = TypicalPersons.getTypicalPersons().stream()
-                .filter(Person::isTutor)
+        List<Person> students = TypicalPersons.getTypicalPersons().stream()
+                .filter(Person::isStudent)
                 .collect(Collectors.toList());
 
-        int totalTutors = tutors.size();
+        int totalStudents = students.size();
         int averagePrice = (int) Math.round(
-                tutors.stream()
+                students.stream()
                       .mapToInt(t -> parseMidpoint(t.getPrice().toString()))
                       .average()
                       .orElse(0));
 
         Map<String, Integer> freq = new LinkedHashMap<>();
-        for (Person t : tutors) {
+        for (Person t : students) {
             String subj = t.getSubject().toString();
             freq.put(subj, freq.getOrDefault(subj, 0) + 1);
         }
@@ -92,10 +92,10 @@ public class TutorStatisticsTest {
                         .map(e -> e.getKey() + " (" + e.getValue() + ")")
                         .collect(Collectors.toList()));
 
-        Statistics stats = new TutorStatistics(totalTutors, averagePrice, mostCommonSubject, allSubjects, 0);
+        Statistics stats = new StudentStatistics(totalStudents, averagePrice, mostCommonSubject, allSubjects, 0);
         String output = stats.toString();
 
-        assertTrue(output.contains(String.format("Total Tutors: %d", totalTutors)));
+        assertTrue(output.contains(String.format("Total Students: %d", totalStudents)));
         assertTrue(output.contains(String.format("Average Price: $%d", averagePrice)));
         assertTrue(output.contains(String.format("Most Common Subject: %s", mostCommonSubject)));
         assertTrue(output.contains(String.format("All Subjects: %s", allSubjects)));
@@ -104,7 +104,7 @@ public class TutorStatisticsTest {
 
     @Test
     public void toString_handlesNullSubject() {
-        TutorStatistics stats = new TutorStatistics(0, 0, null, "", 0);
+        StudentStatistics stats = new StudentStatistics(0, 0, null, "", 0);
         String output = stats.toString();
 
         assertTrue(output.contains("Most Common Subject: null"));

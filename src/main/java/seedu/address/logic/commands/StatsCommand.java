@@ -3,7 +3,9 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import seedu.address.model.Model;
-import seedu.address.model.statistics.TutorStatistics;
+import seedu.address.model.statistics.Statistics;
+import seedu.address.model.statistics.StatisticsCalculator;
+import seedu.address.model.statistics.StudentStatisticsCalculator;
 import seedu.address.model.statistics.TutorStatisticsCalculator;
 
 /**
@@ -20,16 +22,20 @@ public class StatsCommand extends Command {
     public CommandResult execute(Model model) {
         requireNonNull(model);
 
-        TutorStatisticsCalculator tutorCalc = new TutorStatisticsCalculator(model.getAddressBook().getPersonList());
-        TutorStatistics tutorStats = tutorCalc.calculate();
-        String studentStats = "students hereeeeeeeeeeeee"; //todo: implement student statistics
+        StatisticsCalculator tutorCalc = new TutorStatisticsCalculator(model.getAllPersonList());
+        StatisticsCalculator studentCalc = new StudentStatisticsCalculator(model.getAllPersonList());
+        Statistics tutorStats = tutorCalc.calculate();
+        Statistics studentStats = studentCalc.calculate();
 
         String result = "================ CONNECTED STATISTICS ================\n"
-                + "Tutors | Students\n"
+                + "TUTORS\n"
                 + "-----------------------------------------------------\n"
                 + tutorStats + "\n"
+                + "======================================================\n"
+                + "STUDENTS\n"
+                + "-----------------------------------------------------\n"
                 + studentStats + "\n"
-                + "======================================================\n";
+                + "======================================================";
 
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(result);

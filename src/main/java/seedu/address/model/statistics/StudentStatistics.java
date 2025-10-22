@@ -1,26 +1,26 @@
 package seedu.address.model.statistics;
 
 /**
- * Represents statistics about tutors in the address book.
+ * Represents statistics about students in the address book.
  */
-public class TutorStatistics extends Statistics {
-    private final int totalTutors;
+public class StudentStatistics extends Statistics {
+    private final int totalStudents;
     private final int averagePrice;
     private final String mostCommonSubject;
     private final String allSubjects;
     private final int matchedPerson;
 
     /**
-     * Constructs a TutorStatistics object with the given statistics.
+     * Constructs a StudentStatistics object with the given statistics.
      *
-     * @param totalTutors       Total number of tutors.
-     * @param averagePrice      Average price of tutors.
-     * @param mostCommonSubject Most common subject among tutors.
-     * @param matchedPerson     Number of matched persons (tutors).
+     * @param totalStudents       Total number of students.
+     * @param averagePrice        Average price (if applicable) for students.
+     * @param mostCommonSubject   Most common subject among students.
+     * @param matchedPerson       Number of matched persons (students).
      */
-    public TutorStatistics(int totalTutors, int averagePrice, String mostCommonSubject,
-                           String allSubjects, int matchedPerson) {
-        this.totalTutors = totalTutors;
+    public StudentStatistics(int totalStudents, int averagePrice, String mostCommonSubject,
+                             String allSubjects, int matchedPerson) {
+        this.totalStudents = totalStudents;
         this.averagePrice = averagePrice;
         this.mostCommonSubject = mostCommonSubject;
         this.allSubjects = allSubjects;
@@ -29,7 +29,7 @@ public class TutorStatistics extends Statistics {
 
     @Override
     public int getTotalPersons() {
-        return totalTutors;
+        return totalStudents;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class TutorStatistics extends Statistics {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Total Tutors: %d\n", totalTutors));
+        sb.append(String.format("Total Students: %d\n", totalStudents));
         sb.append(String.format("Average Price: $%d\n", averagePrice));
         sb.append(String.format("Most Common Subject: %s\n", mostCommonSubject));
         sb.append(String.format("All Subjects: %s\n", allSubjects));

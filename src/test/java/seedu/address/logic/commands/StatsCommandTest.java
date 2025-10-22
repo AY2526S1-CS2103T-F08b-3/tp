@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.statistics.TutorStatistics;
+import seedu.address.model.statistics.Statistics;
+import seedu.address.model.statistics.StatisticsCalculator;
+import seedu.address.model.statistics.StudentStatisticsCalculator;
 import seedu.address.model.statistics.TutorStatisticsCalculator;
 import seedu.address.testutil.TypicalPersons;
 
@@ -19,17 +21,23 @@ public class StatsCommandTest {
         Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
         StatsCommand command = new StatsCommand();
 
-        TutorStatisticsCalculator tutorCalc =
+        StatisticsCalculator tutorCalc =
                 new TutorStatisticsCalculator(model.getAddressBook().getPersonList());
-        TutorStatistics tutorStats = tutorCalc.calculate();
-        String studentStats = "students hereeeeeeeeeeeee"; // TODO: CHANGE THIS FOR STUDENT IMPLEMENTATION
+
+        StatisticsCalculator studentCalc =
+                new StudentStatisticsCalculator(model.getAddressBook().getPersonList());
+        Statistics tutorStats = tutorCalc.calculate();
+        Statistics studentStats = studentCalc.calculate();
 
         String expected = "================ CONNECTED STATISTICS ================\n"
-                + "Tutors | Students\n"
+                + "TUTORS\n"
                 + "-----------------------------------------------------\n"
                 + tutorStats + "\n"
+                + "======================================================\n"
+                + "STUDENTS\n"
+                + "-----------------------------------------------------\n"
                 + studentStats + "\n"
-                + "======================================================\n";
+                + "======================================================";
 
         CommandResult result = command.execute(model);
 

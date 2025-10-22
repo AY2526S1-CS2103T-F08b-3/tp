@@ -2,6 +2,11 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.time.DayOfWeek;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -133,11 +138,12 @@ public class ParserUtil {
      */
     public static Subject parseSubject(String subject) throws ParseException {
         requireNonNull(subject);
-        String trimmedSubject = subject.trim();
+        String trimmedSubject = subject.toLowerCase().trim();
         if (!Subject.isValidSubject(trimmedSubject)) {
             throw new ParseException(Subject.MESSAGE_CONSTRAINTS);
         }
-        return new Subject(trimmedSubject);
+        String formattedSubject = StringUtil.capitalizeFirstLetter(trimmedSubject);
+        return new Subject(formattedSubject);
     }
 
     /**
@@ -190,4 +196,76 @@ public class ParserUtil {
         }
         return tagSet;
     }
+
+    /**
+     * Parses a {@code String day} into a {@code DayOfWeek}.
+     * Accepts full names (e.g., Monday, Tuesday) case-insensitive.
+     *
+     * @throws ParseException if the input is not a valid day name.
+     */
+    public static DayOfWeek parseDay(String day) throws ParseException {
+        requireNonNull(day);
+        try {
+            return DayOfWeek.valueOf(day.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new ParseException("Invalid day! Use a full day name (e.g. Monday, Tuesday, Wednesday).");
+        }
+    }
+
+    /**
+     * Parses a {@code String time} into a {@code LocalTime}.
+     * Accepts 24-hour format HH:mm (e.g., 15:30).
+     *
+     * @throws ParseException if the input does not conform to HH:mm.
+     */
+    public static LocalTime parseTime(String time) throws ParseException {
+        requireNonNull(time);
+        System.out.println("DEBUG Time received: [" + time + "]");
+        try {
+            return LocalTime.parse(time.trim(), DateTimeFormatter.ofPattern("HH:mm"));
+        } catch (DateTimeParseException e) {
+            throw new ParseException("Invalid time format! Use HH:mm (e.g. 15:30).");
+        }
+    }
+
+    /**
+     * Parses a {@code String duration} into a {@code Duration}.
+     * Accepts 24-hour format HH:mm (e.g., 1:30).
+     *
+     * @throws ParseException if the input does not conform to HH:mm.
+     */
+    public static Duration parseDuration(String durationStr) throws ParseException {
+        requireNonNull(durationStr);
+        String trimmed = durationStr.trim();
+
+        if (!trimmed.matches("\\d{1,2}:\\d{2}")) {
+            throw new ParseException("Invalid duration format! Use HH:mm (e.g. dur/01:30).");
+        }
+
+        try {
+            final long totalMinutes = getTotalMinutes(trimmed);
+
+            return Duration.ofMinutes(totalMinutes);
+        } catch (NumberFormatException e) {
+            throw new ParseException("Invalid duration numbers! Use HH:mm (e.g. dur/ 01:30).");
+        }
+    }
+
+    private static long getTotalMinutes(String trimmed) throws ParseException {
+        String[] parts = trimmed.split(":");
+        int hours = Integer.parseInt(parts[0]);
+        int minutes = Integer.parseInt(parts[1]);
+
+        if (hours < 0 || minutes < 0 || minutes >= 60) {
+            throw new ParseException("Invalid duration! Hours must be >= 0 and minutes between 00–59.");
+        }
+
+        long totalMinutes = hours * 60L + minutes;
+        if (totalMinutes == 0) {
+            throw new ParseException("Duration must be greater than 00:00.");
+        }
+        return totalMinutes;
+    }
+
+
 }

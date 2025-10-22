@@ -37,6 +37,10 @@
       <Label fx:id="level" styleClass="cell_small_label"/>
       <Label fx:id="price" styleClass="cell_small_label"/>
       <Label fx:id="matched" styleClass="cell_small_label" />
+      <HBox spacing="4" alignment="CENTER_LEFT">
+        <Label text="Session:" styleClass="cell_small_label"/>
+        <Label fx:id="session" styleClass="cell_small_label"/>
+      </HBox>
     </VBox>
   </GridPane>
 </HBox>

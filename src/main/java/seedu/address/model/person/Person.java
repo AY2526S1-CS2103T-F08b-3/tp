@@ -304,8 +304,8 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
-                .add("matchedWith", matchedPerson == null ? "None" : matchedPerson.getName().toString())
-                .add("session", session == null ? "None" : session.toString())
+                .add("matchedWith", matchedPerson == null ? "null" : matchedPerson.getName().toString())
+                .add("session", session == null ? "null" : session.toString())
                 .toString();
     }
 

@@ -141,8 +141,16 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Builds a Person object.
+     * @return A person Object
+     */
     public Person build() {
-        return new Person(role, name, phone, email, address, subject, level, price, tags);
+        Person person = new Person(role, name, phone, email, address, subject, level, price, tags);
+        if (person.getPersonId() == -1) {
+            person.setPersonId(Person.allocateNextId());
+        }
+        return person;
     }
 
 }

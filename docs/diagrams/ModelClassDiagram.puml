@@ -19,6 +19,10 @@ Class Email
 Class Name
 Class Phone
 Class Tag
+Class Subject
+Class Price
+Class Level
+Class Session
 
 Class I #FFFFFF
 }
@@ -42,6 +46,10 @@ Person *--> Phone
 Person *--> Email
 Person *--> Address
 Person *--> "*" Tag
+Person *--> Subject
+Person *--> Level
+Person *--> Price
+Person *--> Session
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I

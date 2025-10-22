@@ -28,8 +28,8 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 
     * `list tutors` : Lists all tutors (use `list students` to list all students).
 
-   * `add r/student aaron hp/91234567 a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30` : Adds a **student** with subject, level, and price range.
-     (Example for tutor: `add r/tutor Mary hp/98765432 a/Tampines Ave 1 s/english l/2-5 p/25-40`)
+   * `add r/student aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30` : Adds a **student** with subject, level, and price range.
+     (Example for tutor: `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 s/english l/2-5 p/25-40`)
 
    * `delete 1` : Deletes the 1st **person** shown in the current list.
 

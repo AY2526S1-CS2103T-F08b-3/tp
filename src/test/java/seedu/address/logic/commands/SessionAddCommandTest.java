@@ -85,8 +85,7 @@ public class SessionAddCommandTest {
         SessionAddCommand command = new SessionAddCommand(Index.fromOneBased(1), session);
 
         assertThrows(CommandException.class,
-                "Alice Tan is not matched with anyone. Cannot create a session.",
-                () -> command.execute(model));
+                "Alice Tan is not matched with anyone. Cannot create a session.", () -> command.execute(model));
     }
 
     @Test
@@ -172,8 +171,8 @@ public class SessionAddCommandTest {
 
         assertTrue(command1.equals(command1)); // same object
         assertTrue(command1.equals(command2)); // same values
-        assertFalse(command1.equals(1));       // different type
-        assertFalse(command1.equals(null));    // null
+        assertFalse(command1.equals(1)); // different type
+        assertFalse(command1.equals(null)); // null
         assertFalse(command1.equals(command3)); // different
     }
 

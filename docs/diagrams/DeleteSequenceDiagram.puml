@@ -1,6 +1,9 @@
 @startuml
 !include style.puml
 skinparam ArrowFontStyle plain
+skinparam ArrowColor Blue
+skinparam SequenceLifeLineBorderColor Red
+skinparam ParticipantBackgroundColor LightYellow
 
 box Logic LOGIC_COLOR_T5
 participant ":LogicManager" as LogicManager LOGIC_COLOR

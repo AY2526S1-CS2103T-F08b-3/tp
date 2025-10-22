@@ -214,6 +214,13 @@ Notes:
 * For price ranges (e.g., `10-20`), sorting uses the lower bound value (`10`)
 * For level ranges (e.g., `3-5`), sorting uses the lower bound value (`3`)
 
+### Viewing statistics : `stats`
+Displays statistics about the current tutors and students in ConnectEd, including total counts, average prices, subject distributions, and matched pairs.
+
+Format: `stats`
+
+![result for 'stats'](images/StatsResult.png)
+
 ### Deleting a person : `delete`
 
 Deletes a person (student/tutor) from the ConnectEd database
@@ -234,10 +241,6 @@ Clears all entries from the ConnectEd.
 
 Format: `clear`
 
-### Viewing statistics : `stats`
-Displays statistics about the current tutors and students in ConnectEd, including total counts, average prices, subject distributions, and matched pairs.
-
-Format: `stats`
 
 ### Exiting the program : `exit`
 

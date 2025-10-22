@@ -61,6 +61,10 @@ public class TutorStatisticsCalculator extends StatisticsCalculator {
             subjectCounts.put(subject, subjectCounts.getOrDefault(subject, 0) + 1);
         }
 
+        if (subjectCounts.isEmpty()) {
+            return "N/A";
+        }
+
         StringBuilder sb = new StringBuilder();
         boolean isFirst = true;
         for (Map.Entry<String, Integer> entry : subjectCounts.entrySet()) {

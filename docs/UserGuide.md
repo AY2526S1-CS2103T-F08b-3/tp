@@ -254,6 +254,13 @@ Deletes the existing session for the person (at index 1) and their matched count
 
 ![result for 'sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/40'](images/SessionResult.png)
 
+### Viewing statistics : `stats`
+Displays statistics about the current tutors and students in ConnectEd, including total counts, average prices, subject distributions, and matched pairs.
+
+Format: `stats`
+
+![result for 'stats'](images/StatsResult.png)
+
 ### Deleting a person : `delete`
 
 Deletes a person (student/tutor) from the ConnectEd database
@@ -274,10 +281,6 @@ Clears all entries from the ConnectEd.
 
 Format: `clear`
 
-### Viewing statistics : `stats`
-Displays statistics about the current tutors and students in ConnectEd, including total counts, average prices, subject distributions, and matched pairs.
-
-Format: `stats`
 
 ### Exiting the program : `exit`
 

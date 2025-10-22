@@ -249,9 +249,10 @@ Examples:
 Adds a 2-hour Monday 4 PM Mathematics session with a price of $40 for the person (at index 1) and their matched 
 counterpart.
 
-
 * `sessiondelete 1`
 Deletes the existing session for the person (at index 1) and their matched counterpart.
+
+![result for 'sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/40'](images/SessionResult.png)
 
 ### Deleting a person : `delete`
 

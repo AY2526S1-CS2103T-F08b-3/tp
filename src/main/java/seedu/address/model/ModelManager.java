@@ -96,6 +96,11 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public List<Person> getAllPersonList() {
+        return addressBook.getPersonList();
+    }
+
+    @Override
     public String getRepeatedEntry(Person person) {
         return addressBook.getRepeatedEntry(person);
     }

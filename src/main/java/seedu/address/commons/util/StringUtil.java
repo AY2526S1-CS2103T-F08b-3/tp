@@ -90,4 +90,15 @@ public class StringUtil {
         return s.equals("tutor") || s.equals("student");
     }
 
+    /**
+     * Returns the input word with the first letter capitalized and the rest in lowercase.
+     * e.g. "mathematics" becomes "Mathematics"
+     */
+    public static String capitalizeFirstLetter(String word) {
+        if (word == null || word.isEmpty()) {
+            return word;
+        }
+        return word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase();
+    }
+
 }

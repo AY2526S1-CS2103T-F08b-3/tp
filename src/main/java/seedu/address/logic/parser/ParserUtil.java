@@ -138,11 +138,12 @@ public class ParserUtil {
      */
     public static Subject parseSubject(String subject) throws ParseException {
         requireNonNull(subject);
-        String trimmedSubject = subject.trim();
+        String trimmedSubject = subject.toLowerCase().trim();
         if (!Subject.isValidSubject(trimmedSubject)) {
             throw new ParseException(Subject.MESSAGE_CONSTRAINTS);
         }
-        return new Subject(trimmedSubject);
+        String formattedSubject = StringUtil.capitalizeFirstLetter(trimmedSubject);
+        return new Subject(formattedSubject);
     }
 
     /**
@@ -219,6 +220,7 @@ public class ParserUtil {
      */
     public static LocalTime parseTime(String time) throws ParseException {
         requireNonNull(time);
+        System.out.println("DEBUG Time received: [" + time + "]");
         try {
             return LocalTime.parse(time.trim(), DateTimeFormatter.ofPattern("HH:mm"));
         } catch (DateTimeParseException e) {

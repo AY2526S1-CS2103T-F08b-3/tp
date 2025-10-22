@@ -8,55 +8,56 @@ import java.util.stream.Collectors;
 import seedu.address.model.person.Person;
 
 /**
- * A utility class for calculating statistics about tutors in the address book.
+ * A utility class for calculating statistics about students in the address book.
  */
-public class TutorStatisticsCalculator extends StatisticsCalculator {
+public class StudentStatisticsCalculator extends StatisticsCalculator {
 
-    private final List<Person> tutors;
+    private final List<Person> students;
 
-    public TutorStatisticsCalculator(List<Person> persons) {
-        this.tutors = persons.stream().filter(Person::isTutor).toList();
+    public StudentStatisticsCalculator(List<Person> persons) {
+        this.students = persons.stream().filter(Person::isStudent).toList();
     }
 
     /**
-     * Calculates statistics about tutors from the given list of persons.
-     * @return A TutorStatistics object containing the calculated statistics.
+     * Calculates statistics about students from the given list of persons.
+     * @return A StudentStatistics object containing the calculated statistics.
      */
     @Override
-    public Statistics calculate() {
-        int totalTutors = tutors.size();
+    public StudentStatistics calculate() {
+        int totalStudents = students.size();
         int averagePrice = getAveragePrice();
         String mostCommonSubject = getMostCommonSubject();
         String allSubjects = getAllSubjects();
-        int matchedTutors = countMatchedTutors(tutors);
+        int matchedStudents = countMatchedStudents(students);
 
-        return new TutorStatistics(totalTutors, averagePrice, mostCommonSubject, allSubjects, matchedTutors);
+        return new StudentStatistics(totalStudents, averagePrice, mostCommonSubject, allSubjects, matchedStudents);
     }
 
     private int getAveragePrice() {
-        if (tutors.isEmpty()) {
+        if (students.isEmpty()) {
             return 0;
         }
-        int total = tutors.stream()
-                .mapToInt(t -> Integer.parseInt(t.getAveragePrice().toString()))
+        int total = students.stream()
+                .mapToInt(s -> Integer.parseInt(s.getAveragePrice().toString()))
                 .sum();
-        return total / tutors.size();
+        return total / students.size();
     }
 
     private String getMostCommonSubject() {
-        if (tutors.isEmpty()) {
+        if (students.isEmpty()) {
             return "N/A";
         }
 
-        Map<String, Long> frequencyMap = tutors.stream()
-                .collect(Collectors.groupingBy(t -> t.getSubject().toString(), Collectors.counting()));
+        Map<String, Long> frequencyMap = students.stream()
+                .collect(Collectors.groupingBy(s -> s.getSubject().toString(), Collectors.counting()));
 
         return Collections.max(frequencyMap.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
+
     private String getAllSubjects() {
         Map<String, Integer> subjectCounts = new java.util.LinkedHashMap<>();
 
-        for (Person p : tutors) {
+        for (Person p : students) {
             String subject = p.getSubject().toString();
             subjectCounts.put(subject, subjectCounts.getOrDefault(subject, 0) + 1);
         }
@@ -73,8 +74,8 @@ public class TutorStatisticsCalculator extends StatisticsCalculator {
         return sb.toString().trim();
     }
 
-    private int countMatchedTutors(List<Person> tutors) {
-        return (int) tutors.stream()
+    private int countMatchedStudents(List<Person> students) {
+        return (int) students.stream()
                 .filter(Person::isMatched)
                 .count();
     }

@@ -33,24 +33,52 @@ public class SessionAddCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        if (targetIndex.getZeroBased() >= model.getFilteredPersonList().size()) {
+        var list = model.getFilteredPersonList();
+        if (targetIndex.getZeroBased() >= list.size()) {
             throw new CommandException("Invalid person index.");
         }
 
-        Person person = model.getFilteredPersonList().get(targetIndex.getZeroBased());
-        Person matchedPerson = person.getMatchedPerson();
-
-        if (matchedPerson == null) {
-            throw new CommandException(person.getName() + " is not matched with anyone. Cannot create a session.");
+        Person a = list.get(targetIndex.getZeroBased());
+        Person b = a.getMatchedPerson();
+        if (b == null) {
+            throw new CommandException(a.getName() + " is not matched with anyone. Cannot create a session.");
         }
 
-        person.setSession(session);
-        matchedPerson.setSession(session);
-        model.setPerson(person, person);
-        model.setPerson(matchedPerson, matchedPerson);
+        // 1) Clone both, preserving IDs (constructor order matches your sample)
+        Person aClone = clonePreservingId(a);
+        Person bClone = clonePreservingId(b);
+
+        // 2) Attach the same session to both clones
+        aClone.setSession(session);
+        bClone.setSession(session);
+
+        // 3) Re-link the matched references to the *clones*, not the old objects
+        aClone.setMatchedPerson(bClone);
+        bClone.setMatchedPerson(aClone);
+
+        // 4) Replace in model to trigger UI updates
+        model.setPerson(a, aClone);
+        model.setPerson(b, bClone);
+        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
         return new CommandResult(String.format(
                 "Added session for %s and their matched partner %s:\n%s",
-                person.getName(), matchedPerson.getName(), session));
+                aClone.getName(), bClone.getName(), session));
+    }
+
+    /** Your cloning helper — preserves personId and copies fields/tags. */
+    private Person clonePreservingId(Person p) {
+        return new Person(
+                p.getRole(),
+                p.getName(),
+                p.getPhone(),
+                p.getEmail(),
+                p.getAddress(),
+                p.getSubject(),
+                p.getLevel(),
+                p.getPrice(),
+                new java.util.HashSet<>(p.getTags()),
+                p.getPersonId() // non-incrementing constructor
+        );
     }
 }

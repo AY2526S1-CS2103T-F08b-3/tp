@@ -65,7 +65,6 @@ public class SessionAddCommand extends Command {
                 "Added session for %s and their matched partner %s:\n%s",
                 aClone.getName(), bClone.getName(), session));
     }
-
     /** Your cloning helper — preserves personId and copies fields/tags. */
     private Person clonePreservingId(Person p) {
         return new Person(
@@ -80,5 +79,19 @@ public class SessionAddCommand extends Command {
                 new java.util.HashSet<>(p.getTags()),
                 p.getPersonId() // non-incrementing constructor
         );
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof SessionAddCommand)) {
+            return false;
+        }
+
+        SessionAddCommand otherCommand = (SessionAddCommand) other;
+        return targetIndex.equals(otherCommand.targetIndex)
+                && session.equals(otherCommand.session);
     }
 }

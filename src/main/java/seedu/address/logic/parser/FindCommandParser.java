@@ -51,23 +51,17 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         Predicate<Person> combinedPredicate = p -> true;
 
-        int slashIndex = trimmedArgs.indexOf('/');
+        String preamble = argMultimap.getPreamble().trim();
 
-        if (slashIndex > 1) {
-            int roleEndIndex = slashIndex - 2;
-
-            String possibleRole = trimmedArgs.substring(0, roleEndIndex).trim();
-
+        if (!preamble.isEmpty()) {
             try {
-                String parsedRole = ParserUtil.parseRole(possibleRole);
-                combinedPredicate = (new RolePredicate(parsedRole)).and(combinedPredicate);
+                String parsedRole = ParserUtil.parseRole(preamble);
+                combinedPredicate = new RolePredicate(parsedRole).and(combinedPredicate);
             } catch (ParseException e) {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE), e);
             }
         }
-
-
         // Name
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
             String[] nameKeywords = argMultimap.getValue(PREFIX_NAME).get().trim().split("\\s+");

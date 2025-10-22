@@ -16,6 +16,8 @@ import seedu.address.model.person.Level;
 import seedu.address.model.person.MatchingLevelPredicate;
 import seedu.address.model.person.MatchingPricePredicate;
 import seedu.address.model.person.MatchingSubjectPredicate;
+import seedu.address.model.person.OverlappingLevelPredicate;
+import seedu.address.model.person.OverlappingPricePredicate;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Price;
 import seedu.address.model.person.Subject;
@@ -42,6 +44,8 @@ public class RecommendCommand extends Command {
 
     public static final String MESSAGE_SUCCESS_TUTORS = "Recommended tutors based on your requirements!";
     public static final String MESSAGE_SUCCESS_STUDENTS = "Recommended students based on your requirements!";
+    public static final String MESSAGE_NO_MATCH_TUTORS = "No tutors match your requirements.";
+    public static final String MESSAGE_NO_MATCH_STUDENTS = "No students match your requirements.";
 
     private final Index index;
     private final boolean useSubject;
@@ -100,16 +104,25 @@ public class RecommendCommand extends Command {
             }
             Predicate<Person> tutorPredicate = p -> p.isTutor() && predicate.test(p);
             model.updateFilteredPersonList(tutorPredicate);
+
+            if (model.getFilteredPersonList().isEmpty()) {
+                model.updateFilteredPersonList(p -> true); // show all persons
+                return new CommandResult(MESSAGE_NO_MATCH_TUTORS);
+            }
             return new CommandResult(MESSAGE_SUCCESS_TUTORS);
         } else if (user.isTutor()) {
             if (filterLevel && userLevel != null) {
-                predicate = predicate.and(p -> p.getLevel() != null && userLevel.intersects(p.getLevel()));
+                predicate = predicate.and(new OverlappingLevelPredicate(List.of(userLevel)));
             }
             if (filterPrice && userPrice != null) {
-                predicate = predicate.and(p -> p.getPrice() != null && userPrice.overlaps(p.getPrice()));
+                predicate = predicate.and(new OverlappingPricePredicate(List.of(userPrice)));
             }
             Predicate<Person> studentPredicate = p -> p.isStudent() && predicate.test(p);
             model.updateFilteredPersonList(studentPredicate);
+            if (model.getFilteredPersonList().isEmpty()) {
+                model.updateFilteredPersonList(p -> true); // show all persons
+                return new CommandResult(MESSAGE_NO_MATCH_STUDENTS);
+            }
             return new CommandResult(MESSAGE_SUCCESS_STUDENTS);
         }
         return new CommandResult(

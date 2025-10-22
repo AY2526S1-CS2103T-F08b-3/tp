@@ -52,4 +52,22 @@ public class SessionDeleteCommand extends Command {
                 "Deleted session for %s and their matched partner %s.",
                 person.getName(), matchedPerson.getName()));
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof SessionDeleteCommand)) {
+            return false;
+        }
+
+        SessionDeleteCommand otherCommand = (SessionDeleteCommand) other;
+        return targetIndex.equals(otherCommand.targetIndex);
+    }
+
+    @Override
+    public int hashCode() {
+        return targetIndex.hashCode();
+    }
 }

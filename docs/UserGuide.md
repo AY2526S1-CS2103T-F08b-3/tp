@@ -214,6 +214,46 @@ Notes:
 * For price ranges (e.g., `10-20`), sorting uses the lower bound value (`10`)
 * For level ranges (e.g., `3-5`), sorting uses the lower bound value (`3`)
 
+### Add or Delete a Tutoring Session : `sessionadd/sessiondelete`
+
+Add or remove a tutoring session between a matched tutor–student pair.
+Each session contains the day, time, duration, subject, and price, and is stored bidirectionally so both tutor and student share the same session information.
+
+Format:
+
+* Add a Session:
+`sessionadd <INDEX> d/<DAY> t/<TIME> dur/<DURATION> s/<SUBJECT> p/<PRICE>`
+* Adds a new session to the person (must already be matched).
+
+* Delete a Session:
+`sessiondelete <INDEX>`
+* Removes the existing session from the person and their matched partner.
+
+Details:
+
+* The `<INDEX>` refers to the index shown beside each tutor or student in the list.
+
+* The person must already be matched with another individual before adding a session.
+
+* The sessionadd command automatically adds the same session to both matched persons.
+
+* The `time` must follow the 24-hour format HH:mm (e.g., 16:00).
+
+* The `duration` must follow the HH:mm format (e.g., 02:00 for 2 hours).
+
+* The `<INDEX>` must be a positive integer 1, 2, 3, …
+
+Examples:
+
+* `sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/40`
+Adds a 2-hour Monday 4 PM Mathematics session with a price of $40 for the person (at index 1) and their matched 
+counterpart.
+
+* `sessiondelete 1`
+Deletes the existing session for the person (at index 1) and their matched counterpart.
+
+![result for 'sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/40'](images/SessionResult.png)
+
 ### Deleting a person : `delete`
 
 Deletes a person (student/tutor) from the ConnectEd database

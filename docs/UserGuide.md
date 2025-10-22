@@ -28,8 +28,8 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 
     * `list tutors` : Lists all tutors (use `list students` to list all students).
 
-   * `add r/student aaron hp/91234567 a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30` : Adds a **student** with subject, level, and price range.
-     (Example for tutor: `add r/tutor Mary hp/98765432 a/Tampines Ave 1 s/english l/2-5 p/25-40`)
+   * `add r/student aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30` : Adds a **student** with subject, level, and price range.
+     (Example for tutor: `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 s/english l/2-5 p/25-40`)
 
    * `delete 1` : Deletes the 1st **person** shown in the current list.
 
@@ -49,7 +49,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 
 * Parameters & placeholders
   Commands follow the below exactly:
-  * Add: `add r/<tutor/student> n/<name> hp/<phone> a/<address> s/<subject> l/<level> p/<min-max>`
+  * Add: `add r/<tutor/student> n/<name> hp/<phone> e/<email> a/<address> s/<subject> l/<level> p/<min-max>`
   * List: `list <tutors/students>`
   * Find: `find <tutors/students> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`
   * Match: `match <ID_1> <ID_2>`
@@ -60,6 +60,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
   * `<tutor/student>` for `add`: exactly “tutor” or “student” (case-insensitive).
   * `<tutors/students>` for `list` and `find`: exactly “tutors” or “students” (case-insensitive).
   * `hp/` phone: 8 digits (spaces allowed), digits only.
+  * `e/` email: has format local-part@domain
   * `s/` subject: one of {english, mathematics, chinese, science} (case-insensitive).
   * `l/` level:
     * Student: single integer 1–6
@@ -96,11 +97,11 @@ Format: `help`
 
 Adds a **tutor** or **student** with subject, level, and price range.
 
-Format: `add r/<tutor/student> n/<name> hp/<phone> a/<address> s/<subject> l/<level> p/<min-max>`
+Format: `add r/<tutor/student> n/<name> hp/<phone> e/<email> a/<address> s/<subject> l/<level> p/<min-max>`
 
 Examples:
-* `add r/student n/aaron hp/91234567 a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
-* `add r/tutor n/Mary hp/98765432 a/Tampines Ave 1 s/english l/2-5 p/25-40`
+* `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
+* `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 s/english l/2-5 p/25-40`
 
 ### Listing all persons : `list`
 
@@ -186,6 +187,7 @@ Format: `recommend INDEX [s/] [l/] [p/]`
 * The index **must be a positive integer** 1, 2, 3, …​
 * Optional fields can be specified to filter the recommendations based on subject (`s/`), level (`l/`), and/or price range (`p/`).
 * If no optional fields are specified, recommendations will be based on all three criteria (subject, level, and price range).
+* If no matches are found, a no match message will be displayed and all persons will be shown.
 
 Examples:
 * `recommend 1` recommends all tutors/students that matches the subject, level, and price range of person at index 1
@@ -325,7 +327,7 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** |`add r/<tutor/student> <name> hp/ <phone> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add student aaron hp/ 91234567 a/ Blk 30 Geylang Street 29, #06-40 s/ mathematics l/ 3 p/ 20-30`
+**Add** |`add r/<tutor/student> <name> hp/ <phone> e/ <email> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students s/ chinese`

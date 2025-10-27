@@ -66,7 +66,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName = 'ConnectEd.jar'
+    archiveFileName = '[CS2103T-F08b-3][ConnectEd].jar'
 }
 
 run {

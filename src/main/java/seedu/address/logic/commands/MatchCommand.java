@@ -68,7 +68,8 @@ public class MatchCommand extends Command {
         } else {
             throw new CommandException(MESSAGE_INVALID_PAIR);
         }
-
+        //Check if the students and tutor can be matched
+        validateCompatibility(student, tutor);
         if (tutor.getMatchedPerson() != null || student.getMatchedPerson() != null
                 || tutor.getMatchedStatus() || student.getMatchedStatus()) {
             throw new CommandException(MESSAGE_ALREADY_MATCHED);
@@ -103,6 +104,47 @@ public class MatchCommand extends Command {
                 .filter(p -> p.getPersonId() == id)
                 .findFirst();
     }
+
+    /**
+     * Validates whether a tutor and a student are compatible for matching.
+     * This method checks if the tutor and student share the same subject,
+     * have overlapping level ranges, and have compatible price ranges.
+     * If any of these conditions are not met, a {@link CommandException}
+     * is thrown with detailed information about the mismatched fields.
+     * </p>
+     * @param student The {@code Person} object representing the student in the match.
+     * @param tutor The {@code Person} object representing the tutor in the match.
+     * @throws CommandException if any compatibility checks fail. The exception message
+     *      includes the specific fields that are incompatible.
+     * */
+    private void validateCompatibility(Person student, Person tutor) throws CommandException {
+        StringBuilder problems = new StringBuilder();
+
+        // SUBJECT must match exactly (Subject already implements equals)
+        if (!student.getSubject().equals(tutor.getSubject())) {
+            problems.append("- Subject mismatch: ")
+                    .append(student.getSubject()).append(" vs ").append(tutor.getSubject()).append("\n");
+        }
+
+        // LEVEL ranges must overlap (e.g., student's school level fits tutor's supported levels)
+        if (!student.getLevel().intersects(tutor.getLevel())) {
+            problems.append("- Level mismatch: ")
+                    .append(student.getLevel()).append(" vs ").append(tutor.getLevel()).append("\n");
+        }
+
+        // PRICE ranges must overlap (e.g., budget and rate have feasible intersection)
+        if (!student.getPrice().overlaps(tutor.getPrice())) {
+            problems.append("- Price mismatch: ")
+                    .append(student.getPrice()).append(" vs ").append(tutor.getPrice()).append("\n");
+        }
+
+        if (problems.length() > 0) {
+            throw new CommandException(
+                    "Cannot match due to incompatible fields:\n" + problems.toString().trim()
+            );
+        }
+    }
+
 
     /**
      * Creates a clone of the given {@code Person} object while preserving its unique identifier.

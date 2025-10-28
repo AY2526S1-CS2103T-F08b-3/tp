@@ -34,6 +34,7 @@ public class MainWindow extends UiPart<Stage> {
     private PersonListPanel personListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
+    private StatsWindow statsWindow;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -66,6 +67,7 @@ public class MainWindow extends UiPart<Stage> {
         setAccelerators();
 
         helpWindow = new HelpWindow();
+        statsWindow = new StatsWindow();
     }
 
     public Stage getPrimaryStage() {
@@ -147,6 +149,18 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
+    /**
+     * Opens the stats window or focuses on it if it's already opened.
+     */
+    @FXML
+    public void handleStats() {
+        if (!statsWindow.isShowing()) {
+            statsWindow.show();
+        } else {
+            statsWindow.focus();
+        }
+    }
+
     void show() {
         primaryStage.show();
     }
@@ -160,6 +174,7 @@ public class MainWindow extends UiPart<Stage> {
                 (int) primaryStage.getX(), (int) primaryStage.getY());
         logic.setGuiSettings(guiSettings);
         helpWindow.hide();
+        statsWindow.hide();
         primaryStage.hide();
     }
 
@@ -180,6 +195,13 @@ public class MainWindow extends UiPart<Stage> {
 
             if (commandResult.isShowHelp()) {
                 handleHelp();
+            }
+
+            if (commandResult.isShowStats()) {
+                String statsText = commandResult.getStatsText();
+                // fall back to feedback message if no stats payload provided
+                statsWindow.setStatsText(statsText != null ? statsText : commandResult.getFeedbackToUser());
+                handleStats();
             }
 
             if (commandResult.isExit()) {

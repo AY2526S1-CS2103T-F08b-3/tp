@@ -26,7 +26,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-    * `list tutors` : Lists all tutors (use `list students` to list all students).
+    * `list` : Lists all tutors and students (use `list students` to list all students and `list tutors` to list all tutors).
 
    * `add r/student aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30` : Adds a **student** with subject, level, and price range.
      (Example for tutor: `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 s/english l/2-5 p/25-40`)
@@ -50,7 +50,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 * Parameters & placeholders
   Commands follow the below exactly:
   * Add: `add r/<tutor/student> n/<name> hp/<phone> e/<email> a/<address> s/<subject> l/<level> p/<min-max>`
-  * List: `list <tutors/students>`
+  * List: `list` or `list <tutors/students>`
   * Find: `find <tutors/students> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`
   * Match: `match <ID_1> <ID_2>`
   * Unmatch: `unmatch <ID_1>` or `unmatch <ID_2>`
@@ -118,9 +118,9 @@ Examples:
 
 Shows a list of either tutors or students.
 
-Format: `list tutors`  |  `list students`
+Format: `list`  |  `list tutors`  |  `list students`
 
-Examples: `list tutors` , `list students`
+Examples: `list`, `list tutors` , `list students`
 
 ### Finding *tutors* or *students*: `find`
 
@@ -349,7 +349,7 @@ Action | Format, Examples
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students s/ english`
 **Match/Unmatch** | `match <Id> <Id> / unmatch <Id> `<br> e.g., `match 1 2 / unmatch 1`
-**List** | `list students / list tutors`
+**List** | `list / list students / list tutors`
 **Sort** | `sort <students/tutors> <filter_criteria>` or `sort reset`<br> e.g., `sort students p/`, `sort reset`
 **Recommend** | `recommend INDEX [s/] [l/] [p/]`<br> e.g., `recommend 1 s/ l/`
 **Stats** | `stats`

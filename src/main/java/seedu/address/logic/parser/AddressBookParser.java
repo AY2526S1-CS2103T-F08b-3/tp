@@ -82,10 +82,10 @@ public class AddressBookParser {
             return new ListCommandParser().parse(arguments);
 
         case ExitCommand.COMMAND_WORD:
-            return new ExitCommand();
+            return new ExitCommandParser().parse(arguments);
 
         case HelpCommand.COMMAND_WORD:
-            return new HelpCommand();
+            return new HelpCommandParser().parse(arguments);
 
         case MatchCommand.COMMAND_WORD:
             return new MatchCommandParser().parse(arguments);
@@ -97,7 +97,8 @@ public class AddressBookParser {
             return new SortCommandParser().parse(arguments);
 
         case StatsCommand.COMMAND_WORD:
-            return new StatsCommand();
+            return new StatsCommandParser().parse(arguments);
+
         case SessionAddCommand.COMMAND_WORD:
             return new SessionAddCommandParser().parse(arguments);
 

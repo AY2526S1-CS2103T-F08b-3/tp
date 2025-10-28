@@ -1,11 +1,13 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LEVEL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.commands.RecommendCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -31,6 +33,11 @@ public class RecommendCommandParser implements Parser<RecommendCommand> {
 
         String indexStr = argMultimap.getPreamble();
         Index index;
+
+        if (!StringUtil.isNonZeroUnsignedInteger(indexStr)) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, RecommendCommand.MESSAGE_USAGE));
+        }
 
         try {
             index = ParserUtil.parseIndex(indexStr);

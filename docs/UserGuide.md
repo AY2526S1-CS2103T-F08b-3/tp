@@ -120,18 +120,17 @@ Format: `find <tutors/students> <prefix/ filter_value> [prefix/ <filter_value> .
 
 Description:
 - `<tutor/student>` specifies whether to search tutors or students.<br>
-  This field is optional — omitting it searches all persons.
-- <field>`prefix` must be one of the following prefixes:
+- <field>`prefix` must be at least one of the following prefixes:
   - `n/`  for name
   - `s/`  for subject
   - `l/`  for level
-  - `p/`  for price range
+  - `p/`  for price 
 - <filter_value> is the keyword, number, or range to match for the field.
 - Prefix order does not matter.
 
 Parameter Specifications:
 - <tutors/students> must be exactly tutors or students.
-- `prefix` must be one of the following:
+- `prefix` must be at leastone of the following:
     - `n/`  for name
     - `s/`  for subject
     - `l/`  for level range or specific level

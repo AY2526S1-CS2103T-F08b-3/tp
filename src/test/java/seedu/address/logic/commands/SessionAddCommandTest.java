@@ -139,13 +139,13 @@ public class SessionAddCommandTest {
 
         Session session1 = new Session(
                 DayOfWeek.MONDAY, LocalTime.of(9, 0),
-                Duration.ofHours(1), new Subject("Math"), new Price(40, 40));
+                Duration.ofHours(1), new Subject("Mathematics"), new Price(40, 40));
         SessionAddCommand command1 = new SessionAddCommand(Index.fromOneBased(1), session1);
         command1.execute(model);
 
         Session session2 = new Session(
                 DayOfWeek.TUESDAY, LocalTime.of(10, 0),
-                Duration.ofHours(2), new Subject("Science"), new Price(50, 50));
+                Duration.ofHours(2), new Subject("Mathematics"), new Price(50, 50));
         SessionAddCommand command2 = new SessionAddCommand(Index.fromOneBased(1), session2);
         command2.execute(model);
 

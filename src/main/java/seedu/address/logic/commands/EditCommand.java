@@ -32,7 +32,6 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Price;
 import seedu.address.model.person.Subject;
-import seedu.address.model.person.UniquePersonList;
 import seedu.address.model.tag.Tag;
 
 /**

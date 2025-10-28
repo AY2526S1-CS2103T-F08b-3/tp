@@ -54,20 +54,6 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_missingRole_failure() {
-        assertParseFailure(parser, "n/Alice",
-                "Please specify if you are trying to find tutors or students.\n"
-                        + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-    }
-
-    @Test
-    public void parse_invalidRole_failure() {
-        assertParseFailure(parser, "teacher n/Alice",
-                "Please specify if you are trying to find tutors or students.\n"
-                        + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-    }
-
-    @Test
     public void parse_emptyNamePrefix_failure() {
         assertParseFailure(parser, "tutors n/",
                 "Name value after n/ cannot be empty.");

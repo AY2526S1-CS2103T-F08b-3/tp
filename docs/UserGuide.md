@@ -113,61 +113,51 @@ Examples: `list tutors` , `list students`
 
 ### Finding *tutors* or *students*: `find`
 
-
-Returns a filtered list of students or tutors from the database based on one or more conditions such as name, subject, level, or price.
+Returns a filtered list of tutors or students from the database based on one or more conditions such as name, subject, level, or price.
 
 Format: `find <tutors/students> <prefix/ filter_value> [prefix/ <filter_value> ...]`
 
 Description:
-- `<tutor/student>` specifies whether to search tutors or students.<br>
-- <field>`prefix` must be at least one of the following prefixes:
-  - `n/`  for name
-  - `s/`  for subject
-  - `l/`  for level
-  - `p/`  for price 
-- <filter_value> is the keyword, number, or range to match for the field.
+- `<tutors/students>` specifies whether to search tutors or students.<br>
+- `<field>prefix` must be at least one of the following prefixes:
+  - `n/` for name
+  - `s/` for subject
+  - `l/` for level
+  - `p/` for price
+- `<filter_value>` is the keyword, number, or range to match for the field.
 - Prefix order does not matter.
 
 Parameter Specifications:
-- <tutors/students> must be exactly tutors or students.
-- `prefix` must be at leastone of the following:
-    - `n/`  for name
-    - `s/`  for subject
-    - `l/`  for level range or specific level
-    - `p/`  for price range or specific price
-- <filter_value> must match the expected field type:
-    - n/ <name>: keyword from the person's name (e.g. Aaron, Tan)
-
-      - `find tutors n/ Aaron Tan` finds all tutors with “Aaron” or "Tan" in their name.
-    - s/ <subject>: subject keyword (e.g. Mathematics, English, Science).
-      - `find tutors s/ Mathematics Science` finds all tutors who teach Mathematics or Science
-   
-  - l/ <level>: single integer from 1–6 or a range like 2–4
-      - `find students l/ 3-4`  finds all students in Level 3 to 4.
-      - `find students l/ 3`  finds all students in Level 3.
-      - `find tutors l/ 5-6` finds all tutors who offer teaching students in Level 5-6
-      - `find tutors l/ 6` finds all tutors who offer teaching students in Level 6
-  - p/ <range>: single integer or range(to filter tutors who offer a range of rates). Single integer or range must be between 
-  1-200
+- `<tutors/students>` must be exactly tutors or students. This field is optional.
+- `prefix` must be at least one of the following:
+  - `n/` for name
+  - `s/` for subject
+  - `l/` for level (single integer 1–6 or range like 2–4)
+  - `p/` for price (single integer or range between 1–200)
+- `<filter_value>` must match the expected field type:
+  - n/ `<name>`: keyword from the person's name (e.g. Aaron, Tan)
+    - `find tutors n/ Aaron Tan` finds all tutors with “Aaron” or “Tan” in their name.
+  - s/ `<subject>`: subject keyword (e.g. Mathematics, English, Science)
+    - `find tutors s/ Mathematics Science` finds all tutors who teach Mathematics or Science.
+  - l/ `<level>`: single integer or range
+    - `find students l/ 3-4` finds all students in Level 3 to 4.
+    - `find tutors l/ 5-6` finds all tutors teaching Levels 5–6.
+  - p/ `<price>`: single integer or range
     - `find students p/ 20` finds all students whose price **equals** \$20/hour.
     - `find students p/ 10-20` finds all students whose price **falls within** the \$10–\$20/hour range.
-    - `find tutors p/ 20` finds all tutors whose **(price)/(price range)** **(equals)/(includes)** \$20/hour.
-    - `find tutors p/ 20-30` finds all tutors whose **(price)/(price range) (is included in)/(overlaps with)** the \$20–\$30/hour range.
+    - `find tutors p/ 20` finds all tutors whose **price or price range includes** \$20/hour.
+    - `find tutors p/ 20-30` finds all tutors whose **price or price range overlaps** the \$20–\$30/hour range.
 
 Logic behavior:
-- When multiple values are given for the **same prefix**, the search uses **OR** logic.  
-  Multiple prefixes of the same field follows the same logic
-
-  Example: `find tutors s/ Mathematics Science`  and
-  `find tutors s/ Mathematics s/ Science` returns persons teaching **Mathematics OR Science**.
-- When different prefixes are combined, the search uses **AND** logic.  
-  Example: `find tutors s/ Mathematics l/ 4` returns tutors teaching **Mathematics AND Level 4**.
-
+- When multiple values are given for the **same prefix**, the search uses **OR** logic.
+  - Example: `find tutors s/ Mathematics Science` or  
+    `find tutors s/ Mathematics s/ Science` returns tutors teaching **Mathematics OR Science**.
+- When different prefixes are combined, the search uses **AND** logic.
+  - Example: `find tutors s/ Mathematics l/ 4` returns tutors teaching **Mathematics AND Level 4**.
 
 Examples:
-- `find tutors s/ Mathematics l/ 2–4 p/ 25–50` — finds tutors teaching Math for Levels 2–4, charging $25–50/hour.
-- `find students s/ English s/ Chinese p/ 15` — finds students needing English or Chinese at $15/hour.
-
+- `find tutors s/ Mathematics l/ 2–4 p/ 25–50` — finds tutors teaching Math for Levels 2–4, charging \$25–50/hour.
+- `find students s/ English s/ Chinese p/ 15` — finds students needing English or Chinese at \$15/hour.
 
   ![result for 'find tutors /s mathematics'](images/FindTutorResult.png)
 

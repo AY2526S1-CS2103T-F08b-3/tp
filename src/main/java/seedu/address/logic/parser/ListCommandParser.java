@@ -20,8 +20,7 @@ public class ListCommandParser implements Parser<ListCommand> {
         String trimmedArgs = args.trim();
 
         if (trimmedArgs.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+            return new ListCommand();
         }
 
         String[] splitArgs = trimmedArgs.split("\\s+");

@@ -471,11 +471,11 @@ Use case ends.
 
     Use case ends.
 
-**Use case: List tutors/students**
+**Use case: List tutors/students, or both**
 
 **MSS**
 
-1. User requests to list either tutors or students.
+1. User requests to list either tutors or students, or both.
 
 2. ConnectEd shows the requested list with indices.
 
@@ -483,17 +483,13 @@ Use case ends.
 
 **Extensions**
 
-* 1a. The parameter is missing or invalid.
+* 1a. The parameter is invalid.
     * 1a1. ConnectEd shows “Invalid command format!
       list: Lists all tutors or students and displays them as a list with index numbers.
       Parameter: 'tutors' / 'students'”.
         
         Use case ends.
 
-* 2a. The requested list is empty.
-  * 2a1. ConnectEd shows “No <tutors/students> in the list yet!”.
-
-    Use case ends.
 
 **Use case: Find tutors/students (by subject / level / price)**
 

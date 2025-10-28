@@ -34,9 +34,8 @@ public class RecommendCommandParser implements Parser<RecommendCommand> {
         String indexStr = argMultimap.getPreamble();
         Index index;
 
-        if (!StringUtil.isNonZeroUnsignedInteger(indexStr)) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, RecommendCommand.MESSAGE_USAGE));
+        if (StringUtil.isInvalidIndexInteger(indexStr)) {
+            throw new ParseException(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         try {

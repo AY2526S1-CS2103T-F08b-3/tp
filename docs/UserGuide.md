@@ -162,7 +162,7 @@ Logic behavior:
   Example: `find tutors s/ Mathematics Science`  and
   `find tutors s/ Mathematics s/ Science` returns persons teaching **Mathematics OR Science**.
 - When different prefixes are combined, the search uses **AND** logic.  
-  Example: `find s/ Mathematics l/ 4` returns tutors teaching **Mathematics AND Level 4**.
+  Example: `find tutors s/ Mathematics l/ 4` returns tutors teaching **Mathematics AND Level 4**.
 
 
 Examples:

@@ -97,7 +97,8 @@ public class AddressBookParser {
             return new SortCommandParser().parse(arguments);
 
         case StatsCommand.COMMAND_WORD:
-            return new StatsCommand();
+            return new StatsCommandParser().parse(arguments);
+
         case SessionAddCommand.COMMAND_WORD:
             return new SessionAddCommandParser().parse(arguments);
 

@@ -172,6 +172,8 @@ Format:
 * Unmatch the student/tutor at the specified `ID` and its corresponding matched tutor/student.
 * The id refers to the unique id number associated with each student and tutor.
 * The id **must be a positive integer** 1, 2, 3, …​
+* A Student and Tutor can only be matched if they share the same subject,
+  have overlapping level ranges, and have compatible price ranges.
 
 Examples:
 * `match 1 2` For a tutor with Id 1 and student with Id 2, matches the tutor with the student in the list.

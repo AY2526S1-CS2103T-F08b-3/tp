@@ -18,6 +18,8 @@ public class SessionAddCommand extends Command {
             + "Format: sessionadd INDEX d/DAY t/TIME dur/DURATION s/SUBJECT p/PRICE\n"
             + "Example: sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/40";
 
+    public static final String MESSAGE_SUBJECT_MISMATCH =
+            "Cannot add session: subject mismatch.\nPerson’s subject: %s\nSession’s subject: %s";
     private final Index targetIndex;
     private final Session session;
 
@@ -43,6 +45,7 @@ public class SessionAddCommand extends Command {
         if (b == null) {
             throw new CommandException(a.getName() + " is not matched with anyone. Cannot create a session.");
         }
+        ensureSameSubject(a, session);
 
         // 1) Clone both, preserving IDs (constructor order matches your sample)
         Person aClone = clonePreservingId(a);
@@ -64,6 +67,22 @@ public class SessionAddCommand extends Command {
         return new CommandResult(String.format(
                 "Added session for %s and their matched partner %s:\n%s",
                 aClone.getName(), bClone.getName(), session));
+    }
+    /**
+     * Ensures the session subject matches the person's subject.
+     * If the subjects differ, this method throws a {@link CommandException}
+     * and the session will not be added.
+     * @param person  The person the session is being added to.
+     * @param session The session to validate.
+     * @throws CommandException if {@code session.subject} does not equal {@code person.subject}.
+     */
+    private void ensureSameSubject(Person person, Session session) throws CommandException {
+        // Adjust getters to your API; e.g., person.getSubject(), session.getSubject()
+        if (!person.getSubject().equals(session.getSubject())) {
+            throw new CommandException(String.format(
+                    MESSAGE_SUBJECT_MISMATCH, person.getSubject(), session.getSubject()
+            ));
+        }
     }
     /** Your cloning helper — preserves personId and copies fields/tags. */
     private Person clonePreservingId(Person p) {

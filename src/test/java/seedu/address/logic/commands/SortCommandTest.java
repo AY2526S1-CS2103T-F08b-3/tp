@@ -35,7 +35,8 @@ public class SortCommandTest {
         List<String> sortFields = Arrays.asList("p/");
         SortCommand sortCommand = new SortCommand("tutors", sortFields);
 
-        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_TUTORS);
+        expectedModel.updateFilteredPersonList(
+                expectedModel.getFilterPredicate().and(Model.PREDICATE_SHOW_ALL_TUTORS));
         expectedModel.sortPersons(sortFields);
 
         String expectedMessage = String.format(SortCommand.MESSAGE_SUCCESS_TUTORS, "price");
@@ -48,7 +49,8 @@ public class SortCommandTest {
         List<String> sortFields = Arrays.asList("l/");
         SortCommand sortCommand = new SortCommand("tutors", sortFields);
 
-        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_TUTORS);
+        expectedModel.updateFilteredPersonList(
+                expectedModel.getFilterPredicate().and(Model.PREDICATE_SHOW_ALL_TUTORS));
         expectedModel.sortPersons(sortFields);
 
         String expectedMessage = String.format(SortCommand.MESSAGE_SUCCESS_TUTORS, "level");
@@ -61,7 +63,8 @@ public class SortCommandTest {
         List<String> sortFields = Arrays.asList("p/");
         SortCommand sortCommand = new SortCommand("students", sortFields);
 
-        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_STUDENTS);
+        expectedModel.updateFilteredPersonList(
+                expectedModel.getFilterPredicate().and(Model.PREDICATE_SHOW_ALL_STUDENTS));
         expectedModel.sortPersons(sortFields);
 
         String expectedMessage = String.format(SortCommand.MESSAGE_SUCCESS_STUDENTS, "price");
@@ -74,7 +77,8 @@ public class SortCommandTest {
         List<String> sortFields = Arrays.asList("l/");
         SortCommand sortCommand = new SortCommand("students", sortFields);
 
-        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_STUDENTS);
+        expectedModel.updateFilteredPersonList(
+                expectedModel.getFilterPredicate().and(Model.PREDICATE_SHOW_ALL_STUDENTS));
         expectedModel.sortPersons(sortFields);
 
         String expectedMessage = String.format(SortCommand.MESSAGE_SUCCESS_STUDENTS, "level");
@@ -87,7 +91,8 @@ public class SortCommandTest {
         List<String> sortFields = Arrays.asList("p/", "l/");
         SortCommand sortCommand = new SortCommand("tutors", sortFields);
 
-        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_TUTORS);
+        expectedModel.updateFilteredPersonList(
+                expectedModel.getFilterPredicate().and(Model.PREDICATE_SHOW_ALL_TUTORS));
         expectedModel.sortPersons(sortFields);
 
         String expectedMessage = String.format(SortCommand.MESSAGE_SUCCESS_TUTORS, "price, then level");
@@ -100,12 +105,70 @@ public class SortCommandTest {
         List<String> sortFields = Arrays.asList("l/", "p/");
         SortCommand sortCommand = new SortCommand("students", sortFields);
 
-        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_STUDENTS);
+        expectedModel.updateFilteredPersonList(
+                expectedModel.getFilterPredicate().and(Model.PREDICATE_SHOW_ALL_STUDENTS));
         expectedModel.sortPersons(sortFields);
 
         String expectedMessage = String.format(SortCommand.MESSAGE_SUCCESS_STUDENTS, "level, then price");
 
         assertCommandSuccess(sortCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_reset_success() {
+        SortCommand sortCommand = new SortCommand("reset");
+
+        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
+        expectedModel.sortPersons(List.of());
+
+        String expectedMessage = SortCommand.MESSAGE_SUCCESS_RESET;
+
+        assertCommandSuccess(sortCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_emptyAddressBook_returnsEmptyMessage() {
+        model = new ModelManager();
+
+        List<String> sortFields = Arrays.asList("p/");
+        SortCommand sortCommand = new SortCommand("tutors", sortFields);
+
+        CommandResult result = sortCommand.execute(model);
+        assertEquals("List is empty, there is nothing to sort.", result.getFeedbackToUser());
+    }
+
+    @Test
+    public void execute_noTutorsFound_returnsNoTutorsMessage() {
+        // Assuming getTypicalAddressBook has no tutors, or filter out all tutors
+        model.updateFilteredPersonList(person -> false); // Filter out everything first
+
+        List<String> sortFields = Arrays.asList("p/");
+        SortCommand sortCommand = new SortCommand("tutors", sortFields);
+
+        CommandResult result = sortCommand.execute(model);
+        assertEquals("No tutors found to sort.", result.getFeedbackToUser());
+    }
+
+    @Test
+    public void execute_noStudentsFound_returnsNoStudentsMessage() {
+        // Filter out everything first
+        model.updateFilteredPersonList(person -> false);
+
+        List<String> sortFields = Arrays.asList("p/");
+        SortCommand sortCommand = new SortCommand("students", sortFields);
+
+        CommandResult result = sortCommand.execute(model);
+        assertEquals("No students found to sort.", result.getFeedbackToUser());
+    }
+
+    @Test
+    public void execute_resetEmptyList_returnsEmptyMessage() {
+        model = new ModelManager();
+
+        SortCommand sortCommand = new SortCommand("reset");
+
+        CommandResult result = sortCommand.execute(model);
+        assertEquals("List is empty, there is nothing to sort.", result.getFeedbackToUser());
     }
 
     @Test
@@ -127,6 +190,12 @@ public class SortCommandTest {
     }
 
     @Test
+    public void buildCriteriaDescription_emptyCriteria_returnsEmptyString() {
+        SortCommand sortCommand = new SortCommand("reset");
+        assertEquals("", sortCommand.buildCriteriaDescription());
+    }
+
+    @Test
     public void equals() {
         List<String> firstSortFields = Arrays.asList("p/");
         List<String> secondSortFields = Arrays.asList("l/");
@@ -136,6 +205,7 @@ public class SortCommandTest {
         SortCommand sortSecondCommand = new SortCommand("tutors", secondSortFields);
         SortCommand sortMultipleCommand = new SortCommand("tutors", multipleSortFields);
         SortCommand sortStudentsCommand = new SortCommand("students", firstSortFields);
+        SortCommand resetCommand = new SortCommand("reset");
 
         // same object -> returns true
         assertTrue(sortFirstCommand.equals(sortFirstCommand));
@@ -158,6 +228,16 @@ public class SortCommandTest {
 
         // different role -> returns false
         assertFalse(sortFirstCommand.equals(sortStudentsCommand));
+
+        // reset command equals itself
+        assertTrue(resetCommand.equals(resetCommand));
+
+        // reset command with same role
+        SortCommand resetCommandCopy = new SortCommand("reset");
+        assertTrue(resetCommand.equals(resetCommandCopy));
+
+        // reset command different from regular sort
+        assertFalse(resetCommand.equals(sortFirstCommand));
     }
 
     @Test
@@ -166,23 +246,14 @@ public class SortCommandTest {
         SortCommand sortCommand = new SortCommand("tutors", sortFields);
         String expected = SortCommand.class.getCanonicalName()
                 + "{role=tutors, sortedBy=[p/, l/]}";
-        // Note: This assumes SortCommand has a proper toString() method
-        // If not implemented, you may need to add it to SortCommand
+        assertEquals(expected, sortCommand.toString());
     }
 
     @Test
-    public void execute_emptyList_success() {
-        model = new ModelManager();
-        expectedModel = new ModelManager();
-
-        List<String> sortFields = Arrays.asList("p/");
-        SortCommand sortCommand = new SortCommand("tutors", sortFields);
-
-        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_TUTORS);
-        expectedModel.sortPersons(sortFields);
-
-        String expectedMessage = String.format(SortCommand.MESSAGE_SUCCESS_TUTORS, "price");
-
-        assertCommandSuccess(sortCommand, model, expectedMessage, expectedModel);
+    public void toStringMethod_reset() {
+        SortCommand sortCommand = new SortCommand("reset");
+        String expected = SortCommand.class.getCanonicalName()
+                + "{role=reset, sortedBy=[]}";
+        assertEquals(expected, sortCommand.toString());
     }
 }

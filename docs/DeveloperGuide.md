@@ -320,6 +320,7 @@ The proposed sort mechanism is facilitated by `SortCommand`, which allows users 
 * Single criterion sorting (e.g., by price only)
 * Multi-criterion sorting with priority order (e.g., by price first, then by level)
 * Separate sorting for tutors and students 
+* Reset functionality to clear all filters and show all persons
 
 #### Key Components
 * `SortCommand`- Executes the sorting operation
@@ -352,13 +353,18 @@ The tutors are now displayed sorted by price from lowest to highest.
 
 **Step 5.** The user executes `list students` to switch to viewing students. Since the sort was applied only to tutors, students are displayed in their original unsorted order.
 **Step 6.** The user executes `sort students l/ p/` to sort students by level first, then by price. Students are now organized by education level, with students at lower levels appearing first, and within each level, sorted by their budget (price range).
+**Step 7.** The user wants to return to viewing all persons without any filters. The user executes `sort reset` to clear all filters. The command calls `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS)` to display both tutors and students in their original order.
 
 #### Implementation Details
 1. **Parsing:** `SortCommandParser` validates that:
-    * The role is either "tutors" or "students"
+    * The role is either "tutors" or "students" or "reset"
+    * If role is "reset", no additional parameters are allowed
     * All field are either "p/" or "l/"
     * There are no duplicate fields
-2. **Filtering:** Before sorting, the command filters the person list to show only the specified role (tutors or students)
+2. **Filtering:** Before sorting, the command:
+    * Preserves existing filters using `Model#getFilterPredicate()`
+    * Combines existing filters with the role predicate (tutors/students) using AND logic
+    * For reset, applies `PREDICATE_SHOW_ALL_PERSONS` to clear all filters
 3. **Comparator Chaining:** Multiple sort criteria are handled by chaining comparators
 4. **Range Handling:** For level and price fields that support ranges (e.g., "1-3" or "20-30"), the comparator uses the first number for sorting
 
@@ -368,6 +374,8 @@ The sort command handles several error cases:
 2. **Invalid field:** Returns parse exception if field is not "p/" or "l/"
 3. **Duplicate fields:** Returns parse exception with message indicating which field is duplicated 
 4. **Missing parameters:** Returns parse exception if role or fields are not provided 
+5. **Empty list:** Returns appropriate message if the address book is empty or no tutors/students found
+6. **Reset with extra parameters:** Returns error if "reset" is provided with additional parameters
 
 #### Design Considerations
 **Aspect: How sorting is performed**
@@ -390,6 +398,39 @@ The sort command handles several error cases:
     * Pros: More accurate representation of range values
     * Cons: More complex logic; may be unintuitive for users
 
+**Aspect: How to handle existing filters when sorting**
+
+* **Alternative 1 (current choice):** Preserve existing filters and combine with role filter
+    * Pros: More intuitive - users don't lose their previous filter state; allows sorting within filtered results
+    * Cons: More complex logic to track and combine predicates; may confuse users if they forgot about existing filters
+
+* **Alternative 2:** Clear all filters before applying sort
+    * Pros: Simpler implementation; clearer state - users always know exactly what they're viewing
+    * Cons: Users lose their filter context; would need to reapply filters after sorting
+
+**Aspect: How to implement reset functionality**
+
+* **Alternative 1 (current choice):** Include reset as a special role value in SortCommand
+    * Pros: Consistent command structure; single command handles both sorting and resetting
+    * Cons: Role parameter becomes overloaded (represents both role types and a command action)
+
+* **Alternative 2:** Create a separate ResetCommand
+    * Pros: Cleaner separation of concerns; role parameter stays semantic
+    * Cons: Additional command class; inconsistent with user mental model (reset is related to viewing/sorting)
+
+* **Alternative 3:** Use existing list command to reset
+    * Pros: No new command needed; users already familiar with list
+    * Cons: List command already has specific role-based behavior; reset clears filters while list applies them
+
+**Aspect: Handling empty lists and no results found**
+
+* **Alternative 1 (current choice):** Check for empty list first, then check for empty filtered list after applying predicates
+    * Pros: Provides specific, helpful error messages for different scenarios; better UX
+    * Cons: Multiple checks needed; slightly more complex logic
+
+* **Alternative 2:** Only check after filtering and show generic "no results" message
+    * Pros: Simpler implementation; single check
+    * Cons: Less informative to users; doesn't distinguish between empty database and no matches
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
@@ -774,6 +815,7 @@ Use case ends.
 * **Match** — A one-to-one link between a tutor and a student; **Unmatch** removes that link.
 * **Duplicate (person)** — Same type **and** same name (case-insensitive) **and** same phone; duplicates are rejected.
 * **Recommend** — Suggest tutors to a student, or students to a tutor, based on subject, level, and price compatibility.
+* **Sort** — Arrange tutors or students by specified criteria (`p/` for price, `l/` for level) in ascending order. `sort reset` clears all filters and displays all persons.
 
 
 --------------------------------------------------------------------------------------------------------------------

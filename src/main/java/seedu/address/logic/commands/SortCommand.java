@@ -3,9 +3,11 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.Model;
+import seedu.address.model.person.Person;
 
 /**
  * Sorts persons (tutors or students) in the address book by specified field(s).
@@ -22,10 +24,12 @@ public class SortCommand extends Command {
             + COMMAND_WORD + " tutors p/ (sort by price only)\n"
             + COMMAND_WORD + " tutors l/ (sort by level only)\n"
             + COMMAND_WORD + " tutors p/ l/ (sort by price, then level)\n"
-            + COMMAND_WORD + " students l/ p/ (sort by level, then price)";
+            + COMMAND_WORD + " students l/ p/ (sort by level, then price)\n"
+            + COMMAND_WORD + " reset";
 
     public static final String MESSAGE_SUCCESS_TUTORS = "Sorted all tutors by %1$s";
     public static final String MESSAGE_SUCCESS_STUDENTS = "Sorted all students by %1$s";
+    public static final String MESSAGE_SUCCESS_RESET = "List is reset to the original unfiltered list.";
 
     private final String role;
     private final List<String> sortedBy;
@@ -41,23 +45,53 @@ public class SortCommand extends Command {
         this.sortedBy = sortedBy;
     }
 
+    /**
+     * Creates a SortCommand to handle the sort reset command.
+     *
+     * @param role the reset filter to reset the list to the original unfiltered list.
+     */
+    public SortCommand(String role) {
+        this.role = role;
+        this.sortedBy = List.of();
+    }
+
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
+        if (model.getAllPersonList().isEmpty()) {
+            return new CommandResult("List is empty, there is nothing to sort.");
+        }
 
-        if (role.equals("tutors")) {
-            model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_TUTORS);
+        Predicate<Person> existingFilter = model.getFilterPredicate();
+        Predicate<Person> combinedPredicate;
+        if (role.equals("reset")) {
+            combinedPredicate = Model.PREDICATE_SHOW_ALL_PERSONS;
+        } else if (role.equals("tutors")) {
+            combinedPredicate = existingFilter.and(Model.PREDICATE_SHOW_ALL_TUTORS);
         } else {
-            model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_STUDENTS);
+            combinedPredicate = existingFilter.and(Model.PREDICATE_SHOW_ALL_STUDENTS);
+        }
+
+        model.updateFilteredPersonList(combinedPredicate);
+
+        if (model.getFilteredPersonList().isEmpty()) {
+            if (role.equals("reset")) {
+                return new CommandResult("List is empty.");
+            }
+            return new CommandResult("No " + role + " found to sort.");
         }
 
         model.sortPersons(sortedBy);
 
         String criteriaDescription = buildCriteriaDescription();
-        String successMessage = role.equals("tutors")
-                ? String.format(MESSAGE_SUCCESS_TUTORS, criteriaDescription)
-                : String.format(MESSAGE_SUCCESS_STUDENTS, criteriaDescription);
-
+        String successMessage;
+        if (role.equals("reset")) {
+            successMessage = MESSAGE_SUCCESS_RESET;
+        } else if (role.equals("tutors")) {
+            successMessage = String.format(MESSAGE_SUCCESS_TUTORS, criteriaDescription);
+        } else {
+            successMessage = String.format(MESSAGE_SUCCESS_STUDENTS, criteriaDescription);
+        }
         return new CommandResult(successMessage);
     }
 

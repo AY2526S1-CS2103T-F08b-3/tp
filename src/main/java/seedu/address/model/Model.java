@@ -105,7 +105,13 @@ public interface Model {
     /**
      * Sorts the persons in the address book by the specified fields in order.
      *
-     * @param sortFields list of fields to sort by (e.g., "/p" for price, "/l" for level)
+     * @param sortFields list of fields to sort by (e.g., "p/" for price, "l/" for level)
      */
     void sortPersons(List<String> sortFields);
+
+    /**
+     * Returns the current predicate being used to filter the person list.
+     * @return
+     */
+    Predicate<Person> getFilterPredicate();
 }

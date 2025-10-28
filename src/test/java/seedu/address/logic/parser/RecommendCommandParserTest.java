@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -42,6 +43,14 @@ public class RecommendCommandParserTest {
     public void parse_validIndexWithPriceFlag_returnsRecommendCommand() {
         RecommendCommand expected = new RecommendCommand(Index.fromOneBased(1), false, false, true);
         assertParseSuccess(parser, "1 p/", expected);
+    }
+
+    @Test
+    public void parse_invalidIndex_throwsParseException() {
+        assertParseFailure(parser, "0",
+                String.format(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, RecommendCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "-1",
+                String.format(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, RecommendCommand.MESSAGE_USAGE));
     }
 
     @Test

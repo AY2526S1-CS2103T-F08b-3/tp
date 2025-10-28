@@ -61,7 +61,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
   * `<tutors/students>` for `list` and `find`: exactly “tutors” or “students” (case-insensitive).
   * `hp/` phone: 8 digits (spaces allowed), digits only.
   * `e/` email: has format local-part@domain
-  * `s/` subject: one of {english, mathematics, chinese, science} (case-insensitive).
+  * `s/` subject: one of {english, mathematics, science} (case-insensitive).
   * `l/` level:
     * Student: single integer 1–6
     * Tutor: single integer 1–6 **or** range `x-y` (1–6 to 1–6; no internal spaces)
@@ -102,6 +102,16 @@ Format: `add r/<tutor/student> n/<name> hp/<phone> e/<email> a/<address> s/<subj
 Examples:
 * `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
 * `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 s/english l/2-5 p/25-40`
+
+### Editing a tutor or student: `edit`
+
+Edits the details of an existing tutor or student in the ConnectEd database.
+
+Format: `edit <INDEX> [n/<name>] [hp/<phone>] [e/<email>] [a/<address>] [s/<subject>] [l/<level>] [p/<min-max>] [t/tag]`
+
+Examples:
+* `edit 1 n/John Doe hp/91234567 e/johndoe`
+* `edit 2 s/mathematics l/3 p/20-30`
 
 ### Listing all persons : `list`
 
@@ -328,9 +338,10 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** |`add r/<tutor/student> <name> hp/ <phone> e/ <email> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
+**Edit** | `edit INDEX [n/<name>] [hp/<phone>] [e/<email>] [a/<address>] [s/<subject>] [l/<level>] [p/<min-max>] [t/tag]` e.g., `edit 1 n/John Doe hp/91234567 e/johndoe`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students s/ chinese`
+**Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students s/ english`
 **Match/Unmatch** | `match <Id> <Id> / unmatch <Id> `<br> e.g., `match 1 2 / unmatch 1`
 **List** | `list students / list tutors`
 **Sort** | `sort <students/tutors> <filter_criteria>`<br> e.g., `sort students p/`

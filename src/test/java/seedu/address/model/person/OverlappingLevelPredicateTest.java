@@ -62,18 +62,18 @@ public class OverlappingLevelPredicateTest {
 
     @Test
     public void testNoOverlapReturnsFalse() {
-        Person person = makePersonWithLevel(new Level(7, 7)); // person's range 7–7
+        Person person = makePersonWithLevel(new Level(3, 4));
         OverlappingLevelPredicate predicate = new OverlappingLevelPredicate(
-                List.of(new Level(1, 3), new Level(4, 6))
+                List.of(new Level(1, 2), new Level(5, 6))
         );
-        assertFalse(predicate.test(person)); // 7 does not overlap any provided ranges
+        assertFalse(predicate.test(person));
     }
 
     @Test
     public void testMultipleLevelRangesOneMatchesReturnsTrue() {
         Person person = makePersonWithLevel(new Level(4, 4));
         OverlappingLevelPredicate predicate = new OverlappingLevelPredicate(
-                List.of(new Level(1, 2), new Level(3, 5), new Level(6, 8))
+                List.of(new Level(1, 2), new Level(3, 5), new Level(5, 6))
         );
         assertTrue(predicate.test(person)); // 4 is within 3–5
     }

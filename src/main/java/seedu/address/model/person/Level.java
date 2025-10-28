@@ -8,7 +8,10 @@ import static java.util.Objects.requireNonNull;
 public class Level {
     public static final String MESSAGE_CONSTRAINTS =
             "Level must be a positive integer or a range start-end (e.g., 3 or 1-6) with start <= end.";
-    public static final String VALIDATION_REGEX = "\\d+|\\d+\\s*-\\s*\\d+";
+    public static final String MESSAGE_STUDENT_SINGLE_LEVEL =
+            "Students can only have a single level (e.g., 3), not a range.";
+    private static final int MIN_LEVEL = 1;
+    private static final int MAX_LEVEL = 6;
 
     private final int start; // inclusive
     private final int end; // inclusive
@@ -22,6 +25,9 @@ public class Level {
         if (start <= 0 || end <= 0 || start > end) {
             throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
         }
+        if (start < MIN_LEVEL || start > MAX_LEVEL || end < MIN_LEVEL || end > MAX_LEVEL) {
+            throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
+        }
         this.start = start;
         this.end = end;
     }
@@ -33,6 +39,9 @@ public class Level {
      */
     public static boolean isValidLevel(String levelString) {
         requireNonNull(levelString);
+        if (levelString.trim().isEmpty()) {
+            return false;
+        }
         try {
             Level level = parse(levelString);
             return level.start > 0 && level.end > 0
@@ -52,6 +61,9 @@ public class Level {
     public static Level parse(String text) {
         requireNonNull(text);
         String s = text.trim();
+        if (s.isEmpty()) {
+            throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
+        }
         // Single value?
         if (s.matches("\\d+")) {
             int v = Integer.parseInt(s);
@@ -62,6 +74,9 @@ public class Level {
             String[] parts = s.split("-");
             int a = Integer.parseInt(parts[0].trim());
             int b = Integer.parseInt(parts[1].trim());
+            if (a > b) {
+                throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
+            }
             return new Level(a, b);
         }
         throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);

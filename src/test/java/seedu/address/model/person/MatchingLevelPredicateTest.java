@@ -61,7 +61,7 @@ public class MatchingLevelPredicateTest {
 
     @Test
     public void testPersonLevelNotIncludedReturnsFalse() {
-        Person person = makePersonWithLevel(new Level(6, 8));
+        Person person = makePersonWithLevel(new Level(5, 6));
         MatchingLevelPredicate predicate = new MatchingLevelPredicate(List.of(new Level(1, 3)));
         assertFalse(predicate.test(person)); // 1–3 does not overlap 6–8
     }
@@ -70,14 +70,14 @@ public class MatchingLevelPredicateTest {
     public void testMultipleLevelsOneMatchesReturnsTrue() {
         Person person = makePersonWithLevel(new Level(3, 4));
         MatchingLevelPredicate predicate = new MatchingLevelPredicate(
-                List.of(new Level(1, 2), new Level(3, 3), new Level(10, 12))
+                List.of(new Level(1, 2), new Level(3, 3), new Level(5, 6))
         );
         assertTrue(predicate.test(person)); // 3 matches
     }
 
     @Test
     public void testMultipleLevelsNoneMatchReturnsFalse() {
-        Person person = makePersonWithLevel(new Level(10, 12));
+        Person person = makePersonWithLevel(new Level(5, 6));
         MatchingLevelPredicate predicate = new MatchingLevelPredicate(
                 List.of(new Level(1, 3), new Level(4, 6))
         );

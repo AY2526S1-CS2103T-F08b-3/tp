@@ -50,30 +50,40 @@ public class FindCommandParser implements Parser<FindCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_SUBJECT, PREFIX_LEVEL, PREFIX_PRICE);
 
         Predicate<Person> combinedPredicate = p -> true;
-
         String preamble = argMultimap.getPreamble().trim();
-
         if (!preamble.isEmpty()) {
             try {
                 String parsedRole = ParserUtil.parseRole(preamble);
                 combinedPredicate = new RolePredicate(parsedRole).and(combinedPredicate);
             } catch (ParseException e) {
                 throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE), e);
+                        "Please key in either students or tutors.\n"
+                                + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE)
+                );
             }
         }
         // Name
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
-            String[] nameKeywords = argMultimap.getValue(PREFIX_NAME).get().trim().split("\\s+");
+            String rawName = argMultimap.getValue(PREFIX_NAME).get().trim();
+            if (rawName.isEmpty()) {
+                throw new ParseException("Name value after n/ cannot be empty.");
+            }
+            String[] nameKeywords = rawName.split("\\s+");
+            List<String> nameKeywordsList = Arrays.asList(nameKeywords);
             Predicate<Person> namePredicate =
-                    new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords));
+                    new NameContainsKeywordsPredicate(nameKeywordsList);
             combinedPredicate = combinedPredicate.and(namePredicate);
         }
 
         // Subject
         if (argMultimap.getValue(PREFIX_SUBJECT).isPresent()) {
-            List<String> subjectKeywords = argMultimap.getAllValues(PREFIX_SUBJECT).stream()
+            List<String> allSubjects = argMultimap.getAllValues(PREFIX_SUBJECT);
+            if (allSubjects.stream().allMatch(s -> s.trim().isEmpty())) {
+                throw new ParseException("Subject value after s/ cannot be empty.");
+            }
+            List<String> subjectKeywords = allSubjects.stream()
                     .flatMap(s -> Arrays.stream(s.trim().split("\\s+")))
+                    .filter(s -> !s.isEmpty())
                     .toList();
             List<Subject> subjects = new ArrayList<>();
             for (String keyword : subjectKeywords) {
@@ -85,28 +95,36 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         // Level
         if (argMultimap.getValue(PREFIX_LEVEL).isPresent()) {
-            List<String> levelStrings = argMultimap.getAllValues(PREFIX_LEVEL).stream()
+            List<String> allLevels = argMultimap.getAllValues(PREFIX_LEVEL);
+            if (allLevels.stream().allMatch(s -> s.trim().isEmpty())) {
+                throw new ParseException("Level value after l/ cannot be empty.");
+            }
+            List<String> levelStrings = allLevels.stream()
                     .flatMap(s -> Arrays.stream(s.trim().split("\\s+")))
+                    .filter(s -> !s.isEmpty())
                     .toList();
             List<Level> levels = new ArrayList<>();
             for (String levelString : levelStrings) {
-                levels.add(ParserUtil.parseLevel(levelString)); // throws ParseException if invalid
+                levels.add(ParserUtil.parseLevel(levelString));
             }
-
             Predicate<Person> levelPredicate = new MatchingLevelPredicate(levels);
             combinedPredicate = combinedPredicate.and(levelPredicate);
         }
 
         // Price
         if (argMultimap.getValue(PREFIX_PRICE).isPresent()) {
-            List<String> priceStrings = argMultimap.getAllValues(PREFIX_PRICE).stream()
+            List<String> allPrices = argMultimap.getAllValues(PREFIX_PRICE);
+            if (allPrices.stream().allMatch(s -> s.trim().isEmpty())) {
+                throw new ParseException("Price value after p/ cannot be empty.");
+            }
+            List<String> priceStrings = allPrices.stream()
                     .flatMap(s -> Arrays.stream(s.trim().split("\\s+")))
+                    .filter(s -> !s.isEmpty())
                     .toList();
             List<Price> prices = new ArrayList<>();
             for (String priceString : priceStrings) {
                 prices.add(ParserUtil.parsePrice(priceString));
             }
-
             Predicate<Person> pricePredicate = new MatchingPricePredicate(prices);
             combinedPredicate = combinedPredicate.and(pricePredicate);
         }

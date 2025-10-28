@@ -8,7 +8,8 @@ import static java.util.Objects.requireNonNull;
  */
 public class Price {
     public static final String MESSAGE_CONSTRAINTS =
-            "Price must be a non-negative integer or a range min-max (e.g., 35 or 30-45) with min <= max.";
+            "Price must be a positive integer greater than 0 and no more than 200 "
+                    + "or a range min-max (e.g., 35 or 30-45) with min <= max.";
     public static final String VALIDATION_REGEX = "\\d+|\\d+\\s*-\\s*\\d+";
 
     private final int min; // inclusive
@@ -20,7 +21,7 @@ public class Price {
      * @param max A valid max of the price range.
      */
     public Price(int min, int max) {
-        if (min < 0 || max < 0 || min > max) {
+        if (min <= 0 || max <= 0 || min > max || max > 200) {
             throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
         }
         this.min = min;
@@ -33,7 +34,18 @@ public class Price {
      * @return boolean.
      */
     public static boolean isValidPrice(String test) {
-        return test.matches(VALIDATION_REGEX);
+        if (test == null || test.trim().isEmpty()) {
+            return false;
+        }
+        if (!test.matches(VALIDATION_REGEX)) {
+            return false;
+        }
+        try {
+            parse(test);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     /**
@@ -45,6 +57,9 @@ public class Price {
     public static Price parse(String text) {
         requireNonNull(text);
         String s = text.trim();
+        if (s.isEmpty()) {
+            throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
+        }
         if (s.matches("\\d+")) {
             int v = Integer.parseInt(s);
             return new Price(v, v);
@@ -53,6 +68,9 @@ public class Price {
             String[] parts = s.split("-");
             int a = Integer.parseInt(parts[0].trim());
             int b = Integer.parseInt(parts[1].trim());
+            if (a > b) {
+                throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
+            }
             return new Price(a, b);
         }
         throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);

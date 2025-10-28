@@ -220,7 +220,7 @@ Given below is an example usage scenario and how the match/unmatch mechanism beh
 Step 1. The user launches the application. The application displays a unified list containing both tutors and students, none of which are matched initially.
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `match t1 s2` command to match the first tutor with the second student. The `MatchCommandParser` validates the input, checks that both indices are valid and visible in the current filtered list, and creates a `MatchCommand`. The command executes and calls `Model#matchTutorStudent()`, which:
+Step 2. The user executes `match 1 2` command to match the first person which is a tutor with the second person who is a student. The `MatchCommandParser` validates the input, checks that both indices are valid and visible in the current filtered list, and creates a `MatchCommand`. The command executes and calls `Model#matchTutorStudent()`, which:
 * Verifies neither tutor nor student is already matched to someone else
 * Creates bidirectional references between the tutor and student
 * Updates the GUI to display the match information in both entities' profiles
@@ -231,14 +231,14 @@ Step 2. The user executes `match t1 s2` command to match the first tutor with th
 
 </div>
 
-Step 3. The user realizes the match was incorrect and executes `unmatch t1` to remove the match. The `UnmatchCommandParser` validates the input and creates an `UnmatchCommand`. The command executes and calls `Model#unmatchTutorStudent()`, which:
+Step 3. The user realizes the match was incorrect and executes `unmatch 1` to remove the match. The `UnmatchCommandParser` validates the input and creates an `UnmatchCommand`. The command executes and calls `Model#unmatchTutorStudent()`, which:
 * Retrieves the matched pair from the specified entity
 * Removes bidirectional references from both tutor and student
 * Updates the GUI to remove match information from both profiles
 
-Step 4. The user executes `match t1 s1` to create a new match. Since both entities are now unmatched, the operation succeeds and establishes the new bidirectional relationship.
+Step 4. The user executes `match 1 2` to create a new match. Since both entities are now unmatched, the operation succeeds and establishes the new bidirectional relationship.
 
-The following sequence diagram shows how a find operation goes through the `Logic` component:
+The following sequence diagram shows how a match operation goes through the `Logic` component:
 
 ![FindSequenceDiagram](images/MatchSequenceDiagram-Logic.png)
 
@@ -892,7 +892,7 @@ testers are expected to do more *exploratory* testing.
 1. Matching a student and tutor shown in the list.
 
     1. Prerequisites: 
-       1. Find tutor using the `find tutor ...` command. Take note of the index of the tutor (e.g. `t1`).
+       1. Find tutor using the `find tutor ...` command. Take note of the index of the tutor (e.g. `2`).
        2. Find student using the `find student ...` command. Take note of the index of the student (e.g. `s1`).
 
     2. Test case: `match 1 2`<br>

@@ -243,7 +243,11 @@ Details:
 
 * The `duration` must follow the HH:mm format (e.g., 02:00 for 2 hours).
 
+* The `subject` must match the person being given the session to.
+
 * The `<INDEX>` must be a positive integer 1, 2, 3, …
+
+* When adding a session to someone who already has a session, overrides the previous session.
 
 Examples:
 

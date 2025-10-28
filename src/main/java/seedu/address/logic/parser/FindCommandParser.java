@@ -63,7 +63,9 @@ public class FindCommandParser implements Parser<FindCommand> {
             combinedPredicate = new RolePredicate(parsedRole).and(combinedPredicate);
         } catch (ParseException e) {
             throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE), e);
+                    "Please specify if you are trying to find tutors or students.\n"
+                            + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE)
+            );
         }
         // Name
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {

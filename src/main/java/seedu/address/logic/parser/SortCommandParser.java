@@ -35,16 +35,17 @@ public class SortCommandParser implements Parser<SortCommand> {
 
         String[] splitArgs = trimmedArgs.split("\\s+");
 
-        if (splitArgs.length < 2) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
-        }
-
         String role = splitArgs[0];
+        if (role.equals("reset")) {
+            if (splitArgs.length != 1) {
+                throw new ParseException("Command must be: sort reset!\n");
+            }
+            return new SortCommand(role);
+        }
 
         if (!role.equals("tutors") && !role.equals("students")) {
             throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                    String.format("role given must be tutors/students/reset!\n", SortCommand.MESSAGE_USAGE));
         }
 
         List<String> sortCriteria = new ArrayList<>();
@@ -57,7 +58,7 @@ public class SortCommandParser implements Parser<SortCommand> {
 
             if (!VALID_FIELDS.contains(currentCriteria)) {
                 throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                        String.format(currentCriteria + " is not p/ or l/!\n", SortCommand.MESSAGE_USAGE));
             }
 
             if (seenCriteria.contains(currentCriteria)) {
@@ -70,7 +71,7 @@ public class SortCommandParser implements Parser<SortCommand> {
 
         if (sortCriteria.isEmpty()) {
             throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                    String.format("Please give a criteria to sort by!\n", SortCommand.MESSAGE_USAGE));
         }
 
         return new SortCommand(role, sortCriteria);

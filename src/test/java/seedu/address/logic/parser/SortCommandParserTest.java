@@ -1,10 +1,10 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -67,48 +67,72 @@ public class SortCommandParserTest {
     }
 
     @Test
-    public void parse_emptyArgs_throwsParseException() {
-        assertParseFailure(parser, "     ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+    public void parse_resetCommand_returnsSortCommand() {
+        // valid reset command
+        assertParseSuccess(parser, "reset",
+                new SortCommand("reset"));
+
+        // reset with extra whitespace
+        assertParseSuccess(parser, "  reset  ",
+                new SortCommand("reset"));
     }
 
     @Test
-    public void parse_missingRole_throwsParseException() {
-        assertParseFailure(parser, "p/",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+    public void parse_resetWithExtraArgs_throwsParseException() {
+        // reset should not have additional arguments
+        assertParseFailure(parser, "reset p/",
+                "Command must be: sort reset!\n");
+
+        assertParseFailure(parser, "reset tutors",
+                "Command must be: sort reset!\n");
+    }
+
+    @Test
+    public void parse_emptyArgs_throwsParseException() {
+        assertParseFailure(parser, "     ",
+                String.format("Invalid command format! \n%s", SortCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_missingFields_throwsParseException() {
         assertParseFailure(parser, "tutors",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                "Please give a criteria to sort by!\n");
 
         assertParseFailure(parser, "students",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                "Please give a criteria to sort by!\n");
+
+        assertParseFailure(parser, "tutors  ",
+                "Please give a criteria to sort by!\n");
     }
 
     @Test
     public void parse_invalidRole_throwsParseException() {
         assertParseFailure(parser, "teacher p/",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                "role given must be tutors/students/reset!\n");
 
         assertParseFailure(parser, "tutor p/",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                "role given must be tutors/students/reset!\n");
 
         assertParseFailure(parser, "student l/",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                "role given must be tutors/students/reset!\n");
+
+        assertParseFailure(parser, "all p/",
+                "role given must be tutors/students/reset!\n");
     }
 
     @Test
     public void parse_invalidField_throwsParseException() {
         assertParseFailure(parser, "tutors n/",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                "n/ is not p/ or l/!\n");
 
         assertParseFailure(parser, "students e/",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                "e/ is not p/ or l/!\n");
 
         assertParseFailure(parser, "tutors price",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                "price is not p/ or l/!\n");
+
+        assertParseFailure(parser, "students level",
+                "level is not p/ or l/!\n");
     }
 
     @Test
@@ -121,27 +145,43 @@ public class SortCommandParserTest {
 
         assertParseFailure(parser, "tutors p/ l/ p/",
                 "p/ is a duplicate field!\n" + SortCommand.MESSAGE_USAGE);
+
+        assertParseFailure(parser, "students l/ p/ l/",
+                "l/ is a duplicate field!\n" + SortCommand.MESSAGE_USAGE);
     }
 
     @Test
     public void parse_mixedValidAndInvalidFields_throwsParseException() {
         assertParseFailure(parser, "tutors p/ n/",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                "n/ is not p/ or l/!\n");
 
         assertParseFailure(parser, "students l/ e/",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+                "e/ is not p/ or l/!\n");
+
+        assertParseFailure(parser, "tutors n/ p/",
+                "n/ is not p/ or l/!\n");
     }
 
     @Test
-    public void parse_tooManyArguments_throwsParseException() {
-        // more than just role and fields
-        assertParseFailure(parser, "tutors students p/",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+    public void parse_allValidFields_returnsSortCommand() {
+        // both fields present
+        assertParseSuccess(parser, "tutors p/ l/",
+                new SortCommand("tutors", Arrays.asList("p/", "l/")));
+
+        assertParseSuccess(parser, "students l/ p/",
+                new SortCommand("students", Arrays.asList("l/", "p/")));
     }
 
     @Test
-    public void parse_onlyRole_throwsParseException() {
-        assertParseFailure(parser, "tutors ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
+    public void parse_caseInsensitiveRole_throwsParseException() {
+        // roles should be case-sensitive
+        assertParseFailure(parser, "Tutors p/",
+                "role given must be tutors/students/reset!\n");
+
+        assertParseFailure(parser, "STUDENTS l/",
+                "role given must be tutors/students/reset!\n");
+
+        assertParseFailure(parser, "Reset",
+                "role given must be tutors/students/reset!\n");
     }
 }

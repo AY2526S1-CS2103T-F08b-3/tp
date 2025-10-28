@@ -54,6 +54,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
   * Find: `find <tutors/students> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`
   * Match: `match <ID_1> <ID_2>`
   * Unmatch: `unmatch <ID_1>` or `unmatch <ID_2>`
+  * Sort: `sort <tutors/students> <criteria>/` or `sort reset` where `<criteria>` is `p/` or `l/`
 
 
 * Accepted values (validators)
@@ -197,7 +198,7 @@ Examples:
 ### Sorting student/tutor list : `sort`
 Sorts the displayed list of students or tutors based on specified field(s) in ascending order.
 
-Format: `sort <tutors/students> <criteria>/`
+Format: `sort <tutors/students> <criteria>/` or `sort reset`
 * `<tutors/students>`: specifies whether to sort the tutor or the student list.
 * `<criteria>`: must be one of the following keywords:
   * `p/`: price range
@@ -209,10 +210,14 @@ Examples:
 * `sort students l/`: sorts all students by level only
 * `sort tutors p/ l/`: sorts all tutors by price, then level
 * `sort students l/ p/`: sorts all students by level, then price
+* `sort reset`: resets the list to show all persons (both tutors and students) in their original unfiltered state
   ![result for 'sort tutors p/'](images/SortResult.png)
 
 Notes:
 * The sort command filters the list to show only tutors or students (based on your selection) before sorting
+* The sort command preserves any existing filters and combines them with the tutor/student filter
+* If the list is empty or no matching tutors/students are found, an appropriate message will be displayed
+* use `sort reset` to clear all filters and return to viewing all persons
 * For price ranges (e.g., `10-20`), sorting uses the lower bound value (`10`)
 * For level ranges (e.g., `3-5`), sorting uses the lower bound value (`3`)
 
@@ -333,7 +338,7 @@ Action | Format, Examples
 **Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students s/ chinese`
 **Match/Unmatch** | `match <Id> <Id> / unmatch <Id> `<br> e.g., `match 1 2 / unmatch 1`
 **List** | `list students / list tutors`
-**Sort** | `sort <students/tutors> <filter_criteria>`<br> e.g., `sort students p/`
+**Sort** | `sort <students/tutors> <filter_criteria>` or `sort reset`<br> e.g., `sort students p/`, `sort reset`
 **Recommend** | `recommend INDEX [s/] [l/] [p/]`<br> e.g., `recommend 1 s/ l/`
 **Stats** | `stats`
 **Help** | `help`

@@ -13,8 +13,6 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.person.Level;
-import seedu.address.model.person.MatchingLevelPredicate;
-import seedu.address.model.person.MatchingPricePredicate;
 import seedu.address.model.person.MatchingSubjectPredicate;
 import seedu.address.model.person.OverlappingLevelPredicate;
 import seedu.address.model.person.OverlappingPricePredicate;
@@ -94,14 +92,14 @@ public class RecommendCommand extends Command {
         if (filterSubject && userSubject != null) {
             predicate = predicate.and(new MatchingSubjectPredicate(List.of(userSubject)));
         }
+        if (filterLevel && userLevel != null) {
+            predicate = predicate.and(new OverlappingLevelPredicate(List.of(userLevel)));
+        }
+        if (filterPrice && userPrice != null) {
+            predicate = predicate.and(new OverlappingPricePredicate(List.of(userPrice)));
+        }
 
         if (user.isStudent()) {
-            if (filterLevel && userLevel != null) {
-                predicate = predicate.and(new MatchingLevelPredicate(List.of(userLevel)));
-            }
-            if (filterPrice && userPrice != null) {
-                predicate = predicate.and(new MatchingPricePredicate(List.of(userPrice)));
-            }
             Predicate<Person> tutorPredicate = p -> p.isTutor() && predicate.test(p);
             model.updateFilteredPersonList(tutorPredicate);
 
@@ -111,14 +109,9 @@ public class RecommendCommand extends Command {
             }
             return new CommandResult(MESSAGE_SUCCESS_TUTORS);
         } else if (user.isTutor()) {
-            if (filterLevel && userLevel != null) {
-                predicate = predicate.and(new OverlappingLevelPredicate(List.of(userLevel)));
-            }
-            if (filterPrice && userPrice != null) {
-                predicate = predicate.and(new OverlappingPricePredicate(List.of(userPrice)));
-            }
             Predicate<Person> studentPredicate = p -> p.isStudent() && predicate.test(p);
             model.updateFilteredPersonList(studentPredicate);
+
             if (model.getFilteredPersonList().isEmpty()) {
                 model.updateFilteredPersonList(p -> true); // show all persons
                 return new CommandResult(MESSAGE_NO_MATCH_STUDENTS);

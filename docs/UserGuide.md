@@ -73,6 +73,10 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
   * Use `<INDEX>` persons (1-indexed; visible list indices; no spaces).
   * Examples: `delete 1`, `delete 2`, `match 1 2`, `unmatch 2`.
 
+* Optional parameters
+  * Square brackets `[ ]` indicate optional arguments.
+  * Examples: list `[<tutors/students>]` — runs list tutors or list students if specified, otherwise defaults to showing all.
+
 
 * Errors (shape & value)
   <br>The app guides with specific messages on: wrong command format, missing/invalid `<tutor/student>` or `<tutors/students>`, invalid field (`/s` `/l` `/p`), malformed values (non-integer level, bad `min-max`, min>max), duplicates, and empty lists.
@@ -118,9 +122,12 @@ Examples:
 
 Shows a list of either tutors or students.
 
-Format: `list`  |  `list tutors`  |  `list students`
+Format: `list [<tutors/students>]`
 
-Examples: `list`, `list tutors` , `list students`
+Examples: 
+* `list`
+* `list tutors` 
+* `list students`
 
 ### Finding *tutors* or *students*: `find`
 
@@ -195,7 +202,7 @@ Examples:
 ### Recommending persons : `recommend`
 Recommends a list of tutors to a student or a list of students to a tutor based on subject, level, and/or price range.
 
-Format: `recommend INDEX [s/] [l/] [p/]`
+Format: `recommend <INDEX> [s/] [l/] [p/]`
 * Recommends tutors to a student or students to a tutor at the specified `INDEX`.
 * The index refers to the index number shown in the current displayed list.
 * The index **must be a positive integer** 1, 2, 3, …​
@@ -269,14 +276,14 @@ Details:
 
 Examples:
 
-* `sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/40`
-Adds a 2-hour Monday 4 PM Mathematics session with a price of $40 for the person (at index 1) and their matched 
+* `sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/30`
+Adds a 2-hour Monday 4 PM Mathematics session with a price of $30 for the person (at index 1) and their matched 
 counterpart.
 
 * `sessiondelete 1`
 Deletes the existing session for the person (at index 1) and their matched counterpart.
 
-![result for 'sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/40'](images/SessionResult.png)
+![result for 'sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/30'](images/SessionResult.png)
 
 ### Viewing statistics : `stats`
 Displays statistics about the current tutors and students in ConnectEd, including total counts, average prices, subject distributions, and matched pairs.
@@ -318,7 +325,7 @@ ConnectEd data are saved in the hard disk automatically after any command that c
 
 ### Editing the data file
 
-ConnectEd data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+ConnectEd data are saved automatically as a JSON file `[JAR file location]/data/connected.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file makes its format invalid, ConnectEd will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
@@ -350,13 +357,13 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** |`add r/<tutor/student> <name> hp/ <phone> e/ <email> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
-**Edit** | `edit INDEX [n/<name>] [hp/<phone>] [e/<email>] [a/<address>] [s/<subject>] [l/<level>] [p/<min-max>] [t/tag]` e.g., `edit 1 n/John Doe hp/91234567 e/johndoe`
+**Edit** | `edit <INDEX> [n/<name>] [hp/<phone>] [e/<email>] [a/<address>] [s/<subject>] [l/<level>] [p/<min-max>] [t/tag]` e.g., `edit 1 n/John Doe hp/91234567 e/johndoe`
 **Clear** | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
+**Delete** | `delete <INDEX>`<br> e.g., `delete 3`
 **Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students s/ english`
 **Match/Unmatch** | `match <Id> <Id> / unmatch <Id> `<br> e.g., `match 1 2 / unmatch 1`
 **List** | `list / list students / list tutors`
 **Sort** | `sort <students/tutors> <filter_criteria>` or `sort reset`<br> e.g., `sort students p/`, `sort reset`
-**Recommend** | `recommend INDEX [s/] [l/] [p/]`<br> e.g., `recommend 1 s/ l/`
+**Recommend** | `recommend <INDEX> [s/] [l/] [p/]`<br> e.g., `recommend 1 s/ l/`
 **Stats** | `stats`
 **Help** | `help`

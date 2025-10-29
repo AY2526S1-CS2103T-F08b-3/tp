@@ -25,7 +25,7 @@ public class FindCommand extends Command {
             + "Format: " + COMMAND_WORD
             + " [ROLE] [n/ NAME] [s/ SUBJECT] [l/ LEVEL (single or range)] [p/ PRICE (single or range)]\n"
             + "Note: You may include multiple values per prefix, and prefix order does not matter.\n"
-            + "Example: " + COMMAND_WORD + " tutors n/ Aaron s/ Math English l/ 1-3 p/ 20-50";
+            + "Example: " + COMMAND_WORD + " tutors n/ Aaron s/ Mathematics English l/ 1-3 p/ 20-50";
 
 
 

@@ -122,53 +122,37 @@ Format: `list`  |  `list tutors`  |  `list students`
 
 Examples: `list`, `list tutors` , `list students`
 
-### Finding *tutors* or *students*: `find`
+### Finding persons: `find`
 
-Returns a filtered list of tutors or students from the database based on one or more conditions such as name, subject, level, or price.
+Filters the list of persons based on one or more conditions such as role, name, subject, level, or price.
 
-Format: `find <tutors/students> <prefix/ filter_value> [prefix/ <filter_value> ...]`
+**Format:**  
+`find [tutors/students] [n/<name>] [s/<subject>] [l/<level>] [p/<min-max>]`
 
-Description:
-- `<tutors/students>` specifies whether to search tutors or students.<br>
-- `<field>prefix` must be at least one of the following prefixes:
-  - `n/` for name
-  - `s/` for subject
-  - `l/` for level
-  - `p/` for price
-- `<filter_value>` is the keyword, number, or range to match for the field.
-- Prefix order does not matter.
+**Prefixes:**
+- `n/` name — keyword(s) (e.g. `n/ Aaron Tan`)
+- `s/` subject — e.g. Mathematics, English, Science, 
+- `l/` level — single number `1–6` or range `start–end`
+- `p/` price — single `1–200` or range `min–max`
 
-Parameter Specifications:
-- `<tutors/students>` must be exactly tutors or students. This field is optional.
-- `prefix` must be at least one of the following:
-  - `n/` for name
-  - `s/` for subject
-  - `l/` for level (single integer 1–6 or range like 2–4)
-  - `p/` for price (single integer or range between 1–200)
-- `<filter_value>` must match the expected field type:
-  - n/ `<name>`: keyword from the person's name (e.g. Aaron, Tan)
-    - `find tutors n/ Aaron Tan` finds all tutors with “Aaron” or “Tan” in their name.
-  - s/ `<subject>`: subject keyword (e.g. Mathematics, English, Science)
-    - `find tutors s/ Mathematics Science` finds all tutors who teach Mathematics or Science.
-  - l/ `<level>`: single integer or range
-    - `find students l/ 3-4` finds all students in Level 3 to 4.
-    - `find tutors l/ 5-6` finds all tutors teaching Levels 5–6.
-  - p/ `<price>`: single integer or range
-    - `find students p/ 20` finds all students whose price **equals** \$20/hour.
-    - `find students p/ 10-20` finds all students whose price **falls within** the \$10–\$20/hour range.
-    - `find tutors p/ 20` finds all tutors whose **price or price range includes** \$20/hour.
-    - `find tutors p/ 20-30` finds all tutors whose **price or price range overlaps** the \$20–\$30/hour range.
+**Logic:**
+- Multiple values under the same prefix use **OR** logic  
+  (e.g. `s/ Mathematics English` finds Mathematics or English).
+- Different prefixes use **AND** logic  
+  (e.g. `s/ Mathematics l/ 4` finds Mathematics and Level 4).
+- Role (`tutors` or `students`) is optional, if omitted, searches all persons.
 
-Logic behavior:
-- When multiple values are given for the **same prefix**, the search uses **OR** logic.
-  - Example: `find tutors s/ Mathematics Science` or  
-    `find tutors s/ Mathematics s/ Science` returns tutors teaching **Mathematics OR Science**.
-- When different prefixes are combined, the search uses **AND** logic.
-  - Example: `find tutors s/ Mathematics l/ 4` returns tutors teaching **Mathematics AND Level 4**.
+**Level and Price matching:**
+- Both can be single values or ranges.
+- Students match if their range **includes** the given value or range.
+- Tutors match if their range **overlaps** the given value or range.
 
-Examples:
-- `find tutors s/ Mathematics l/ 2–4 p/ 25–50` — finds tutors teaching Math for Levels 2–4, charging \$25–50/hour.
-- `find students s/ English s/ Chinese p/ 15` — finds students needing English or Chinese at \$15/hour.
+**Examples:**
+- `find tutors s/ Math l/ 2-4 p/ 25-50` finds tutors teaching Math for Levels 2–4 charging \$25–50/hour.
+- `find students s/ English p/ 10-20` finds students needing English within \$10–20/hour.
+- `find p/ 20` finds all persons whose price or range includes \$20/hour.
+- `find s/ Mathematics l/ 1-3 p/ 15` finds persons teaching or studying Math at Levels 1–3 with prices around \$15/hour.
+
 
   ![result for 'find tutors /s mathematics'](images/FindTutorResult.png)
 

@@ -127,7 +127,7 @@ Examples: `list`, `list tutors` , `list students`
 Filters the list of persons based on one or more conditions such as role, name, subject, level, or price.
 
 **Format:**  
-`find [tutors/students] <prefix/ value> [prefix/ value ...]`
+`find [tutors/students] [n/<name>] [s/<subject>] [l/<level>] [p/<min-max>]`
 
 **Prefixes:**
 - `n/` name — keyword(s) (e.g. `n/ Aaron Tan`)
@@ -142,7 +142,7 @@ Filters the list of persons based on one or more conditions such as role, name, 
   (e.g. `s/ Mathematics l/ 4` finds Mathematics and Level 4).
 - Role (`tutors` or `students`) is optional, if omitted, searches all persons.
 
-**Level and price matching:**
+**Level and Price matching:**
 - Both can be single values or ranges.
 - Students match if their range **includes** the given value or range.
 - Tutors match if their range **overlaps** the given value or range.

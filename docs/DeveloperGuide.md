@@ -148,6 +148,82 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### **List Feature**
+
+#### Implementation Details
+
+The `ListCommand` allows users to display all **tutors**, **students**, or **all persons** currently stored in the address book.  
+It serves as a core navigation command that resets the filtered list view based on the specified role.
+
+1. **Parsing:**  
+   The `ListCommandParser` validates that:
+    * The role is one of `"tutors"`, `"students"`.
+    * If no argument is provided, it defaults to show all the persons.
+    * If an invalid argument is provided, a `ParseException` is thrown with a usage message:
+      ```
+      Invalid command format!
+      list: Lists all tutors or students and displays them as a list with index numbers.
+      Parameter: 'tutors' / 'students'
+      ```
+
+2. **Filtering:**  
+   Before listing, the command updates the filtered person list using the appropriate predicate:
+    * `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_TUTORS)` – for `"tutors"`.
+    * `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_STUDENTS)` – for `"students"`.
+    * `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS)` – for `"all"`.
+
+   These predicates are predefined in the `Model` and ensure that the displayed list in the GUI reflects the selected category.
+
+3. **Execution:**  
+   The `ListCommand#execute()` method:
+    * Calls the relevant predicate based on the role.
+    * Refreshes the UI list to display the filtered persons.
+    * Returns a `CommandResult` containing a role-specific success message:
+        * `"Listed all tutors and students."`
+        * `"Listed all tutors."`
+        * `"Listed all students."`
+
+4. **Integration with UI:**
+    * The updated filtered list is bound to the GUI through JavaFX’s `ObservableList`.
+    * The UI automatically refreshes to show the updated list without requiring manual refresh actions.
+    * The command box clears after successful execution, consistent with other CLI commands.
+
+#### Error Handling
+
+The `ListCommand` handles several error cases gracefully:
+
+1. **Invalid role:**  
+   If the user specifies an invalid role (e.g., `list tutor` instead of `list tutors`), a `ParseException` is thrown with the correct usage message.
+
+2. **Extra parameters:**  
+   If additional arguments or prefixes are provided (e.g., `list tutors p/`), the parser rejects the input and shows the usage error.
+
+---
+
+#### Design Considerations
+
+**Aspect: Command Structure**
+
+* **Alternative 1 (current choice):** Use a single `ListCommand` class with a role parameter (`tutors`, `students`).
+    * Pros: Simple, reduces code duplication, centralized command behavior.
+    * Cons: Requires argument parsing logic and role validation.
+
+* **Alternative 2:** Create separate commands (`ListTutorsCommand`, `ListStudentsCommand`, etc.).
+    * Pros: Each command is simpler and self-contained.
+    * Cons: More boilerplate classes; harder to maintain consistency across variants.
+
+---
+
+#### Example Usage
+
+| Command | Description | Expected Result |
+|--------|--------------|----------------|
+| `list` | Displays all persons (tutors and students). | Full list shown in UI. |
+| `list tutors` | Displays all tutors in the address book. | Tutor list shown in UI. |
+| `list students` | Displays all students in the address book. | Student list shown in UI. |
+
+
+
 ### [Proposed] Find feature
 
 #### Proposed Implementation
@@ -352,7 +428,9 @@ The tutors are now displayed sorted by price from lowest to highest.
 </div>
 
 **Step 5.** The user executes `list students` to switch to viewing students. Since the sort was applied only to tutors, students are displayed in their original unsorted order.
+
 **Step 6.** The user executes `sort students l/ p/` to sort students by level first, then by price. Students are now organized by education level, with students at lower levels appearing first, and within each level, sorted by their budget (price range).
+
 **Step 7.** The user wants to return to viewing all persons without any filters. The user executes `sort reset` to clear all filters. The command calls `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS)` to display both tutors and students in their original order.
 
 #### Implementation Details
@@ -390,7 +468,7 @@ The sort command handles several error cases:
 
 **Aspect: Sorting by ranges (Level and Price)**
 
-* **Alternative 1 (current choice):** Use the first number in hyphenated ranges (e.g., "20-30 -> 20)
+* **Alternative 1 (current choice):** Use the first number in hyphenated ranges (e.g., 20-30 -> 20)
     * Pros: Simple and predictable behaviour; works consistently for both single values and ranges
     * Cons: May not represent the "true" value for ranges (doesn't use midpoint or average)
 
@@ -431,6 +509,27 @@ The sort command handles several error cases:
 * **Alternative 2:** Only check after filtering and show generic "no results" message
     * Pros: Simpler implementation; single check
     * Cons: Less informative to users; doesn't distinguish between empty database and no matches
+
+### Stats Feature
+#### Proposed Implementation
+
+The statistics feature is implemented via `StatsCommand` and `StatsCommandParser`. It provides a summary of key metrics (counts, averages) to help coordinators assess the database at a glance.
+
+#### Key Components
+- `StatsCommand#execute()` — Retrieves aggregated statistics from the Model and formats them for display.
+
+- `StatsCommandParser#parse()` — Parses optional filters (e.g., role/ tutors or role/ students) and constructs a `StatsCommand`.
+
+- `Model#getStatistics(Optional<Role> role) `— Computes and returns a Statistics object containing (at minimum):
+
+  * Total tutors and students 
+  * Subject distribution
+  * Average hourly price (tutors) / average budget (students)
+  * Number of matched pairs
+
+
+No underlying data is modified by this command.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**

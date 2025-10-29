@@ -137,6 +137,7 @@ Parameter Specifications:
 - <tutor/student> must be exactly tutor or student (case-insensitive).
 - <field>/ must be one of the following:
     - n/  for name
+    - r/  for role
     - s/  for subject
     - l/  for level (1–6)
     - p/  for price range

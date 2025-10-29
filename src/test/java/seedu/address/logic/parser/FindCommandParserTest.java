@@ -14,7 +14,7 @@ public class FindCommandParserTest {
     private final FindCommandParser parser = new FindCommandParser();
 
     @Test
-    public void parse_validNameArgs_success() {
+    public void parse_validNameArgsWithRole_success() {
         assertDoesNotThrow(() -> {
             var command = parser.parse("tutors n/Alice Bob");
             assertTrue(command instanceof FindCommand);
@@ -22,7 +22,7 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validSubjectArgs_success() {
+    public void parse_validSubjectArgsWithRole_success() {
         assertDoesNotThrow(() -> {
             var command = parser.parse("students s/Mathematics Science");
             assertTrue(command instanceof FindCommand);
@@ -30,7 +30,7 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validLevelArgs_success() {
+    public void parse_validLevelArgsWithRole_success() {
         assertDoesNotThrow(() -> {
             var command = parser.parse("tutors l/1-4");
             assertTrue(command instanceof FindCommand);
@@ -38,18 +38,32 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validPriceArgs_success() {
+    public void parse_validPriceArgsWithRole_success() {
         assertDoesNotThrow(() -> {
             var command = parser.parse("students p/10-50");
             assertTrue(command instanceof FindCommand);
         });
     }
-
     @Test
     public void parse_emptyArgs_failure() {
         assertParseFailure(parser, "",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         assertParseFailure(parser, "   ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_invalidRole_failure() {
+        assertParseFailure(parser, "teacher n/Alice",
+                "Please key in either students or tutors.\n"
+                        + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_roleOnlyWithoutPrefixes_failure() {
+        assertParseFailure(parser, "tutors",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "students",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
@@ -77,4 +91,10 @@ public class FindCommandParserTest {
                 "Price value after p/ cannot be empty.");
     }
 
+    @Test
+    public void parse_noRecognizedPrefixes_failure() {
+        assertParseFailure(parser, "randomTextOnly",
+                "Please key in either students or tutors.\n"
+                        + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
 }

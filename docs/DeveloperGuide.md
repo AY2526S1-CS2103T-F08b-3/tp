@@ -1037,13 +1037,13 @@ testers are expected to do more *exploratory* testing.
 
 1. Adding a tutor.
 
-   1. Test case: `add tutor aaron /hp 91234567 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30`<br>
+   1. Test case: `add r/tutor aaron hp/ 91234567 a/ Blk 30 Geylang Street 29, #06-40 /s mathematics l/ 3 p/ 20-30`<br>
       Expected: Tutor is added to the list. Details of the added tutor shown in the status message. 
 
    2. Test case: `add aaron`<br>
       Expected: No tutor is added. Error details shown in the status message. Status bar remains the same.
 
-   3. Other incorrect add commands to try: `add`, `add tutor aaron /hp 0 /a Blk 30 Geylang Street 29, #06-40 /s mathematics /l 3 /p 20-30`<br>
+   3. Other incorrect add commands to try: `add`, `add tutor aaron hp/ 0 /a Blk 30 Geylang Street 29, #06-40 s/ mathematics l/ 3 p/ 20-30`<br>
       Expected: Similar to previous.
 
 ### Deleting a tutor
@@ -1065,13 +1065,13 @@ testers are expected to do more *exploratory* testing.
 
 1. Finding a student or students.
 
-    1. Test case: `find student /s english`<br>
+    1. Test case: `find student s/ english`<br>
        Expected: Students that have the 'english' subject are being listed. 
 
     2. Test case: `find student`<br>
         Expected: No student is listed. Error details shown in the status message. Status bar remains the same.
 
-    3. Other incorrect add commands to try: `find`, `find student /s eng`<br>
+    3. Other incorrect add commands to try: `find`, `find student s/ eng`<br>
         Expected: Similar to previous.
 
 ### Matching a student and tutor
@@ -1096,10 +1096,10 @@ testers are expected to do more *exploratory* testing.
 ### Recommending tutors to a student/ students to a tutor
 1. Recommending tutors to a student/ students to a tutor.
 
-   1. Test case: `recommend 3 /s /l`<br>
+   1. Test case: `recommend 3 s/ l/`<br>
         Expected: Tutors/Students that match the subject and level of person with index `3` are being listed.
 
-   2. Test case: `recommend 1 /s /p`<br>
+   2. Test case: `recommend 1 s/ p/`<br>
         Expected: Tutors/Students that match the subject and price range of person with index `1` are being listed.
 
    3. Test case: `recommend 2`<br>

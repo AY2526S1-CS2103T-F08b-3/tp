@@ -79,10 +79,11 @@ public class ParserUtil {
     public static Name parseName(String name) throws ParseException {
         requireNonNull(name);
         String trimmedName = name.trim();
-        if (!Name.isValidName(trimmedName)) {
+        String normalizedName = trimmedName.replaceAll("\\s+", " ");
+        if (!Name.isValidName(normalizedName)) {
             throw new ParseException(Name.MESSAGE_CONSTRAINTS);
         }
-        return new Name(trimmedName);
+        return new Name(normalizedName);
     }
 
     /**
@@ -155,7 +156,17 @@ public class ParserUtil {
     public static Level parseLevel(String level) throws ParseException {
         requireNonNull(level);
         String trimmedLevel = level.trim();
-        return Level.parse(trimmedLevel);
+        if (trimmedLevel.isEmpty()) {
+            throw new ParseException(Level.MESSAGE_CONSTRAINTS);
+        }
+        if (!Level.isValidLevel(trimmedLevel)) {
+            throw new ParseException(Level.MESSAGE_CONSTRAINTS);
+        }
+        try {
+            return Level.parse(trimmedLevel);
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(Level.MESSAGE_CONSTRAINTS);
+        }
     }
 
     /**
@@ -167,7 +178,17 @@ public class ParserUtil {
     public static Price parsePrice(String price) throws ParseException {
         requireNonNull(price);
         String trimmedPrice = price.trim();
-        return Price.parse(trimmedPrice);
+        if (trimmedPrice.isEmpty()) {
+            throw new ParseException(Price.MESSAGE_CONSTRAINTS);
+        }
+        if (!Price.isValidPrice(trimmedPrice)) {
+            throw new ParseException(Price.MESSAGE_CONSTRAINTS);
+        }
+        try {
+            return Price.parse(trimmedPrice);
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(Price.MESSAGE_CONSTRAINTS);
+        }
     }
 
     /**

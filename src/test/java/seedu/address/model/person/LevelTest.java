@@ -30,28 +30,37 @@ public class LevelTest {
         // null level
         assertThrows(NullPointerException.class, () -> Level.isValidLevel(null));
 
-        // invalid levels
+        // Bug fix #1: Empty strings should return false
         assertFalse(Level.isValidLevel("")); // empty string
         assertFalse(Level.isValidLevel(" ")); // spaces only
-        assertFalse(Level.isValidLevel("-1")); // negative
-        assertFalse(Level.isValidLevel("0")); // zero
+
+        // Bug fix #2: Reversed ranges should return false
         assertFalse(Level.isValidLevel("2-1")); // reversed range
-        assertFalse(Level.isValidLevel("abc")); // non-numeric
-        assertFalse(Level.isValidLevel("1-a")); // non-numeric range
+        assertFalse(Level.isValidLevel("6-1")); // reversed range
+        assertFalse(Level.isValidLevel("5-3")); // reversed range
+
+        assertFalse(Level.isValidLevel("0")); // below min
+        assertFalse(Level.isValidLevel("-1")); // negative
         assertFalse(Level.isValidLevel("7")); // above max
+        assertFalse(Level.isValidLevel("10")); // above max
         assertFalse(Level.isValidLevel("1-7")); // end above max
         assertFalse(Level.isValidLevel("0-3")); // start below min
         assertFalse(Level.isValidLevel("3-0")); // end below min
         assertFalse(Level.isValidLevel("6-7")); // end above max
         assertFalse(Level.isValidLevel("0-1")); // start below min
 
-        // valid levels (only 1-6 allowed)
-        assertTrue(Level.isValidLevel("1"));
-        assertTrue(Level.isValidLevel("6"));
-        assertTrue(Level.isValidLevel("1-2"));
-        assertTrue(Level.isValidLevel("3-3"));
-        assertTrue(Level.isValidLevel("5-6"));
+        assertFalse(Level.isValidLevel("abc")); // non-numeric
+        assertFalse(Level.isValidLevel("1-a")); // non-numeric range
+
+        assertTrue(Level.isValidLevel("1")); // min valid
+        assertTrue(Level.isValidLevel("6")); // max valid
+        assertTrue(Level.isValidLevel("3")); // middle value
+        assertTrue(Level.isValidLevel("1-2")); // valid range
+        assertTrue(Level.isValidLevel("3-3")); // same start and end
+        assertTrue(Level.isValidLevel("5-6")); // valid range
+        assertTrue(Level.isValidLevel("1-6")); // full range
         assertTrue(Level.isValidLevel("1 - 6")); // spaces around dash
+        assertTrue(Level.isValidLevel("2 - 4")); // spaces around dash
     }
 
     @Test

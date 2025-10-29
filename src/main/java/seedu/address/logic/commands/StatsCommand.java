@@ -18,6 +18,8 @@ public class StatsCommand extends Command {
             + ": Displays statistics about the persons in the address book.\n"
             + "Example: " + COMMAND_WORD;
 
+    public static final String SHOWING_STATS_MESSAGE = "Opened stats window.";
+
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
@@ -27,7 +29,7 @@ public class StatsCommand extends Command {
         Statistics tutorStats = tutorCalc.calculate();
         Statistics studentStats = studentCalc.calculate();
 
-        String result = "================ CONNECTED STATISTICS ================\n"
+        String result = "=================== CONNECTED STATISTICS ===================\n"
                 + "TUTORS\n"
                 + "-----------------------------------------------------\n"
                 + tutorStats + "\n"
@@ -37,8 +39,9 @@ public class StatsCommand extends Command {
                 + studentStats + "\n"
                 + "======================================================";
 
-        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(result);
+        // feedback shown in output box remains SHOWING_STATS_MESSAGE,
+        // full stats string is passed as the statsText payload for the stats window
+        return new CommandResult(SHOWING_STATS_MESSAGE, result, false, true, false);
     }
 
     @Override

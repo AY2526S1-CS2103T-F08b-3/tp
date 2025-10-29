@@ -67,6 +67,24 @@ public class StringUtil {
     }
 
     /**
+     * Returns true if {@code s} represents an invalid index integer
+     * e.g. "-1", "0", "-100", etc. <br>
+     * Will return false for any other non-null string input
+     * e.g. empty string, "1", "+1", and " 2 " (untrimmed), "3 0" (contains whitespace), "1 a" (contains letters)
+     * @throws NullPointerException if {@code s} is null.
+     */
+    public static boolean isInvalidIndexInteger(String s) {
+        requireNonNull(s);
+
+        try {
+            int value = Integer.parseInt(s);
+            return (value < 0 && !s.startsWith("+")) || value == 0;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
+
+    /**
      * Returns true if {@code s} represents a valid role
      * e.g. "tutors"/ "students"  <br>
      * Will return false for any other invalid string input

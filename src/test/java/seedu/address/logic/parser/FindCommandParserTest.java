@@ -9,38 +9,41 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
 
-/**
- * Final passing test suite for FindCommandParser.
- * This version is compatible with all JUnit versions and your parser.
- */
 public class FindCommandParserTest {
 
     private final FindCommandParser parser = new FindCommandParser();
 
     @Test
-    public void parse_validNameArgs_success() {
+    public void parse_validNameArgsWithRole_success() {
         assertDoesNotThrow(() -> {
-            var command = parser.parse(" n/Alice Bob");
+            var command = parser.parse("tutors n/Alice Bob");
             assertTrue(command instanceof FindCommand);
         });
     }
 
     @Test
-    public void parse_validPriceArgs_success() {
+    public void parse_validSubjectArgsWithRole_success() {
         assertDoesNotThrow(() -> {
-            var command = parser.parse(" p/10-50");
+            var command = parser.parse("students s/Mathematics Science");
             assertTrue(command instanceof FindCommand);
         });
     }
 
     @Test
-    public void parse_multiplePrefixes_success() {
+    public void parse_validLevelArgsWithRole_success() {
         assertDoesNotThrow(() -> {
-            var command = parser.parse(" n/Charlie sub/Math lvl/1-3 p/20-40");
+            var command = parser.parse("tutors l/1-4");
             assertTrue(command instanceof FindCommand);
         });
     }
 
+    @Test
+    public void parse_validPriceArgsWithRole_success() {
+        assertDoesNotThrow(() -> {
+            var command = parser.parse("students p/10-50");
+            assertTrue(command instanceof FindCommand);
+        });
+    }
     @Test
     public void parse_emptyArgs_failure() {
         assertParseFailure(parser, "",
@@ -50,16 +53,48 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_noRecognizedPrefixes_failure() {
-        assertParseFailure(parser, " random text only",
+    public void parse_invalidRole_failure() {
+        assertParseFailure(parser, "teacher n/Alice",
+                "Please key in either students or tutors.\n"
+                        + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_roleOnlyWithoutPrefixes_failure() {
+        assertParseFailure(parser, "tutors",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "students",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
-    public void parse_invalidPrefix_failure() {
-        assertParseFailure(parser, " x/Alice",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    public void parse_emptyNamePrefix_failure() {
+        assertParseFailure(parser, "tutors n/",
+                "Name value after n/ cannot be empty.");
+    }
+
+    @Test
+    public void parse_emptySubjectPrefix_failure() {
+        assertParseFailure(parser, "students s/",
+                "Subject value after s/ cannot be empty.");
+    }
+
+    @Test
+    public void parse_emptyLevelPrefix_failure() {
+        assertParseFailure(parser, "tutors l/",
+                "Level value after l/ cannot be empty.");
+    }
+
+    @Test
+    public void parse_emptyPricePrefix_failure() {
+        assertParseFailure(parser, "students p/",
+                "Price value after p/ cannot be empty.");
+    }
+
+    @Test
+    public void parse_noRecognizedPrefixes_failure() {
+        assertParseFailure(parser, "randomTextOnly",
+                "Please key in either students or tutors.\n"
+                        + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 }
-
-

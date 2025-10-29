@@ -26,7 +26,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-    * `list tutors` : Lists all tutors (use `list students` to list all students).
+    * `list` : Lists all tutors and students (use `list students` to list all students and `list tutors` to list all tutors).
 
    * `add r/student aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30` : Adds a **student** with subject, level, and price range.
      (Example for tutor: `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 s/english l/2-5 p/25-40`)
@@ -50,7 +50,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 * Parameters & placeholders
   Commands follow the below exactly:
   * Add: `add r/<tutor/student> n/<name> hp/<phone> e/<email> a/<address> s/<subject> l/<level> p/<min-max>`
-  * List: `list <tutors/students>`
+  * List: `list` or `list <tutors/students>`
   * Find: `find <tutors/students> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`
   * Match: `match <ID_1> <ID_2>`
   * Unmatch: `unmatch <ID_1>` or `unmatch <ID_2>`
@@ -62,7 +62,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
   * `<tutors/students>` for `list` and `find`: exactly “tutors” or “students” (case-insensitive).
   * `hp/` phone: 8 digits (spaces allowed), digits only.
   * `e/` email: has format local-part@domain
-  * `s/` subject: one of {english, mathematics, chinese, science} (case-insensitive).
+  * `s/` subject: one of {english, mathematics, science} (case-insensitive).
   * `l/` level:
     * Student: single integer 1–6
     * Tutor: single integer 1–6 **or** range `x-y` (1–6 to 1–6; no internal spaces)
@@ -104,62 +104,72 @@ Examples:
 * `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
 * `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 s/english l/2-5 p/25-40`
 
+### Editing a tutor or student: `edit`
+
+Edits the details of an existing tutor or student in the ConnectEd database.
+
+Format: `edit <INDEX> [n/<name>] [hp/<phone>] [e/<email>] [a/<address>] [s/<subject>] [l/<level>] [p/<min-max>] [t/tag]`
+
+Examples:
+* `edit 1 n/John Doe hp/91234567 e/johndoe`
+* `edit 2 s/mathematics l/3 p/20-30`
+
 ### Listing all persons : `list`
 
 Shows a list of either tutors or students.
 
-Format: `list tutors`  |  `list students`
+Format: `list`  |  `list tutors`  |  `list students`
 
-Examples: `list tutors` , `list students`
+Examples: `list`, `list tutors` , `list students`
 
 ### Finding *tutors* or *students*: `find`
 
-Returns a filtered list of students/tutors from our database based on one condition (subject, level, or price).
+Returns a filtered list of tutors or students from the database based on one or more conditions such as name, subject, level, or price.
 
-Returns a filtered list of students or tutors from the database based on one or more conditions such as name, subject, level, or price.
-
-Format: find <tutors/students> <field>/ <filter_value> [<field>/ <filter_value> ...]
+Format: `find <tutors/students> <prefix/ filter_value> [prefix/ <filter_value> ...]`
 
 Description:
-- <tutor/student> specifies whether to search tutors or students.<br>
-  This field is optional — omitting it searches all persons.
-- <field>/ must be one of the following prefixes:
-  - n/  for name
-  - s/  for subject
-  - l/  for level
-  - p/  for price range
-- <filter_value> is the keyword, number, or range to match for the field.
+- `<tutors/students>` specifies whether to search tutors or students.<br>
+- `<field>prefix` must be at least one of the following prefixes:
+  - `n/` for name
+  - `s/` for subject
+  - `l/` for level
+  - `p/` for price
+- `<filter_value>` is the keyword, number, or range to match for the field.
 - Prefix order does not matter.
-- Multiple prefixes of the same type are allowed (e.g. s/ math s/ science).
-- All conditions are combined with logical AND, meaning all must match.
 
 Parameter Specifications:
-- <tutor/student> must be exactly tutor or student (case-insensitive).
-- <field>/ must be one of the following:
-    - n/  for name
-    - r/  for role
-    - s/  for subject
-    - l/  for level (1–6)
-    - p/  for price range
-- <filter_value> must match the expected field type:
-    - n/ <name>: keyword from the person's name (e.g. Aaron, Tan)
-    - s/ <subject>: subject keyword (e.g. mathematics, english, science)
-    - l/ <level>: single integer from 1–6 or a range like 2–4
-    - p/ <range>: one or two integers separated by a dash (e.g. 10–20, 30)
+- `<tutors/students>` must be exactly tutors or students. This field is optional.
+- `prefix` must be at least one of the following:
+  - `n/` for name
+  - `s/` for subject
+  - `l/` for level (single integer 1–6 or range like 2–4)
+  - `p/` for price (single integer or range between 1–200)
+- `<filter_value>` must match the expected field type:
+  - n/ `<name>`: keyword from the person's name (e.g. Aaron, Tan)
+    - `find tutors n/ Aaron Tan` finds all tutors with “Aaron” or “Tan” in their name.
+  - s/ `<subject>`: subject keyword (e.g. Mathematics, English, Science)
+    - `find tutors s/ Mathematics Science` finds all tutors who teach Mathematics or Science.
+  - l/ `<level>`: single integer or range
+    - `find students l/ 3-4` finds all students in Level 3 to 4.
+    - `find tutors l/ 5-6` finds all tutors teaching Levels 5–6.
+  - p/ `<price>`: single integer or range
+    - `find students p/ 20` finds all students whose price **equals** \$20/hour.
+    - `find students p/ 10-20` finds all students whose price **falls within** the \$10–\$20/hour range.
+    - `find tutors p/ 20` finds all tutors whose **price or price range includes** \$20/hour.
+    - `find tutors p/ 20-30` finds all tutors whose **price or price range overlaps** the \$20–\$30/hour range.
+
+Logic behavior:
+- When multiple values are given for the **same prefix**, the search uses **OR** logic.
+  - Example: `find tutors s/ Mathematics Science` or  
+    `find tutors s/ Mathematics s/ Science` returns tutors teaching **Mathematics OR Science**.
+- When different prefixes are combined, the search uses **AND** logic.
+  - Example: `find tutors s/ Mathematics l/ 4` returns tutors teaching **Mathematics AND Level 4**.
 
 Examples:
-- find tutors n/ Aaron — finds all tutors with “Aaron” in their name.
-- find tutors s/ Mathematics — finds all tutors teaching Mathematics.
-- find tutors l/ 3 — finds all tutors teaching Level 3 students.
-- find students p/ 10–20 — finds all students offering a price range of $10–20/hour.
-- find tutors s/ Mathematics l/ 2–4 p/ 25–50 — finds tutors teaching Math for Levels 2–4, charging $25–50/hour.
-- find students s/ English s/ Chinese p/ 15 — finds students needing English or Chinese at $15/hour.
+- `find tutors s/ Mathematics l/ 2–4 p/ 25–50` — finds tutors teaching Math for Levels 2–4, charging \$25–50/hour.
+- `find students s/ English s/ Chinese p/ 15` — finds students needing English or Chinese at \$15/hour.
 
-Notes:
-- You can combine multiple filters in one command.
-- Prefixes can appear in any order.
-- The same prefix can appear multiple times with different values.
-- Invalid formats (e.g. p/ abc, l/ 10–5) will show an “Invalid command format” error.
   ![result for 'find tutors /s mathematics'](images/FindTutorResult.png)
 
 ### Match/Unmatch a student and a tutor : `match/unmatch`
@@ -174,6 +184,8 @@ Format:
 * Unmatch the student/tutor at the specified `ID` and its corresponding matched tutor/student.
 * The id refers to the unique id number associated with each student and tutor.
 * The id **must be a positive integer** 1, 2, 3, …​
+* A Student and Tutor can only be matched if they share the same subject,
+  have overlapping level ranges, and have compatible price ranges.
 
 Examples:
 * `match 1 2` For a tutor with Id 1 and student with Id 2, matches the tutor with the student in the list.
@@ -249,7 +261,11 @@ Details:
 
 * The `duration` must follow the HH:mm format (e.g., 02:00 for 2 hours).
 
+* The `subject` must match the person being given the session to.
+
 * The `<INDEX>` must be a positive integer 1, 2, 3, …
+
+* When adding a session to someone who already has a session, overrides the previous session.
 
 Examples:
 
@@ -334,11 +350,12 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** |`add r/<tutor/student> <name> hp/ <phone> e/ <email> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
+**Edit** | `edit INDEX [n/<name>] [hp/<phone>] [e/<email>] [a/<address>] [s/<subject>] [l/<level>] [p/<min-max>] [t/tag]` e.g., `edit 1 n/John Doe hp/91234567 e/johndoe`
 **Clear** | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students s/ chinese`
+**Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students s/ english`
 **Match/Unmatch** | `match <Id> <Id> / unmatch <Id> `<br> e.g., `match 1 2 / unmatch 1`
-**List** | `list students / list tutors`
+**List** | `list / list students / list tutors`
 **Sort** | `sort <students/tutors> <filter_criteria>` or `sort reset`<br> e.g., `sort students p/`, `sort reset`
 **Recommend** | `recommend INDEX [s/] [l/] [p/]`<br> e.g., `recommend 1 s/ l/`
 **Stats** | `stats`

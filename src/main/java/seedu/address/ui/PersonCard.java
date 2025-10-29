@@ -111,6 +111,6 @@ public class PersonCard extends UiPart<Region> {
         String price = s.getPrice().toString();
 
         // Final string (drop the literal "Session:" here because your FXML already shows "Session:")
-        return String.format("%s | %s | %s hrs | %s | %s", day, time, dur, subj, price);
+        return String.format("%s | %s | %s hrs | %s | $%s", day, time, dur, subj, price);
     }
 }

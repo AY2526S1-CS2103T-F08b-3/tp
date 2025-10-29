@@ -25,100 +25,133 @@ import seedu.address.model.person.Subject;
 
 /**
  * Parses user input and creates a new {@code FindCommand}.
- * <p>
- * This parser supports optional role filters ("tutors" or "students"),
+ * Supports optional role filters ("tutors" or "students"),
  * and allows multiple criteria such as name, subject, level, and price.
- * Both level and price may be single values or ranges.
  */
 public class FindCommandParser implements Parser<FindCommand> {
 
-    /**
-     * Parses the given {@code String} of arguments and constructs a {@code FindCommand}.
-     *
-     * @param args full user input string after the command word
-     * @return a new {@code FindCommand} with the combined predicate
-     * @throws ParseException if the input format or any field value is invalid
-     */
+    @Override
     public FindCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
-        if (trimmedArgs.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
-        ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_SUBJECT, PREFIX_LEVEL, PREFIX_PRICE);
-
+        validateNotEmpty(args);
+        ArgumentMultimap argMultimap = tokenizeArguments(args);
         Predicate<Person> combinedPredicate = p -> true;
-
-        String preamble = argMultimap.getPreamble().trim();
-
-        if (!preamble.isEmpty()) {
-            try {
-                String parsedRole = ParserUtil.parseRole(preamble);
-                combinedPredicate = new RolePredicate(parsedRole).and(combinedPredicate);
-            } catch (ParseException e) {
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE), e);
-            }
-        }
-        // Name
-        if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
-            String[] nameKeywords = argMultimap.getValue(PREFIX_NAME).get().trim().split("\\s+");
-            Predicate<Person> namePredicate =
-                    new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords));
-            combinedPredicate = combinedPredicate.and(namePredicate);
-        }
-
-        // Subject
-        if (argMultimap.getValue(PREFIX_SUBJECT).isPresent()) {
-            List<String> subjectKeywords = argMultimap.getAllValues(PREFIX_SUBJECT).stream()
-                    .flatMap(s -> Arrays.stream(s.trim().split("\\s+")))
-                    .toList();
-            List<Subject> subjects = new ArrayList<>();
-            for (String keyword : subjectKeywords) {
-                subjects.add(ParserUtil.parseSubject(keyword));
-            }
-            Predicate<Person> subjectPredicate = new MatchingSubjectPredicate(subjects);
-            combinedPredicate = combinedPredicate.and(subjectPredicate);
-        }
-
-        // Level
-        if (argMultimap.getValue(PREFIX_LEVEL).isPresent()) {
-            List<String> levelStrings = argMultimap.getAllValues(PREFIX_LEVEL).stream()
-                    .flatMap(s -> Arrays.stream(s.trim().split("\\s+")))
-                    .toList();
-            List<Level> levels = new ArrayList<>();
-            for (String levelString : levelStrings) {
-                levels.add(ParserUtil.parseLevel(levelString)); // throws ParseException if invalid
-            }
-
-            Predicate<Person> levelPredicate = new MatchingLevelPredicate(levels);
-            combinedPredicate = combinedPredicate.and(levelPredicate);
-        }
-
-        // Price
-        if (argMultimap.getValue(PREFIX_PRICE).isPresent()) {
-            List<String> priceStrings = argMultimap.getAllValues(PREFIX_PRICE).stream()
-                    .flatMap(s -> Arrays.stream(s.trim().split("\\s+")))
-                    .toList();
-            List<Price> prices = new ArrayList<>();
-            for (String priceString : priceStrings) {
-                prices.add(ParserUtil.parsePrice(priceString));
-            }
-
-            Predicate<Person> pricePredicate = new MatchingPricePredicate(prices);
-            combinedPredicate = combinedPredicate.and(pricePredicate);
-        }
-        if (argMultimap.getValue(PREFIX_NAME).isEmpty()
-                && argMultimap.getValue(PREFIX_SUBJECT).isEmpty()
-                && argMultimap.getValue(PREFIX_LEVEL).isEmpty()
-                && argMultimap.getValue(PREFIX_PRICE).isEmpty()) {
-
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
+        combinedPredicate = addRolePredicate(argMultimap, combinedPredicate);
+        combinedPredicate = addNamePredicate(argMultimap, combinedPredicate);
+        combinedPredicate = addSubjectPredicate(argMultimap, combinedPredicate);
+        combinedPredicate = addLevelPredicate(argMultimap, combinedPredicate);
+        combinedPredicate = addPricePredicate(argMultimap, combinedPredicate);
+        ensureAtLeastOneFilter(argMultimap);
         return new FindCommand(combinedPredicate);
     }
-}
 
+    private void validateNotEmpty(String args) throws ParseException {
+        if (args.trim().isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+    }
+
+    private ArgumentMultimap tokenizeArguments(String args) {
+        return ArgumentTokenizer.tokenize(args,
+                PREFIX_NAME, PREFIX_SUBJECT, PREFIX_LEVEL, PREFIX_PRICE);
+    }
+
+    private Predicate<Person> addRolePredicate(ArgumentMultimap map,
+                                               Predicate<Person> combinedPredicate) throws ParseException {
+        String preamble = map.getPreamble().trim();
+        if (preamble.isEmpty()) {
+            return combinedPredicate;
+        }
+        try {
+            String parsedRole = ParserUtil.parseRole(preamble);
+            return combinedPredicate.and(new RolePredicate(parsedRole));
+        } catch (ParseException e) {
+            throw new ParseException(
+                    "Please key in either students or tutors.\n"
+                            + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+    }
+
+    private Predicate<Person> addNamePredicate(ArgumentMultimap map,
+                                               Predicate<Person> combinedPredicate) throws ParseException {
+        if (map.getValue(PREFIX_NAME).isEmpty()) {
+            return combinedPredicate;
+        }
+        String rawName = map.getValue(PREFIX_NAME).get().trim();
+        if (rawName.isEmpty()) {
+            throw new ParseException("Name value after n/ cannot be empty.");
+        }
+        List<String> nameKeywords = Arrays.asList(rawName.split("\\s+"));
+        return combinedPredicate.and(new NameContainsKeywordsPredicate(nameKeywords));
+    }
+
+    private Predicate<Person> addSubjectPredicate(ArgumentMultimap map,
+                                                  Predicate<Person> combinedPredicate) throws ParseException {
+        if (map.getValue(PREFIX_SUBJECT).isEmpty()) {
+            return combinedPredicate;
+        }
+        List<String> allSubjects = map.getAllValues(PREFIX_SUBJECT);
+        if (allSubjects.stream().allMatch(s -> s.trim().isEmpty())) {
+            throw new ParseException("Subject value after s/ cannot be empty.");
+        }
+        List<Subject> subjects = new ArrayList<>();
+        for (String s : allSubjects) {
+            for (String token : s.trim().split("\\s+")) {
+                if (!token.isEmpty()) {
+                    subjects.add(ParserUtil.parseSubject(token));
+                }
+            }
+        }
+        return combinedPredicate.and(new MatchingSubjectPredicate(subjects));
+    }
+
+    private Predicate<Person> addLevelPredicate(ArgumentMultimap map,
+                                                Predicate<Person> combinedPredicate) throws ParseException {
+        if (map.getValue(PREFIX_LEVEL).isEmpty()) {
+            return combinedPredicate;
+        }
+        List<String> allLevels = map.getAllValues(PREFIX_LEVEL);
+        if (allLevels.stream().allMatch(s -> s.trim().isEmpty())) {
+            throw new ParseException("Level value after l/ cannot be empty.");
+        }
+        List<Level> levels = new ArrayList<>();
+        for (String s : allLevels) {
+            for (String token : s.trim().split("\\s+")) {
+                if (!token.isEmpty()) {
+                    levels.add(ParserUtil.parseLevel(token));
+                }
+            }
+        }
+        return combinedPredicate.and(new MatchingLevelPredicate(levels));
+    }
+
+    private Predicate<Person> addPricePredicate(ArgumentMultimap map,
+                                                Predicate<Person> combinedPredicate) throws ParseException {
+        if (map.getValue(PREFIX_PRICE).isEmpty()) {
+            return combinedPredicate;
+        }
+        List<String> allPrices = map.getAllValues(PREFIX_PRICE);
+        if (allPrices.stream().allMatch(s -> s.trim().isEmpty())) {
+            throw new ParseException("Price value after p/ cannot be empty.");
+        }
+        List<Price> prices = new ArrayList<>();
+        for (String s : allPrices) {
+            for (String token : s.trim().split("\\s+")) {
+                if (!token.isEmpty()) {
+                    prices.add(ParserUtil.parsePrice(token));
+                }
+            }
+        }
+        return combinedPredicate.and(new MatchingPricePredicate(prices));
+    }
+
+    private void ensureAtLeastOneFilter(ArgumentMultimap map) throws ParseException {
+        if (map.getValue(PREFIX_NAME).isEmpty()
+                && map.getValue(PREFIX_SUBJECT).isEmpty()
+                && map.getValue(PREFIX_LEVEL).isEmpty()
+                && map.getValue(PREFIX_PRICE).isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+    }
+}

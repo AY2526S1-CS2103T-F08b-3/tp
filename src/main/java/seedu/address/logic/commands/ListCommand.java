@@ -20,11 +20,15 @@ public class ListCommand extends Command {
 
     public static final String MESSAGE_SUCCESS_TUTORS = "Listed all tutors";
     public static final String MESSAGE_SUCCESS_STUDENTS = "Listed all students";
+    public static final String MESSAGE_SUCCESS_EVERYONE = "Listed all students and tutors";
 
-    private final String role;
+    private String role = "";
 
     public ListCommand(String role) {
         this.role = role;
+    }
+
+    public ListCommand() {
     }
 
     @Override
@@ -38,7 +42,7 @@ public class ListCommand extends Command {
             return new CommandResult(MESSAGE_SUCCESS_STUDENTS);
         }
 
-        // change this later
-        return new CommandResult(MESSAGE_SUCCESS_TUTORS);
+        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
+        return new CommandResult(MESSAGE_SUCCESS_EVERYONE);
     }
 }

@@ -228,52 +228,85 @@ The `ListCommand` handles several error cases gracefully:
 
 #### Proposed Implementation
 
-The find mechanism is facilitated by the `FindCommand`, `FindCommandParser`, and a set of predicate classes (`MatchingSubjectPredicate`, `MatchingLevelPredicate`, and `MatchingPricePredicate`).
-It enables users to filter the list of tutors or students by one or more criteria — such as subject, level, or price range.
+The **Find feature** allows users to search for **tutors** or **students** in the database based on one or more criteria such as name, subject, level, or price range.
 
-* `FindCommand#execute()` — Executes the find operation by applying the appropriate predicate to filter the list.
-* `FindCommandParser#parse()` — Parses and validates user input to create a valid `FindCommand`.
+The proposed mechanism is facilitated by the `FindCommand` class.  
+It is constructed by the `FindCommandParser` inside the `AddressBookParser`.  
+When executed, it updates the filtered list in the `Model` using a combined predicate built from user-specified filters.
 
-These operations interact with the `Model` interface through `Model#getFilteredPersonList()` to apply the filter and display results.
+These operations are exposed in the `Logic` and `Model` components as `LogicManager#execute()`, `AddressBookParser#parseCommand()`, and `Model#updateFilteredPersonList()` respectively.
 
 Given below is an example usage scenario and how the find mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The application displays the full list of tutors and students.
 
-![UndoRedoState0](images/UndoRedoState0.png)
+#### Step 1. User executes the `find` command
 
-Step 2. The user executes `find tutors s/ Mathematics` command to find tutors teaching mathematics. The `FindCommandParser` validates the input and creates a `FindCommand`. The command executes and calls `Model#getFilteredPersonList()` with the predicate, filtering the displayed list to show only tutors teaching Mathematics.
+The user enters the command below in the command box: eg `"find tutors s/Mathematics"`
 
-![UndoRedoState1](images/FindState1.png)
+The `LogicManager` passes this string to `AddressBookParser#parseCommand("find tutors s/Mathematics")`.
 
-![UndoRedoState2](images/UndoRedoState2.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If a find command fails validation (e.g., invalid parameters), the `FindCommandParser` will throw a `ParseException`, and the command will not execute. The user will see an appropriate error message.
+The `AddressBookParser` identifies the keyword `find` and delegates parsing to the `FindCommandParser`.
 
 
-</div>
 
-Step 3. The user executes `list students` or `list tutors` to view either all students or all tutors again. The `list students/tutors` command resets the filter by calling `Model#getFilteredPersonList`, displaying the complete list of tutors or students.
+#### Step 2. `FindCommandParser` processes the arguments
 
-The following sequence diagram shows how a find operation goes through the `Logic` component:
+The `FindCommandParser` performs the following actions:
 
-![FindSequenceDiagram](images/FindSequenceDiagram-Logic.png)
+* Extracts the **role** (`tutors` or `students`) from the preamble.
+* Tokenizes the remaining arguments using the prefixes `n/`, `s/`, `l/`, and `p/`.
+* Parses and validates each argument value.
+* Creates individual predicates such as  
+  `NameContainsKeywordsPredicate`, `MatchingSubjectPredicate`,  
+  `MatchingLevelPredicate`, and `MatchingPricePredicate`.
+* Combines these predicates with logical AND to form one composite predicate.
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `FindCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+After successful parsing, the parser returns a new `FindCommand` containing this composite predicate.
 
-</div>
+#### Step 3. `FindCommand` execution
 
+When the `LogicManager` calls `FindCommand#execute(Model model)`,  
+the command filters the current person list according to the predicate:
+
+```java
+@Override
+public CommandResult execute(Model model) {
+    requireNonNull(model);
+    model.updateFilteredPersonList(predicate);
+    return new CommandResult(
+            String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+}
+```
+#### Step 4. Model updates the filtered list
+
+The Model receives the request through `updateFilteredPersonList(predicate)` and applies the predicate to its stored list of persons.
+The updated filtered list is automatically reflected in the UI panel.
+
+#### Step 5. Command execution summary
+The following sequence diagram shows how a find operation goes through the Logic component:
+![FindSequenceDiagram](images/FindSequenceDiagram2-Logic.png)
+:information_source: **Note:** The lifeline for `FindCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
 #### Design considerations:
 
-**Aspect: How filtering is applied:**
+#### Aspect: How filtering evolved from AB3
 
-* **Alternative 1 (current choice):** Use JavaFX FilteredList with predicates.
-    * Pros: Efficient, leverages JavaFX's built-in filtering mechanism. Automatically updates the UI when filter changes. Clean separation of filtering logic through predicate classes (`MatchingSubjectPredicate`, `MatchingLevelPredicate`, and `MatchingPricePredicate`).
-    * Cons: Filter is stateless – each new find command replaces the previous filter completely.
+* **Alternative 1 (previous AB3 implementation)**: Single-prefix search using only `NameContainsKeywordsPredicate`.
+    * **Pros:** Simple and fast, performs a basic name-based keyword search.
+    * **Cons:** Limited and cannot filter by subjects, levels, prices, or distinguish tutors from students.
 
-* **Alternative 2:** Maintain a separate filtered copy of the person list.
-    * Pros: Provides more control over the filtering process. Could potentially support multiple simultaneous filters (e.g., by subject and price together).
-    * Cons: More complex implementation. Requires manual synchronization with the main list when data changes. Increases memory usage due to duplicate lists.
+* **Alternative 2 (current choice)**: Enhanced `FindCommand` supporting multiple prefixes (`n/`, `s/`, `l/`, `p/`) and optional roles (`tutors`, `students`).
+    * **Pros:** Far more flexible and supports complex searches like `find tutors s/Mathematics l/4 p/10-30`. Uses modular predicates for each attribute.
+    * **Cons:** Slightly more complex parser and predicate logic, higher validation overhead.
+
+#### Aspect: How logical conditions are applied
+
+* **Alternative 1 (previous AB3 implementation)**: Used only **OR** matching across names.
+    * **Pros:** Simple and intuitive for name-based search.
+    * **Cons:** Not suitable for combining multiple filters, e.g., searching by subject *and* level simultaneously.
+
+* **Alternative 2 (current choice)**: Applies **AND logic** between different prefixes and **OR logic** within a single prefix.
+    * **Pros:** Allows precise, realistic filtering (e.g., tutors teaching Math **and** Level 4). Matches user expectations.
+    * **Cons:** Slightly more complex to implement due to multiple predicate combinations.
 
 ---
 
@@ -296,7 +329,7 @@ Given below is an example usage scenario and how the match/unmatch mechanism beh
 Step 1. The user launches the application. The application displays a unified list containing both tutors and students, none of which are matched initially.
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `match t1 s2` command to match the first tutor with the second student. The `MatchCommandParser` validates the input, checks that both indices are valid and visible in the current filtered list, and creates a `MatchCommand`. The command executes and calls `Model#matchTutorStudent()`, which:
+Step 2. The user executes `match 1 2` command to match the first person which is a tutor with the second person who is a student. The `MatchCommandParser` validates the input, checks that both indices are valid and visible in the current filtered list, and creates a `MatchCommand`. The command executes and calls `Model#matchTutorStudent()`, which:
 * Verifies neither tutor nor student is already matched to someone else
 * Creates bidirectional references between the tutor and student
 * Updates the GUI to display the match information in both entities' profiles
@@ -307,14 +340,14 @@ Step 2. The user executes `match t1 s2` command to match the first tutor with th
 
 </div>
 
-Step 3. The user realizes the match was incorrect and executes `unmatch t1` to remove the match. The `UnmatchCommandParser` validates the input and creates an `UnmatchCommand`. The command executes and calls `Model#unmatchTutorStudent()`, which:
+Step 3. The user realizes the match was incorrect and executes `unmatch 1` to remove the match. The `UnmatchCommandParser` validates the input and creates an `UnmatchCommand`. The command executes and calls `Model#unmatchTutorStudent()`, which:
 * Retrieves the matched pair from the specified entity
 * Removes bidirectional references from both tutor and student
 * Updates the GUI to remove match information from both profiles
 
-Step 4. The user executes `match t1 s1` to create a new match. Since both entities are now unmatched, the operation succeeds and establishes the new bidirectional relationship.
+Step 4. The user executes `match 1 2` to create a new match. Since both entities are now unmatched, the operation succeeds and establishes the new bidirectional relationship.
 
-The following sequence diagram shows how a find operation goes through the `Logic` component:
+The following sequence diagram shows how a match operation goes through the `Logic` component:
 
 ![FindSequenceDiagram](images/MatchSequenceDiagram-Logic.png)
 
@@ -611,11 +644,11 @@ Use case ends.
 
     Use case ends.
 
-**Use case: List tutors/students**
+**Use case: List tutors/students, or both**
 
 **MSS**
 
-1. User requests to list either tutors or students.
+1. User requests to list either tutors or students, or both.
 
 2. ConnectEd shows the requested list with indices.
 
@@ -623,17 +656,13 @@ Use case ends.
 
 **Extensions**
 
-* 1a. The parameter is missing or invalid.
+* 1a. The parameter is invalid.
     * 1a1. ConnectEd shows “Invalid command format!
       list: Lists all tutors or students and displays them as a list with index numbers.
       Parameter: 'tutors' / 'students'”.
         
         Use case ends.
 
-* 2a. The requested list is empty.
-  * 2a1. ConnectEd shows “No <tutors/students> in the list yet!”.
-
-    Use case ends.
 
 **Use case: Find tutors/students (by subject / level / price)**
 
@@ -995,7 +1024,7 @@ testers are expected to do more *exploratory* testing.
 1. Matching a student and tutor shown in the list.
 
     1. Prerequisites: 
-       1. Find tutor using the `find tutor ...` command. Take note of the index of the tutor (e.g. `t1`).
+       1. Find tutor using the `find tutor ...` command. Take note of the index of the tutor (e.g. `2`).
        2. Find student using the `find student ...` command. Take note of the index of the student (e.g. `s1`).
 
     2. Test case: `match 1 2`<br>

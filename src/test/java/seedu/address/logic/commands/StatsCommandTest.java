@@ -29,15 +29,7 @@ public class StatsCommandTest {
         Statistics tutorStats = tutorCalc.calculate();
         Statistics studentStats = studentCalc.calculate();
 
-        String expected = "================ CONNECTED STATISTICS ================\n"
-                + "TUTORS\n"
-                + "-----------------------------------------------------\n"
-                + tutorStats + "\n"
-                + "======================================================\n"
-                + "STUDENTS\n"
-                + "-----------------------------------------------------\n"
-                + studentStats + "\n"
-                + "======================================================";
+        String expected = "Opened stats window.";
 
         CommandResult result = command.execute(model);
 

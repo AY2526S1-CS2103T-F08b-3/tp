@@ -16,16 +16,20 @@ public class CommandResult {
     /** Help information should be shown to the user. */
     private final boolean showHelp;
 
+    /** Stats information should be shown to the user. */
+    private final boolean showStats;
+
     /** The application should exit. */
     private final boolean exit;
+
+    /** optional payload for stats window content. */
+    private final String statsText;
 
     /**
      * Constructs a {@code CommandResult} with the specified fields.
      */
-    public CommandResult(String feedbackToUser, boolean showHelp, boolean exit) {
-        this.feedbackToUser = requireNonNull(feedbackToUser);
-        this.showHelp = showHelp;
-        this.exit = exit;
+    public CommandResult(String feedbackToUser, boolean showHelp, boolean showStats, boolean exit) {
+        this(feedbackToUser, null, showHelp, showStats, exit);
     }
 
     /**
@@ -33,7 +37,19 @@ public class CommandResult {
      * and other fields set to their default value.
      */
     public CommandResult(String feedbackToUser) {
-        this(feedbackToUser, false, false);
+        this(feedbackToUser, null, false, false, false);
+    }
+
+    /**
+     * Constructs a {@code CommandResult} with the specified {@code feedbackToUser},
+     * with {@code statsText} other fields set to their default value.
+     */
+    public CommandResult(String feedbackToUser, String statsText, boolean showHelp, boolean showStats, boolean exit) {
+        this.feedbackToUser = requireNonNull(feedbackToUser);
+        this.statsText = statsText;
+        this.showHelp = showHelp;
+        this.showStats = showStats;
+        this.exit = exit;
     }
 
     public String getFeedbackToUser() {
@@ -44,8 +60,19 @@ public class CommandResult {
         return showHelp;
     }
 
+    public boolean isShowStats() {
+        return showStats;
+    }
+
     public boolean isExit() {
         return exit;
+    }
+
+    /**
+     * Returns the optional stats text payload for the stats window. May be null.
+     */
+    public String getStatsText() {
+        return statsText;
     }
 
     @Override
@@ -61,13 +88,15 @@ public class CommandResult {
 
         CommandResult otherCommandResult = (CommandResult) other;
         return feedbackToUser.equals(otherCommandResult.feedbackToUser)
+                && Objects.equals(statsText, otherCommandResult.statsText)
                 && showHelp == otherCommandResult.showHelp
+                && showStats == otherCommandResult.showStats
                 && exit == otherCommandResult.exit;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(feedbackToUser, showHelp, exit);
+        return Objects.hash(feedbackToUser, statsText, showHelp, showStats, exit);
     }
 
     @Override

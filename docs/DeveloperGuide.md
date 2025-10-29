@@ -122,7 +122,7 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
+* stores the ConnectEd data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
@@ -246,14 +246,14 @@ The proposed match/unmatch mechanism is facilitated by `MatchCommand` and `Unmat
 * `MatchCommandParser#parse()` — Parses and validates user input to create a valid `MatchCommand` with tutor and student indices.
 * `UnmatchCommandParser#parse()` — Parses user input to create a valid UnmatchCommand with either tutor or student index.
 
-These operations interact with the `Model` interface through `Model#matchTutorStudent()` and `Model#unmatchTutorStudent()` to maintain referential integrity.
+These operations interact with the Model interface through Model#setMatchedPerson() to maintain referential integrity.
 
 Given below is an example usage scenario and how the match/unmatch mechanism behaves at each step.
 
 Step 1. The user launches the application. The application displays a unified list containing both tutors and students, none of which are matched initially.
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `match 1 2` command to match the first person which is a tutor with the second person who is a student. The `MatchCommandParser` validates the input, checks that both indices are valid and visible in the current filtered list, and creates a `MatchCommand`. The command executes and calls `Model#matchTutorStudent()`, which:
+Step 2. The user executes `match 1 2` command to match the first person which is a tutor with the second person who is a student. The `MatchCommandParser` validates the input, checks that both indices are valid and visible in the current filtered list, and creates a `MatchCommand`. The command executes and calls `Model#setMatchedPerson()`, which:
 * Verifies neither tutor nor student is already matched to someone else
 * Creates bidirectional references between the tutor and student
 * Updates the GUI to display the match information in both entities' profiles
@@ -264,7 +264,7 @@ Step 2. The user executes `match 1 2` command to match the first person which is
 
 </div>
 
-Step 3. The user realizes the match was incorrect and executes `unmatch 1` to remove the match. The `UnmatchCommandParser` validates the input and creates an `UnmatchCommand`. The command executes and calls `Model#unmatchTutorStudent()`, which:
+Step 3. The user realizes the match was incorrect and executes `unmatch 1` to remove the match. The `UnmatchCommandParser` validates the input and creates an `UnmatchCommand`. The command executes and calls `Model#unsetMatchedPerson()`, which:
 * Retrieves the matched pair from the specified entity
 * Removes bidirectional references from both tutor and student
 * Updates the GUI to remove match information from both profiles
@@ -273,7 +273,7 @@ Step 4. The user executes `match 1 2` to create a new match. Since both entities
 
 The following sequence diagram shows how a match operation goes through the `Logic` component:
 
-![FindSequenceDiagram](images/MatchSequenceDiagram-Logic.png)
+![MatchSequenceDiagram](images/MatchSequenceDiagram-Logic.png)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `MatchCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
 
@@ -464,6 +464,8 @@ The sort command handles several error cases:
 * **Alternative 2:** Only check after filtering and show generic "no results" message
     * Pros: Simpler implementation; single check
     * Cons: Less informative to users; doesn't distinguish between empty database and no matches
+
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**

@@ -483,7 +483,7 @@ The sort command handles several error cases:
 **Target user profile: Tuition coordinators**
 
 This app is designed for tuition coordinators who 
-* Work with **primary and secondary school students** and freelance tutors teaching core subjects (**English, Mathematics, Chinese, Science**).
+* Work with **primary school students** and freelance tutors teaching core subjects (**English, Mathematics, Science**).
 * Prefer **efficient, keyboard-driven workflows** over graphical interfaces.
 * Need to **add, find, match, recommend, and sort** tutors and students quickly using command-line inputs.
 * Handle multiple records at once and need **accurate filters** for subject, level, and price.

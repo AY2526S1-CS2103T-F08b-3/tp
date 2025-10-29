@@ -50,7 +50,7 @@ Person *--> Subject
 Person *--> Level
 Person *--> Price
 Person *--> Session
-Person "1" *--> "matchedPerson" Person
+Person "1" *--> Person :matchedPerson
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I

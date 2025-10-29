@@ -203,13 +203,13 @@ public CommandResult execute(Model model) {
 ```
 #### Step 4. Model updates the filtered list
 
-The Model receives the request through updateFilteredPersonList(predicate) and applies the predicate to its stored list of persons.
+The Model receives the request through `updateFilteredPersonList(predicate)` and applies the predicate to its stored list of persons.
 The updated filtered list is automatically reflected in the UI panel.
 
 #### Step 5. Command execution summary
-The following sequence diagram shows how a match operation goes through the Logic component:
+The following sequence diagram shows how a find operation goes through the Logic component:
 ![FindSequenceDiagram](images/FindSequenceDiagram2-Logic.png)
-:information_source: **Note:** The lifeline for `MatchCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+:information_source: **Note:** The lifeline for `FindCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
 #### Design considerations:
 
 #### Aspect: How filtering evolved from AB3

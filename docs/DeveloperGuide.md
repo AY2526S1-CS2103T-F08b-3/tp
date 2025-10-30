@@ -680,106 +680,38 @@ Use case ends.
 
 **MSS**
 
-1. The tuition coordinator enters a `find` command specifying an optional target role (`tutors` or `students`) and one or more filters using prefixes `n/`, `s/`, `l/`, or `p/` with their respective values.  
-   Examples:
-    * `find sbj/ Mathematics`
-    * `find students l/ 3`
-    * `find tutors p/ 20-50 l/ 4`
-    * `find students n/ Tan sbj/ English`
+1. User enters a `find` command with an optional role (`tutors` or `students`) and one or more filters using prefixes `n/`, `sbj/`, `l/`, or `p/`.  
+   Example: `find tutors sbj/ Mathematics l/ 2-4 p/ 20-40`
 
-2. ConnectEd validates the input:
-    * Ensures a valid role (`tutors` or `students`) is provided or otherwise not present.
-    * Checks that at least one valid prefix (`n/`, `sbj/`, `l/`, or `p/`) is included.
-    * Confirms that no field value is left empty (e.g., `sbj/ `, `p/ `, `n/ `).
-    * Ensures all filter values follow their correct formats:
-        - **Name (n/)**: Must contain only letters or spaces.
-        - **Subject (s/)**: Must match one of the valid subjects (Mathematics, English, Science, Chinese).
-        - **Level (l/)**: Must be a positive integer or a range `start-end` (e.g., `3` or `1-6`) with `start ≤ end`.
-        - **Price (p/)**: Must be a positive integer greater than 0 and no more than 200, or a range `min-max` (e.g., `35` or `30-45`) with `min ≤ max`.
+2. ConnectEd validates all inputs and formats (role, prefixes, and field values).
 
-3. ConnectEd constructs the relevant predicates:
-    * `RolePredicate` – filters based on tutors or students.
-    * `NameContainsKeywordsPredicate` – filters by matching any of the provided name keywords.
-    * `MatchingSubjectPredicate` – filters by matching any of the provided subjects.
-    * `MatchingLevelPredicate` – filters by matching level or level range.
-    * `MatchingPricePredicate` – filters by matching price or price range.
+3. ConnectEd constructs and combines all matching predicates (Role, Name, Subject, Level, Price).
 
-4. ConnectEd combines all active predicates:
-    * **Within the same prefix** → combined using **OR logic**  
-      (e.g. `find tutors sbj/ Mathematics Science` shows tutors teaching Mathematics **or** Science)
-    * **Across different prefixes** → combined using **AND logic**  
-      (e.g. `find tutors sbj/ Mathematics l/ 4` shows tutors teaching Mathematics **and** Level 4)
-
-5. The filtered list of tutors or students matching all conditions is displayed in the UI.  
-   The list automatically updates based on the applied predicate.
+4. ConnectEd updates the list to show all persons matching the given criteria.
 
    Use case ends.
 
-
 **Extensions**
 
-* **2a.** Role is invalid or missing.
-    * **2a1.** ConnectEd shows:  
-      "Please key in either students or tutors."
+* 2a. No valid prefixes or empty values (e.g. `n/ `, `sbj/ `).
+    * 2a1. ConnectEd shows corresponding error message.  
+      Use case ends.
+
+* 2b. Invalid role.
+    * 2b1. ConnectEd shows: “Invalid role. Please key in either students or tutors.” and correct command usage
+      Use case ends.
+
+* 2c. Invalid or malformed values (e.g. `p/250`, `l/7-2`, invalid subject).
+    * 2c1. ConnectEd shows the corresponding validation message.  
+      Use case ends.
+
+* 3a. No persons match the filters.
+    * 3a1. ConnectEd shows “0 persons listed.”  
+      Use case ends.
   
-      Invalid command format!
-  
-      find: Finds persons that match the specified criteria.
-      
-      Format: find [ROLE] [n/ NAME] [s/ SUBJECT] [l/ LEVEL (single or range)] [p/ PRICE (single or range)]
-      
-      Note: You may include multiple values per prefix, and prefix order does not matter.
-      
-      Example: find tutors n/ Aaron sbj/ Mathematics English l/ 1-3 p/ 20-50
-
-* **2b.** No valid prefixes (`n/`, `s/`, `l/`, `p/`) are provided.
-    * **2b1.** ConnectEd shows:  
-      *“Invalid command format!*  
-      find: Finds persons that match the specified criteria.  
-      Format: find [ROLE] [n/ NAME] [s/ SUBJECT] [l/ LEVEL (single or range)] [p/ PRICE (single or range)]  
-      Note: You may include multiple values per prefix, and prefix order does not matter.  
-      Example: find tutors n/ Aaron sbj/ Mathematics English l/ 1-3 p/ 20-50”*  
+* 3b. Empty list
+  * 3b1. ConnectEd shows “0 persons listed.”
       Use case ends.
-
-* **2c.** A prefix value is empty (e.g. `n/ `, `s/ `, `l/ `, or `p/ `).
-    * **2c1.** ConnectEd shows a prefix-specific error message such as:  
-      *“Name value after n/ cannot be empty.”*  
-      *“Subject value after sbj/ cannot be empty.”*  
-      *“Level value after l/ cannot be empty.”*  
-      *“Price value after p/ cannot be empty.”*  
-      Use case ends.
-
-* **2d.** A filter value is invalid or malformed.
-    * **2d1.** For an invalid **subject**:  
-      *“Invalid subject.”*
-    * **2d2.** For an invalid **level** (e.g., letters or start > end):  
-      *“Level must be a positive integer or a range start-end (e.g., 3 or 1-6) with start <= end.”*
-    * **2d3.** For an invalid **price** (e.g., negative numbers, >200, or wrong range):  
-      *“Price must be a positive integer greater than 0 and no more than 200 or a range min-max (e.g., 35 or 30-45) with min <= max.”*  
-      Use case ends.
-
-* **2e.** Extra or incorrect prefixes (e.g., `x/`, `find tutors /l 4`) are entered.
-    * **2e1.** ConnectEd shows:  
-      *“Invalid command format!*  
-      find: Finds persons that match the specified criteria.  
-      Format: find [ROLE] [n/ NAME] [s/ SUBJECT] [l/ LEVEL (single or range)] [p/ PRICE (single or range)]  
-      Note: You may include multiple values per prefix, and prefix order does not matter.  
-      Example: find tutors n/ Aaron sbj/ Mathematics English l/ 1-3 p/ 20-50”*  
-      Use case ends.
-
-* **3a.** No persons match the provided criteria.
-    * **3a1.** ConnectEd displays an empty list with the message:  
-      *“0 persons listed.”*  
-      Use case ends.
-
-* **3b.** The address book has no entries for the selected role.
-    * **3b1.** ConnectEd displays:  
-      *“0 persons listed.”*  
-      Use case ends.
-
-* **3c.** Multiple valid filters are combined (e.g., `s/Mathematics l/3 p/20-40`).
-    * **3c1.** ConnectEd applies all filters using **AND logic**, showing only persons who meet all criteria.  
-      Use case ends successfully.
 
 ---
 

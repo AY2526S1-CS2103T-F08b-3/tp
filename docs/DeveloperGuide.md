@@ -698,8 +698,8 @@ Use case ends.
       Use case ends.
 
 * 2b. Invalid role.
-    * 2b1. ConnectEd shows: “Invalid role. Please key in either students or tutors.” and correct command usage
-      Use case ends.
+    * 2b1. ConnectEd shows: “Invalid role. Please key in either students or tutors.” and correct command usage\
+      Use case ends
 
 * 2c. Invalid or malformed values (e.g. `p/250`, `l/7-2`, invalid subject).
     * 2c1. ConnectEd shows the corresponding validation message.  
@@ -710,8 +710,9 @@ Use case ends.
       Use case ends.
   
 * 3b. Empty list
-  * 3b1. ConnectEd shows “0 persons listed.”
-      Use case ends.
+  * 3b1. ConnectEd shows “0 persons listed.” 
+  
+    Use case ends.
 
 ---
 

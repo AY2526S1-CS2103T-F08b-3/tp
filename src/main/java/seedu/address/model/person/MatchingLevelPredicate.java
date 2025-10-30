@@ -19,7 +19,7 @@ public class MatchingLevelPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         return levels.stream()
-                .anyMatch(level -> person.getLevel().includes(level));
+                .anyMatch(level -> person.getLevel().includes(level) || person.getLevel().intersects(level));
     }
 
     @Override

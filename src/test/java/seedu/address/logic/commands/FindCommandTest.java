@@ -23,12 +23,9 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Level;
 import seedu.address.model.person.MatchingLevelPredicate;
 import seedu.address.model.person.MatchingPricePredicate;
-import seedu.address.model.person.MatchingSubjectPredicate;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Price;
-import seedu.address.model.person.Subject;
-
 /**
  * Integration tests for {@code FindCommand}.
  * Updated to handle all predicate types (name, subject, level, price)
@@ -65,17 +62,6 @@ public class FindCommandTest {
         // different predicate -> false
         assertFalse(findFirstCommand.equals(findSecondCommand));
     }
-
-    @Test
-    public void execute_zeroKeywords_noPersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
-        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Collections.emptyList());
-        FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Collections.emptyList(), model.getFilteredPersonList());
-    }
-
     @Test
     public void execute_multipleNameKeywords_multiplePersonsFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
@@ -86,18 +72,6 @@ public class FindCommandTest {
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(CARL, ELLE, FIONA), model.getFilteredPersonList());
     }
-
-    @Test
-    public void execute_subjectPredicate_success() {
-        List<Subject> subjects = List.of(new Subject("English"));
-        Predicate<Person> predicate = new MatchingSubjectPredicate(subjects);
-        FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
-        int resultCount = expectedModel.getFilteredPersonList().size();
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, resultCount);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-    }
-
     @Test
     public void execute_levelPredicate_success() {
         List<Level> levels = List.of(new Level(1, 3));

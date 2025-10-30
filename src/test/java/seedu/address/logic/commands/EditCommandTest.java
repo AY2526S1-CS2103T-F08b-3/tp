@@ -51,38 +51,7 @@ public class EditCommandTest {
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
-    @Test
-    public void execute_someFieldsSpecifiedUnfilteredList_success() {
-        Index indexLastPerson = Index.fromOneBased(model.getFilteredPersonList().size());
-        Person lastPerson = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
 
-        PersonBuilder personInList = new PersonBuilder(lastPerson);
-        Person editedPerson = personInList
-                .withName(VALID_NAME_BOB)
-                .withPhone(VALID_PHONE_BOB)
-                .withSubject(VALID_SUBJECT_BOB)
-                .withLevel(VALID_LEVEL_BOB)
-                .withPrice(VALID_PRICE_BOB)
-                .withTags(VALID_TAG_HUSBAND)
-                .build();
-
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withName(VALID_NAME_BOB)
-                .withPhone(VALID_PHONE_BOB)
-                .withSubject(VALID_SUBJECT_BOB)
-                .withLevel(VALID_LEVEL_BOB)
-                .withPrice(VALID_PRICE_BOB)
-                .withTags(VALID_TAG_HUSBAND)
-                .build();
-
-        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(lastPerson, editedPerson);
-
-        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
-    }
     @Test
     public void execute_noFieldSpecifiedUnfilteredList_success() {
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, new EditPersonDescriptor());

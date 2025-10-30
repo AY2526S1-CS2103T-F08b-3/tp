@@ -28,8 +28,8 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 
     * `list` : Lists all tutors and students (use `list students` to list all students and `list tutors` to list all tutors).
 
-   * `add r/student aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30` : Adds a **student** with subject, level, and price range.
-     (Example for tutor: `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 s/english l/2-5 p/25-40`)
+   * `add r/student aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 sbj/mathematics l/3 p/20-30` : Adds a **student** with subject, level, and price range.
+     (Example for tutor: `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 sbj/english l/2-5 p/25-40`)
 
    * `delete 1` : Deletes the 1st **person** shown in the current list.
 
@@ -49,7 +49,7 @@ ConnectEd is a **desktop app for managing tutors and students, optimized for use
 
 * Parameters & placeholders
   Commands follow the below exactly:
-  * Add: `add r/<tutor/student> n/<name> hp/<phone> e/<email> a/<address> s/<subject> l/<level> p/<min-max>`
+  * Add: `add r/<tutor/student> n/<name> hp/<phone> e/<email> a/<address> sbj/<subject> l/<level> p/<min-max>`
   * List: `list` or `list <tutors/students>`
   * Find: `find <tutors/students> <field>/ <filter_value>` where `<field>` is `s/`, `l/`, or `p/`
   * Match: `match <ID_1> <ID_2>`
@@ -102,11 +102,11 @@ Format: `help`
 
 Adds a **tutor** or **student** with subject, level, and price range.
 
-Format: `add r/<tutor/student> n/<name> hp/<phone> e/<email> a/<address> s/<subject> l/<level> p/<min-max>`
+Format: `add r/<tutor/student> n/<name> hp/<phone> e/<email> a/<address> sbj/<subject> l/<level> p/<min-max>`
 
 Examples:
-* `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
-* `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 s/english l/2-5 p/25-40`
+* `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 sbj/mathematics l/3 p/20-30`
+* `add r/tutor n/Mary hp/98765432 e/maryy@example.com a/Tampines Ave 1 sbj/english l/2-5 p/25-40`
 
 ### Editing a tutor or student: `edit`
 
@@ -116,7 +116,7 @@ Format: `edit <INDEX> [n/<name>] [hp/<phone>] [e/<email>] [a/<address>] [s/<subj
 
 Examples:
 * `edit 1 n/John Doe hp/91234567 e/johndoe`
-* `edit 2 s/mathematics l/3 p/20-30`
+* `edit 2 sbj/mathematics l/3 p/20-30`
 
 ### Listing all persons : `list`
 
@@ -155,10 +155,10 @@ Filters the list of persons based on one or more conditions such as role, name, 
 - Tutors match if their range **overlaps** the given value or range.
 
 **Examples:**
-- `find tutors s/ Mathematics l/ 2-4 p/ 25-50` finds tutors teaching Mathematics for Levels 2–4 charging \$25–50/hour.
-- `find students s/ English p/ 10-20` finds students needing English within \$10–20/hour.
+- `find tutors sbj/ Mathematics l/ 2-4 p/ 25-50` finds tutors teaching Mathematics for Levels 2–4 charging \$25–50/hour.
+- `find students sbj/ English p/ 10-20` finds students needing English within \$10–20/hour.
 - `find p/ 20` finds all persons whose price or range includes \$20/hour.
-- `find s/ Mathematics l/ 1-3 p/ 15` finds persons teaching or studying Mathematics at Levels 1–3 with prices around \$15/hour.
+- `find sbj/ Mathematics l/ 1-3 p/ 15` finds persons teaching or studying Mathematics at Levels 1–3 with prices around \$15/hour.
 
 
   ![result for 'find tutors /s mathematics'](images/FindTutorResult.png)
@@ -196,8 +196,8 @@ Format: `recommend <INDEX> [s/] [l/] [p/]`
 
 Examples:
 * `recommend 1` recommends all tutors/students that matches the subject, level, and price range of person at index 1
-* `recommend 2 s/` recommends all tutors/students that matches the subject of person at index 2
-  ![result for 'recommend 1 s/'](images/RecommendResult.png)
+* `recommend 2 sbj/` recommends all tutors/students that matches the subject of person at index 2
+  ![result for 'recommend 1 sbj/'](images/RecommendResult.png)
 
 ### Sorting student/tutor list : `sort`
 Sorts the displayed list of students or tutors based on specified field(s) in ascending order.
@@ -233,7 +233,7 @@ Each session contains the day, time, duration, subject, and price, and is stored
 Format:
 
 * Add a Session:
-`sessionadd <INDEX> d/<DAY> t/<TIME> dur/<DURATION> s/<SUBJECT> p/<PRICE>`
+`sessionadd <INDEX> d/<DAY> t/<TIME> dur/<DURATION> sbj/<SUBJECT> p/<PRICE>`
 * Adds a new session to the person (must already be matched).
 
 * Delete a Session:
@@ -260,14 +260,14 @@ Details:
 
 Examples:
 
-* `sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/30`
+* `sessionadd 1 d/Monday t/16:00 dur/02:00 sbj/Mathematics p/30`
 Adds a 2-hour Monday 4 PM Mathematics session with a price of $30 for the person (at index 1) and their matched 
 counterpart.
 
 * `sessiondelete 1`
 Deletes the existing session for the person (at index 1) and their matched counterpart.
 
-![result for 'sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/30'](images/SessionResult.png)
+![result for 'sessionadd 1 d/Monday t/16:00 dur/02:00 sbj/Mathematics p/30'](images/SessionResult.png)
 
 ### Viewing statistics : `stats`
 Displays statistics about the current tutors and students in ConnectEd, including total counts, average prices, subject distributions, and matched pairs.
@@ -340,14 +340,14 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** |`add r/<tutor/student> <name> hp/ <phone> e/ <email> a/ <address> s/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 s/mathematics l/3 p/20-30`
+**Add** |`add r/<tutor/student> <name> hp/ <phone> e/ <email> a/ <address> sbj/ <subject> l/ <level_or_range> p/ <min-max>` e.g., `add r/student n/aaron hp/91234567 e/aaront@example.com a/Blk 30 Geylang Street 29, #06-40 sbj/mathematics l/3 p/20-30`
 **Edit** | `edit <INDEX> [n/<name>] [hp/<phone>] [e/<email>] [a/<address>] [s/<subject>] [l/<level>] [p/<min-max>] [t/tag]` e.g., `edit 1 n/John Doe hp/91234567 e/johndoe`
 **Clear** | `clear`
 **Delete** | `delete <INDEX>`<br> e.g., `delete 3`
-**Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students s/ english`
+**Find** | `find <tutors/students> <field>/ <filter_value>`<br> e.g., `find students sbj/ english`
 **Match/Unmatch** | `match <Id> <Id> / unmatch <Id> `<br> e.g., `match 1 2 / unmatch 1`
 **List** | `list / list students / list tutors`
 **Sort** | `sort <students/tutors> <filter_criteria>` or `sort reset`<br> e.g., `sort students p/`, `sort reset`
-**Recommend** | `recommend <INDEX> [s/] [l/] [p/]`<br> e.g., `recommend 1 s/ l/`
+**Recommend** | `recommend <INDEX> [s/] [l/] [p/]`<br> e.g., `recommend 1 sbj/ l/`
 **Stats** | `stats`
 **Help** | `help`

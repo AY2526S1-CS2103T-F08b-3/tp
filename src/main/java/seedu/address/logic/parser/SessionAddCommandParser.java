@@ -17,7 +17,7 @@ import seedu.address.model.person.Subject;
 
 /**
  * Parses input arguments and creates a new SessionAddCommand object.
- * Format: sessionadd INDEX d/DAY t/TIME s/SUBJECT p/PRICE
+ * Format: sessionadd INDEX d/DAY t/TIME sbj/SUBJECT p/PRICE
  */
 public class SessionAddCommandParser implements Parser<SessionAddCommand> {
 

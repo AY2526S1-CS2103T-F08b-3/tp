@@ -30,7 +30,7 @@ public class RecommendCommandParserTest {
     @Test
     public void parse_validIndexWithSubjectFlag_returnsRecommendCommand() {
         RecommendCommand expected = new RecommendCommand(Index.fromOneBased(1), true, false, false);
-        assertParseSuccess(parser, "1 s/", expected);
+        assertParseSuccess(parser, "1 sbj/", expected);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class RecommendCommandParserTest {
     @Test
     public void parse_validIndexWithAllFlags_returnsRecommendCommand() {
         RecommendCommand expected = new RecommendCommand(Index.fromOneBased(1), true, true, true);
-        assertParseSuccess(parser, "1 s/ l/ p/", expected);
+        assertParseSuccess(parser, "1 sbj/ l/ p/", expected);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class RecommendCommandParserTest {
 
     @Test
     public void parse_valueAfterPrefix_throwsParseException() {
-        assertParseFailure(parser, "1 s/abc", "Subject specifier should not have a value.");
+        assertParseFailure(parser, "1 sbj/abc", "Subject specifier should not have a value.");
         assertParseFailure(parser, "1 l/123", "Level specifier should not have a value.");
         assertParseFailure(parser, "1 p/xyz", "Price specifier should not have a value.");
     }
@@ -83,6 +83,6 @@ public class RecommendCommandParserTest {
     @Test
     public void parse_excessiveWhitespace_returnsRecommendCommand() {
         RecommendCommand expected = new RecommendCommand(Index.fromOneBased(1), true, true, true);
-        assertParseSuccess(parser, "  1   s/   l/   p/  ", expected);
+        assertParseSuccess(parser, "  1   sbj/   l/   p/  ", expected);
     }
 }

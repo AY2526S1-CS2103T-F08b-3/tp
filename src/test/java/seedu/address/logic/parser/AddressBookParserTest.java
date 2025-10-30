@@ -68,11 +68,11 @@ public class AddressBookParserTest {
     public void parseCommand_find() throws Exception {
         AddressBookParser parser = new AddressBookParser();
 
-        assertTrue(parser.parseCommand("find tutors s/Mathematics") instanceof FindCommand);
-        assertTrue(parser.parseCommand("find students s/English l/3 p/40") instanceof FindCommand);
+        assertTrue(parser.parseCommand("find tutors sbj/Mathematics") instanceof FindCommand);
+        assertTrue(parser.parseCommand("find students sbj/English l/3 p/40") instanceof FindCommand);
 
         assertThrows(ParseException.class, () ->
-                parser.parseCommand("find tutor s/Mathematics")); // singular should fail
+                parser.parseCommand("find tutor sbj/Mathematics")); // singular should fail
     }
 
 

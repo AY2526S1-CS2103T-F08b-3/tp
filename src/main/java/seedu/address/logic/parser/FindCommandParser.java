@@ -92,7 +92,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
         List<String> allSubjects = map.getAllValues(PREFIX_SUBJECT);
         if (allSubjects.stream().allMatch(s -> s.trim().isEmpty())) {
-            throw new ParseException("Subject value after s/ cannot be empty.");
+            throw new ParseException("Subject value after sbj/ cannot be empty.");
         }
         List<Subject> subjects = new ArrayList<>();
         for (String s : allSubjects) {

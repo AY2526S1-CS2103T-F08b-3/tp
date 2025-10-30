@@ -706,12 +706,12 @@ Use case ends.
       Use case ends.
 
 * 3a. No persons match the filters.
-    * 3a1. ConnectEd shows “0 persons listed.”  
+    * 3a1. ConnectEd shows "No persons match your search."
       Use case ends.
   
 * 3b. Empty list
-  * 3b1. ConnectEd shows “0 persons listed.” 
-  
+  * 3b1. ConnectEd shows "List is empty, there is no persons to find."
+
     Use case ends.
 
 ---

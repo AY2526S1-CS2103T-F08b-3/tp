@@ -598,21 +598,22 @@ Priorities: High (must have)
 `* * *` Medium (nice to have) 
 `* *` Low (optional) `*`
 
-| Priority | As a … | I want to … | So that I can …                                                                         |
-|-----------|---------|-------------|-----------------------------------------------------------------------------------------|
+| Priority | As a … | I want to …                                                           | So that I can …                                                                         |
+|---------|---------|-----------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
 | `* * *` | tuition coordinator | **add** a *student* with name, phone, address, subject, level, and price | record student requests systematically                                                  |
 | `* * *` | tuition coordinator | **add** a *tutor* with name, phone, address, subject, level(s), and price | maintain an updated list of available tutors                                            |
-| `* * *` | tuition coordinator | **list** all *tutors* or *students* | view one role category at a time for clarity                                            |
-| `* * *` | tuition coordinator | **find** tutors/students by **name, subject, level, or price** | identify suitable tutors or students efficiently                                        |
-| `* * *` | tuition coordinator | **match** a tutor with a student  | confirm successful tuition pairings                                                     |
-| `* * *` | tuition coordinator | **unmatch** a tutor or student | correct pairing mistakes or cancellations quickly                                       |
-| `* * *` | tuition coordinator | **delete** a tutor or student entry | remove outdated records                                                                 |
-| `* * *` | tuition coordinator | **sort** tutors or students by **price** or **level** | compare affordability and experience easily                                             |
-| `* *` | tuition coordinator | **recommend** tutors to a student, or students to a tutor | receive automated personal suggestions based on subject, level, and price compatibility |
-| `* *` | tuition coordinator | view **clear error messages** for invalid commands | fix mistakes easily and continue working                                                |
-| `* *` | tuition coordinator | prevent adding **duplicate entries**  | ensure data remains clean and accurate                                                  |
-| `*` | tuition coordinator | **edit** tutor or student details | update information without re-adding                                                    |
-| `*` | tuition coordinator | **reset** the current filter view | return to the complete tutor/student list                                               |
+| `* * *` | tuition coordinator | **list** all *tutors* or *students*                                   | view one role category at a time for clarity                                            |
+| `* * *` | tuition coordinator | **find** tutors/students by **name, subject, level, or price**        | identify suitable tutors or students efficiently                                        |
+| `* * *` | tuition coordinator | **match** a tutor with a student                                      | confirm successful tuition pairings                                                     |
+| `* * *` | tuition coordinator | **unmatch** a tutor or student                                        | correct pairing mistakes or cancellations quickly                                       |
+| `* * *` | tuition coordinator | **delete** a tutor or student entry                                   | remove outdated records                                                                 |
+| `* * *` | tuition coordinator | **sort** tutors or students by **price** or **level**                 | compare affordability and experience easily                                             |
+| `* *` | tuition coordinator | **add a session** to a tutor and student                              | see what are the details of the arranged tuition session between student and tutor      |
+| `* *` | tuition coordinator | **recommend** tutors to a student, or students to a tutor             | receive automated personal suggestions based on subject, level, and price compatibility |
+| `* *` | tuition coordinator | view **clear error messages** for invalid commands                    | fix mistakes easily and continue working                                                |
+| `* *` | tuition coordinator | prevent adding **duplicate entries**                                  | ensure data remains clean and accurate                                                  |
+| `*` | tuition coordinator | **edit** tutor or student details                                     | update information without re-adding                                                    |
+| `*` | tuition coordinator | **reset** the current filter view                                     | return to the complete tutor/student list                                               |
 
 ### Use cases
 
@@ -1003,6 +1004,7 @@ Use case ends.
 * **Duplicate (person)** — Same type **and** same name (case-insensitive) **and** same phone; duplicates are rejected.
 * **Recommend** — Suggest tutors to a student, or students to a tutor, based on subject, level, and price compatibility.
 * **Sort** — Arrange tutors or students by specified criteria (`p/` for price, `l/` for level) in ascending order. `sort reset` clears all filters and displays all persons.
+* **Session** — Add or delete a session to both a student and tutor who are both `matched` to each other.
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -1031,13 +1033,12 @@ testers are expected to do more *exploratory* testing.
    2. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-3. _{ more test cases …​ }_
 
 ### Adding a tutor
 
 1. Adding a tutor.
 
-   1. Test case: `add r/tutor aaron hp/ 91234567 a/ Blk 30 Geylang Street 29, #06-40 /s mathematics l/ 3 p/ 20-30`<br>
+   1. Test case: `add r/tutor n/aaron hp/ 91234567 a/ Blk 30 Geylang Street 29, #06-40 sbj/ mathematics l/1-3 p/ 20-30`<br>
       Expected: Tutor is added to the list. Details of the added tutor shown in the status message. 
 
    2. Test case: `add aaron`<br>
@@ -1108,10 +1109,4 @@ testers are expected to do more *exploratory* testing.
    4. Other incorrect add commands to try: `recommend`, `recommend 5 e/`, `recommend x` (where x is larger than the list size or smaller than 1)<br>
         Expected: Error message shown.
 
-### Saving data
 
-1. Dealing with missing/corrupted data files
-
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-2. _{ more test cases …​ }_

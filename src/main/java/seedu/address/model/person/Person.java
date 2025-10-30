@@ -152,6 +152,14 @@ public class Person {
         return isStudent;
     }
 
+    public String getFormattedRole() {
+        if (isTutor) {
+            return "Tutor";
+        } else {
+            return "Student";
+        }
+    }
+
     public void setMatchedPerson(Person person) {
         this.matchedPerson = person;
         this.isMatched = true;

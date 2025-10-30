@@ -157,7 +157,7 @@ It serves as a core navigation command that resets the filtered list view based 
 
 1. **Parsing:**  
    The `ListCommandParser` validates that:
-    * The role is one of `"tutors"`, `"students"`.
+    * The role is one of `"tutors"`, `"students"`. The role is case-insensitive.
     * If no argument is provided, it defaults to show all the persons.
     * If an invalid argument is provided, a `ParseException` is thrown with a usage message:
       ```

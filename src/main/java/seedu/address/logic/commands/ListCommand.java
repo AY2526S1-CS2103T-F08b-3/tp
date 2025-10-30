@@ -18,9 +18,9 @@ public class ListCommand extends Command {
             + "Parameter: 'tutors' / 'students'\n"
             + "Example: " + COMMAND_WORD + " tutors";
 
-    public static final String MESSAGE_SUCCESS_TUTORS = "Listed all tutors";
-    public static final String MESSAGE_SUCCESS_STUDENTS = "Listed all students";
-    public static final String MESSAGE_SUCCESS_EVERYONE = "Listed all students and tutors";
+    public static final String MESSAGE_SUCCESS_TUTORS = "Listed all tutors.";
+    public static final String MESSAGE_SUCCESS_STUDENTS = "Listed all students.";
+    public static final String MESSAGE_SUCCESS_EVERYONE = "Listed all students and tutors.";
 
     private String role = "";
 

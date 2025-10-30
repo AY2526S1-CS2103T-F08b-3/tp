@@ -37,7 +37,7 @@ public class ParserUtil {
      * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
      */
     public static String parseRole(String role) throws ParseException {
-        String trimmedRole = role.trim();
+        String trimmedRole = role.trim().toLowerCase();
         if (!StringUtil.isValidRole(trimmedRole)) {
             throw new ParseException(MESSAGE_INVALID_ROLE);
         }
@@ -50,7 +50,7 @@ public class ParserUtil {
      * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
      */
     public static String parseIndivRole(String role) throws ParseException {
-        String trimmedRole = role.trim();
+        String trimmedRole = role.trim().toLowerCase();
         if (!StringUtil.isValidIndivRole(trimmedRole)) {
             throw new ParseException(MESSAGE_INVALID_ROLE);
         }

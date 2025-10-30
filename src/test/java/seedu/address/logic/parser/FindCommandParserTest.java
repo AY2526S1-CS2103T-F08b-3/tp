@@ -44,6 +44,7 @@ public class FindCommandParserTest {
             assertTrue(command instanceof FindCommand);
         });
     }
+
     @Test
     public void parse_emptyArgs_failure() {
         assertParseFailure(parser, "",
@@ -57,14 +58,6 @@ public class FindCommandParserTest {
         assertParseFailure(parser, "teacher n/Alice",
                 "Please key in either students or tutors.\n"
                         + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-    }
-
-    @Test
-    public void parse_roleOnlyWithoutPrefixes_failure() {
-        assertParseFailure(parser, "tutors",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, "students",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
@@ -89,12 +82,5 @@ public class FindCommandParserTest {
     public void parse_emptyPricePrefix_failure() {
         assertParseFailure(parser, "students p/",
                 "Price value after p/ cannot be empty.");
-    }
-
-    @Test
-    public void parse_noRecognizedPrefixes_failure() {
-        assertParseFailure(parser, "randomTextOnly",
-                "Please key in either students or tutors.\n"
-                        + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 }

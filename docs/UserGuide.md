@@ -155,10 +155,10 @@ Filters the list of persons based on one or more conditions such as role, name, 
 - Tutors match if their range **overlaps** the given value or range.
 
 **Examples:**
-- `find tutors sbj/ Math l/ 2-4 p/ 25-50` finds tutors teaching Math for Levels 2–4 charging \$25–50/hour.
+- `find tutors sbj/ Mathematics l/ 2-4 p/ 25-50` finds tutors teaching Mathematics for Levels 2–4 charging \$25–50/hour.
 - `find students sbj/ English p/ 10-20` finds students needing English within \$10–20/hour.
 - `find p/ 20` finds all persons whose price or range includes \$20/hour.
-- `find sbj/ Mathematics l/ 1-3 p/ 15` finds persons teaching or studying Math at Levels 1–3 with prices around \$15/hour.
+- `find sbj/ Mathematics l/ 1-3 p/ 15` finds persons teaching or studying Mathematics at Levels 1–3 with prices around \$15/hour.
 
 
   ![result for 'find tutors /s mathematics'](images/FindTutorResult.png)

@@ -88,6 +88,10 @@ public class EditCommand extends Command {
         Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
+        if (editedPerson.isStudent() && !editedPerson.getLevel().isSingle()) {
+            throw new CommandException(Level.MESSAGE_STUDENT_SINGLE_LEVEL);
+        }
+
         for (Person existing : model.getAllPersonList()) {
             if (existing == personToEdit) {
                 continue;

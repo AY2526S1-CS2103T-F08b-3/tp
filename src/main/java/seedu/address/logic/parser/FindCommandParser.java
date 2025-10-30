@@ -67,8 +67,8 @@ public class FindCommandParser implements Parser<FindCommand> {
             return combinedPredicate.and(new RolePredicate(parsedRole));
         } catch (ParseException e) {
             throw new ParseException(
-                    "Please key in either students or tutors.\n"
-                            + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+                    "Invalid role. Please key in either students or tutors.\n"
+                            + String.format(FindCommand.MESSAGE_USAGE));
         }
     }
 

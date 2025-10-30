@@ -633,7 +633,7 @@ Use case ends.
 
 * 2a. One or more fields are missing or in the wrong format.
 
-    ConnectEd shows an error message indicating the invalid/missing field(s).
+    ConnectEd shows an error message indicating invalid command format.
 
     Use case resumes at step 1 with corrected input.
 
@@ -642,10 +642,18 @@ Use case ends.
 
     Use case ends.
 
+* 2c. Invalid data format (Subject, Price, Level).
+  ConnectEd rejects the add and shows correct data format to be inputted.
+
+  Use case resumes at step 1 with corrected input.
+
+
 * 3a. Storage fails (e.g., I/O error).
   * 3a1. ConnectEd shows “Error saving data: add”.
 
     Use case ends.
+
+---
 
 **Use case: List tutors/students, or both**
 
@@ -666,6 +674,7 @@ Use case ends.
         
         Use case ends.
 
+---
 
 **Use case: Find tutors/students (by name / subject / level / price)**
 
@@ -680,8 +689,8 @@ Use case ends.
 
 2. ConnectEd validates the input:
     * Ensures a valid role (`tutors` or `students`) is provided or otherwise not present.
-    * Checks that at least one valid prefix (`n/`, `s/`, `l/`, or `p/`) is included.
-    * Confirms that no field value is left empty (e.g., `s/ `, `p/ `, `n/ `).
+    * Checks that at least one valid prefix (`n/`, `sbj/`, `l/`, or `p/`) is included.
+    * Confirms that no field value is left empty (e.g., `sbj/ `, `p/ `, `n/ `).
     * Ensures all filter values follow their correct formats:
         - **Name (n/)**: Must contain only letters or spaces.
         - **Subject (s/)**: Must match one of the valid subjects (Mathematics, English, Science, Chinese).
@@ -706,7 +715,6 @@ Use case ends.
 
    Use case ends.
 
----
 
 **Extensions**
 
@@ -773,18 +781,19 @@ Use case ends.
     * **3c1.** ConnectEd applies all filters using **AND logic**, showing only persons who meet all criteria.  
       Use case ends successfully.
 
+---
 
 **Use case: Match a tutor to a student**
 
-**Preconditions: At least one tutor and one student exist and are visible (possibly after list/find).**
+**Preconditions: At least one tutor and one student exist.**
 
 **Guarantees: On success, both sides reflect a bidirectional match.**
 
 **MSS**
 
-1. User requests to match using visible indices: match `<Id>` `s<Id>`.
+1. User requests to match using visible indices: match `<Id>` `<Id>`.
 
-2. ConnectEd validates both indices against the list of persons.
+2. ConnectEd validates both Ids against the list of persons.
 
 3. ConnectEd checks that neither party is already matched.
 
@@ -796,35 +805,22 @@ Use case ends.
 
 **Extensions**
 
-* 2a. Either index is invalid/out of range/not visible.
-  * 2a1. ConnectEd shows an index error (role-specific).
+* 2a. Either person Id is invalid/out of range.
+  * 2a1. ConnectEd shows a person Id error . "Person with id #x not found."
   
     Use case resumes at step 1.
 
-* 3a. Tutor is already matched.
-  * 3a1. ConnectEd shows “Tutor <TutorName> is already matched to <OtherStudentName>. Unmatch first.”
+* 3a. Tutor or student is already matched.
+  * 3a1. ConnectEd shows “One or both persons are already matched.” User is required to unmatch first.
   
     Use case ends.
 
-* 3b. Student is already matched.
-  * 3b1. ConnectEd shows “Student <StudentName> is already matched to <OtherTutorName>. Unmatch first.”
+* 4a. No tutors or students exist.
+  * 4a1. ConnectEd shows “There are no tutors and students to match!”.
   
     Use case ends.
 
-* 4a. The exact pair is already matched (idempotent).
-  * 4a1. ConnectEd shows “No change: Tutor <TutorName> is already matched to Student <StudentName>.”
-  
-    Use case ends.
-
-* 4b. No tutors or students exist.
-  * 4b1. ConnectEd shows “There are no tutors and students to match!”.
-  
-    Use case ends.
-
-* 4c. Storage fails.
-  * 4c1. ConnectEd shows “Error saving data: match”.
-  
-    Use case ends.
+---
 
 **Use case: Unmatch a tutor and student**
 
@@ -836,7 +832,7 @@ Use case ends.
 
 1. User requests to unmatch by specifying one side: unmatch `<Id of tutor>` or unmatch `<Id of student>`.
 
-2. ConnectEd validates the index against the currently displayed list for that role.
+2. ConnectEd validates the person Id against the list of persons.
 
 3. ConnectEd verifies there is a linked counterpart.
 
@@ -848,20 +844,17 @@ Use case ends.
 
 **Extensions**
 
-* 2a. Index invalid/out of range/not visible.
+* 2a. Index invalid/out of range.
   * 2a1. ConnectEd shows a role-specific index error.
   
     Use case resumes at step 1.
 
 * 3a. The specified person is not matched.
-  * 3a1. ConnectEd shows “No change: <Role> <Name> is not currently matched.”
+  * 3a1. ConnectEd shows error message “Person with id #x is not currently matched with anyone.”
     
     Use case ends.
 
-* 4a. Storage fails.
-  * 4a1. ConnectEd shows “Error saving data: unmatch”.
-    
-    Use case ends.
+---
 
 **Use case: Delete a person (tutor/student)**
 
@@ -871,9 +864,9 @@ Use case ends.
 
 **MSS**
 
-1. User requests to delete a specific person using role + index: delete <INDEX>
+1. User requests to delete a specific person using index: delete `<INDEX>`
 
-2. ConnectEd validates the role and index.
+2. ConnectEd validates the index.
 
 3. ConnectEd confirms the person is not currently matched.
 
@@ -885,37 +878,31 @@ Use case ends.
 
 **Extensions**
 
-* 2a. Role not specified or wrong format.
-  * 2a1. ConnectEd shows “Please specify tutor/student to be deleted using delete `<index>`!”.
+* 2a. Wrong format.
+  * 2a1. ConnectEd shows error message “Invalid command format! ”.
 
     Use case ends.
 
-* 2b. Index invalid/out of range/not visible.
-  * 2b1. ConnectEd shows “This person doesn’t exist! Please check the index again”.
+* 2b. Index invalid/out of range.
+  * 2b1. ConnectEd shows error message “The person index provided is invalid”.
 
     Use case ends.
 
 * 3a. Person is matched.
-  * 3a1. ConnectEd shows “<Tutor/Student> is matched, please unmatch before deleting …”.
+  * 3a1. ConnectEd shows “Cannot delete this person because they are currently matched.
+    Please unmatch them first.”.
 
     Use case ends.
 
-* 4a. No entries exist for that role.
-  * 4a1. ConnectEd shows “There are no <tutors/students> yet!”.
-
-    Use case ends.
-
-* 4b. Storage fails.
-  * 4b1. ConnectEd shows “Error saving data: delete”.
-
-    Use case ends.
-
+---
 
 **Use case: Recommend tutors to a student / students to a tutor**
+
 **Preconditions: At least one tutor and one student exist in the database.**
+
 **Guarantees: On success, the user receives a list of recommended tutors for a student, or students for a tutor, based on subject, level, and price compatibility.**
 **MSS**
-1. User requests recommendations for a person using `recommend INDEX [subject] [level] [price]` (e.g., `recommend 1 /s /l`).
+1. User requests recommendations for a person using `recommend <INDEX> [subject] [level] [price]` (e.g., `recommend 1 /s /l`).
 2. ConnectEd validates the index and checks that it refers to a valid person in the current list.
 3. ConnectEd retrieves the profile of the specified student/tutor.
 4. ConnectEd determines the role (student or tutor) and applies the relevant filters:
@@ -931,6 +918,8 @@ Use case ends.
 * 2a. Index is invalid/out of range/not visible.
     * 2a1. ConnectEd shows "The person index provided is invalid"
     Use case ends.
+
+---
 
 **Use case: Save data (automatic)**
 
@@ -1081,10 +1070,10 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: 
        1. Find tutor using the `find tutor ...` command. Take note of the index of the tutor (e.g. `2`).
-       2. Find student using the `find student ...` command. Take note of the index of the student (e.g. `s1`).
+       2. Find student using the `find student ...` command. Take note of the index of the student (e.g. `1`).
 
     2. Test case: `match 1 2`<br>
-       Expected: Person with id `1` and student with id `2` are being matched.
+       Expected: Person with id `1` and person with id `2` are being matched.
 
     3. Test case: `match 0 0`<br>
        Expected: No student and tutor matched. Error details shown in the status message. Status bar remains the same.
@@ -1092,7 +1081,6 @@ testers are expected to do more *exploratory* testing.
     4. Other incorrect add commands to try: `match 1`, `match 2`<br>
        Expected: Similar to previous.
 
-2. _{ more test cases …​ }_
 
 ### Recommending tutors to a student/ students to a tutor
 1. Recommending tutors to a student/ students to a tutor.

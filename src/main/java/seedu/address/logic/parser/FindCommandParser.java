@@ -35,12 +35,12 @@ public class FindCommandParser implements Parser<FindCommand> {
         validateNotEmpty(args);
         ArgumentMultimap argMultimap = tokenizeArguments(args);
         Predicate<Person> combinedPredicate = p -> true;
-        combinedPredicate = addRolePredicate(argMultimap, combinedPredicate);
         combinedPredicate = addNamePredicate(argMultimap, combinedPredicate);
         combinedPredicate = addSubjectPredicate(argMultimap, combinedPredicate);
         combinedPredicate = addLevelPredicate(argMultimap, combinedPredicate);
         combinedPredicate = addPricePredicate(argMultimap, combinedPredicate);
         ensureAtLeastOneFilter(argMultimap);
+        combinedPredicate = addRolePredicate(argMultimap, combinedPredicate);
         return new FindCommand(combinedPredicate);
     }
 
@@ -150,8 +150,8 @@ public class FindCommandParser implements Parser<FindCommand> {
                 && map.getValue(PREFIX_SUBJECT).isEmpty()
                 && map.getValue(PREFIX_LEVEL).isEmpty()
                 && map.getValue(PREFIX_PRICE).isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException("Please ensure one valid prefix is used \n"
+                    + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
     }
 }

@@ -110,12 +110,99 @@ public class EditCommand extends Command {
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
-
+        Person counterpart = personToEdit.getMatchedPerson();
+        ensureStillCompatibleOrThrow(editedPerson, counterpart);
         model.setPerson(personToEdit, editedPerson);
+        rewireMatchAfterEdit(model, personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
     }
+    /** Ensures an edited person remains compatible with their existing match. */
+    private static void ensureStillCompatibleOrThrow(Person edited, Person counterpart) throws CommandException {
+        if (counterpart == null) {
+            return;
+        }
 
+        // Figure out roles
+        Person tutor;
+        Person student;
+        if (edited.isTutor() && counterpart.isStudent()) {
+            tutor = edited;
+            student = counterpart;
+        } else if (edited.isStudent() && counterpart.isTutor()) {
+            student = edited;
+            tutor = counterpart;
+        } else {
+            // Shouldn’t happen if roles were immutable, but be defensive
+            throw new CommandException("Edit would break roles: both sides must be one tutor and one student.");
+        }
+
+        StringBuilder problems = new StringBuilder();
+
+        // SUBJECT must match exactly
+        if (!student.getSubject().equals(tutor.getSubject())) {
+            problems.append("- Subject mismatch: ")
+                    .append(student.getSubject()).append(" vs ").append(tutor.getSubject()).append("\n");
+        }
+
+        // LEVEL ranges must overlap
+        if (!student.getLevel().intersects(tutor.getLevel())) {
+            problems.append("- Level mismatch: ")
+                    .append(student.getLevel()).append(" vs ").append(tutor.getLevel()).append("\n");
+        }
+
+        if (problems.length() > 0) {
+            throw new CommandException(
+                    "Edit would break the existing match:\n" + problems.toString().trim()
+                            + "\n\nTip: unmatch first, or edit fields so they remain compatible."
+            );
+        }
+    }
+
+    /**
+     * After replacing a person in the model, rewire their existing match so
+     * the counterpart points to the new instance, and keep both sides in sync.
+     *
+     * @param model the model
+     * @param oldPerson the original person object that was replaced
+     * @param newPerson the new person object now in the model
+     */
+    private static void rewireMatchAfterEdit(Model model, Person oldPerson, Person newPerson) {
+        Person counterpart = oldPerson.getMatchedPerson();
+        if (counterpart == null) {
+            return; // nothing to rewire
+        }
+
+        // Clone counterpart, preserving ID and fields
+        Person updatedCounterpart = clonePreservingId(counterpart);
+
+        // Preserve counterpart's session if any
+        if (counterpart.getSession() != null) {
+            updatedCounterpart.setSession(counterpart.getSession());
+        }
+
+        // Re-link both directions to the fresh instances
+        updatedCounterpart.setMatchedPerson(newPerson);
+        newPerson.setMatchedPerson(updatedCounterpart);
+
+        // Replace counterpart in the model so everyone now points to the updated instance
+        model.setPerson(counterpart, updatedCounterpart);
+    }
+    /** Local copy of clonePreservingId */
+    private static Person clonePreservingId(Person p) {
+        return new Person(
+                p.getRole(),
+                p.getName(),
+                p.getPhone(),
+                p.getEmail(),
+                p.getAddress(),
+                p.getSubject(),
+                p.getLevel(),
+                p.getPrice(),
+                new java.util.HashSet<>(p.getTags()),
+                p.getPersonId()
+        );
+    }
     /**
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
@@ -134,8 +221,16 @@ public class EditCommand extends Command {
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         int personId = personToEdit.getPersonId();
 
-        return new Person(updatedRole, updatedName, updatedPhone, updatedEmail,
+        Person editedPerson = new Person(updatedRole, updatedName, updatedPhone, updatedEmail,
                 updatedAddress, updatedSubject, updatedLevel, updatedPrice, updatedTags, personId);
+
+        if (personToEdit.isMatched()) {
+            editedPerson.setMatchedPerson(personToEdit.getMatchedPerson());
+        }
+        if (personToEdit.getSession() != null) {
+            editedPerson.setSession(personToEdit.getSession());
+        }
+        return editedPerson;
     }
 
     @Override

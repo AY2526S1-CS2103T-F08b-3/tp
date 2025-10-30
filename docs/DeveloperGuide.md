@@ -241,9 +241,9 @@ Given below is an example usage scenario and how the find mechanism behaves at e
 
 #### Step 1. User executes the `find` command
 
-The user enters the command below in the command box: eg `"find tutors s/Mathematics"`
+The user enters the command below in the command box: eg `"find tutors sbj/Mathematics"`
 
-The `LogicManager` passes this string to `AddressBookParser#parseCommand("find tutors s/Mathematics")`.
+The `LogicManager` passes this string to `AddressBookParser#parseCommand("find tutors sbj/Mathematics")`.
 
 The `AddressBookParser` identifies the keyword `find` and delegates parsing to the `FindCommandParser`.
 
@@ -295,7 +295,7 @@ The following sequence diagram shows how a find operation goes through the Logic
     * **Cons:** Limited and cannot filter by subjects, levels, prices, or distinguish tutors from students.
 
 * **Alternative 2 (current choice)**: Enhanced `FindCommand` supporting multiple prefixes (`n/`, `s/`, `l/`, `p/`) and optional roles (`tutors`, `students`).
-    * **Pros:** Far more flexible and supports complex searches like `find tutors s/Mathematics l/4 p/10-30`. Uses modular predicates for each attribute.
+    * **Pros:** Far more flexible and supports complex searches like `find tutors sbj/Mathematics l/4 p/10-30`. Uses modular predicates for each attribute.
     * **Cons:** Slightly more complex parser and predicate logic, higher validation overhead.
 
 #### Aspect: How logical conditions are applied
@@ -393,7 +393,7 @@ Given below is an example usage scenario and how the recommend mechanism behaves
 
 Step 1. The user launches the application for the first time. The application displays the full list of tutors and students.
 
-Step 2. The user executes `recommend 2 s/` command to find tutors/students matching the subject of the student/tutor. The `RecommendCommandParser` validates the input and creates a `RecommendCommand`. The command retrieves the specified user, constructs a predicate based on the user's subject requirement, and applies it using `Model#updateFilteredPersonList(predicate)` to display recommended tutors matching the criteria.
+Step 2. The user executes `recommend 2 sbj/` command to find tutors/students matching the subject of the student/tutor. The `RecommendCommandParser` validates the input and creates a `RecommendCommand`. The command retrieves the specified user, constructs a predicate based on the user's subject requirement, and applies it using `Model#updateFilteredPersonList(predicate)` to display recommended tutors matching the criteria.
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** If a recommend command fails validation (e.g., invalid parameters), the `RecommendCommandParser` will throw a `ParseException`, and the command will not execute. The user will see an appropriate error message.
 
@@ -672,10 +672,10 @@ Use case ends.
 
 1. The tuition coordinator enters a `find` command specifying an optional target role (`tutors` or `students`) and one or more filters using prefixes `n/`, `s/`, `l/`, or `p/` with their respective values.  
    Examples:
-    * `find s/ Mathematics`
+    * `find sbj/ Mathematics`
     * `find students l/ 3`
     * `find tutors p/ 20-50 l/ 4`
-    * `find students n/ Tan s/ English`
+    * `find students n/ Tan sbj/ English`
 
 2. ConnectEd validates the input:
     * Ensures a valid role (`tutors` or `students`) is provided or otherwise not present.
@@ -696,9 +696,9 @@ Use case ends.
 
 4. ConnectEd combines all active predicates:
     * **Within the same prefix** → combined using **OR logic**  
-      (e.g. `find tutors s/ Mathematics Science` shows tutors teaching Mathematics **or** Science)
+      (e.g. `find tutors sbj/ Mathematics Science` shows tutors teaching Mathematics **or** Science)
     * **Across different prefixes** → combined using **AND logic**  
-      (e.g. `find tutors s/ Mathematics l/ 4` shows tutors teaching Mathematics **and** Level 4)
+      (e.g. `find tutors sbj/ Mathematics l/ 4` shows tutors teaching Mathematics **and** Level 4)
 
 5. The filtered list of tutors or students matching all conditions is displayed in the UI.  
    The list automatically updates based on the applied predicate.
@@ -721,7 +721,7 @@ Use case ends.
       
       Note: You may include multiple values per prefix, and prefix order does not matter.
       
-      Example: find tutors n/ Aaron s/ Mathematics English l/ 1-3 p/ 20-50
+      Example: find tutors n/ Aaron sbj/ Mathematics English l/ 1-3 p/ 20-50
 
 * **2b.** No valid prefixes (`n/`, `s/`, `l/`, `p/`) are provided.
     * **2b1.** ConnectEd shows:  
@@ -729,13 +729,13 @@ Use case ends.
       find: Finds persons that match the specified criteria.  
       Format: find [ROLE] [n/ NAME] [s/ SUBJECT] [l/ LEVEL (single or range)] [p/ PRICE (single or range)]  
       Note: You may include multiple values per prefix, and prefix order does not matter.  
-      Example: find tutors n/ Aaron s/ Mathematics English l/ 1-3 p/ 20-50”*  
+      Example: find tutors n/ Aaron sbj/ Mathematics English l/ 1-3 p/ 20-50”*  
       Use case ends.
 
 * **2c.** A prefix value is empty (e.g. `n/ `, `s/ `, `l/ `, or `p/ `).
     * **2c1.** ConnectEd shows a prefix-specific error message such as:  
       *“Name value after n/ cannot be empty.”*  
-      *“Subject value after s/ cannot be empty.”*  
+      *“Subject value after sbj/ cannot be empty.”*  
       *“Level value after l/ cannot be empty.”*  
       *“Price value after p/ cannot be empty.”*  
       Use case ends.
@@ -755,7 +755,7 @@ Use case ends.
       find: Finds persons that match the specified criteria.  
       Format: find [ROLE] [n/ NAME] [s/ SUBJECT] [l/ LEVEL (single or range)] [p/ PRICE (single or range)]  
       Note: You may include multiple values per prefix, and prefix order does not matter.  
-      Example: find tutors n/ Aaron s/ Mathematics English l/ 1-3 p/ 20-50”*  
+      Example: find tutors n/ Aaron sbj/ Mathematics English l/ 1-3 p/ 20-50”*  
       Use case ends.
 
 * **3a.** No persons match the provided criteria.
@@ -1043,7 +1043,7 @@ testers are expected to do more *exploratory* testing.
    2. Test case: `add aaron`<br>
       Expected: No tutor is added. Error details shown in the status message. Status bar remains the same.
 
-   3. Other incorrect add commands to try: `add`, `add tutor aaron hp/ 0 /a Blk 30 Geylang Street 29, #06-40 s/ mathematics l/ 3 p/ 20-30`<br>
+   3. Other incorrect add commands to try: `add`, `add tutor aaron hp/ 0 /a Blk 30 Geylang Street 29, #06-40 sbj/ mathematics l/ 3 p/ 20-30`<br>
       Expected: Similar to previous.
 
 ### Deleting a tutor
@@ -1065,13 +1065,13 @@ testers are expected to do more *exploratory* testing.
 
 1. Finding a student or students.
 
-    1. Test case: `find student s/ english`<br>
+    1. Test case: `find student sbj/ english`<br>
        Expected: Students that have the 'english' subject are being listed. 
 
     2. Test case: `find student`<br>
         Expected: No student is listed. Error details shown in the status message. Status bar remains the same.
 
-    3. Other incorrect add commands to try: `find`, `find student s/ eng`<br>
+    3. Other incorrect add commands to try: `find`, `find student sbj/ eng`<br>
         Expected: Similar to previous.
 
 ### Matching a student and tutor
@@ -1096,10 +1096,10 @@ testers are expected to do more *exploratory* testing.
 ### Recommending tutors to a student/ students to a tutor
 1. Recommending tutors to a student/ students to a tutor.
 
-   1. Test case: `recommend 3 s/ l/`<br>
+   1. Test case: `recommend 3 sbj/ l/`<br>
         Expected: Tutors/Students that match the subject and level of person with index `3` are being listed.
 
-   2. Test case: `recommend 1 s/ p/`<br>
+   2. Test case: `recommend 1 sbj/ p/`<br>
         Expected: Tutors/Students that match the subject and price range of person with index `1` are being listed.
 
    3. Test case: `recommend 2`<br>

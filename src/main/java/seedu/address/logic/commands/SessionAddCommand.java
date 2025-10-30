@@ -15,8 +15,8 @@ public class SessionAddCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds a session to the specified person (must be matched).\n"
-            + "Format: sessionadd INDEX d/DAY t/TIME dur/DURATION s/SUBJECT p/PRICE\n"
-            + "Example: sessionadd 1 d/Monday t/16:00 dur/02:00 s/Mathematics p/40";
+            + "Format: sessionadd INDEX d/DAY t/TIME dur/DURATION sbj/SUBJECT p/PRICE\n"
+            + "Example: sessionadd 1 d/Monday t/16:00 dur/02:00 sbj/Mathematics p/40";
 
     public static final String MESSAGE_SUBJECT_MISMATCH =
             "Cannot add session: subject mismatch.\nPerson’s subject: %s\nSession’s subject: %s";
@@ -65,7 +65,7 @@ public class SessionAddCommand extends Command {
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
         return new CommandResult(String.format(
-                "Added session for %s and their matched partner %s:\n%s",
+                "Updated session for %s and their matched partner %s:\n%s",
                 aClone.getName(), bClone.getName(), session));
     }
     /**

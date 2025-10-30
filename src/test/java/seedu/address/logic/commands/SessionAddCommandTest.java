@@ -100,7 +100,7 @@ public class SessionAddCommandTest {
         CommandResult result = command.execute(model);
 
         String expectedMessage = String.format(
-                "Added session for %s and their matched partner %s:\n%s",
+                "Updated session for %s and their matched partner %s:\n%s",
                 tutor.getName(), student.getName(), session);
         assertEquals(expectedMessage, result.getFeedbackToUser());
 

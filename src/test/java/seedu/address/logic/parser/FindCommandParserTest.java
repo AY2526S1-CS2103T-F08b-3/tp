@@ -24,7 +24,7 @@ public class FindCommandParserTest {
     @Test
     public void parse_validSubjectArgsWithRole_success() {
         assertDoesNotThrow(() -> {
-            var command = parser.parse("students s/Mathematics Science");
+            var command = parser.parse("students sbj/Mathematics Science");
             assertTrue(command instanceof FindCommand);
         });
     }
@@ -75,8 +75,8 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_emptySubjectPrefix_failure() {
-        assertParseFailure(parser, "students s/",
-                "Subject value after s/ cannot be empty.");
+        assertParseFailure(parser, "students sbj/",
+                "Subject value after sbj/ cannot be empty.");
     }
 
     @Test

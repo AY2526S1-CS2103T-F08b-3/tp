@@ -18,9 +18,10 @@ public class ListCommand extends Command {
             + "Parameter: 'tutors' / 'students'\n"
             + "Example: " + COMMAND_WORD + " tutors";
 
-    public static final String MESSAGE_SUCCESS_TUTORS = "Listed all tutors.";
-    public static final String MESSAGE_SUCCESS_STUDENTS = "Listed all students.";
-    public static final String MESSAGE_SUCCESS_EVERYONE = "Listed all students and tutors.";
+    public static final String MESSAGE_EMPTY_LIST = "List is empty!";
+    public static final String MESSAGE_SUCCESS_TUTORS = "Listed all tutors";
+    public static final String MESSAGE_SUCCESS_STUDENTS = "Listed all students";
+    public static final String MESSAGE_SUCCESS_EVERYONE = "Listed all students and tutors";
 
     private String role = "";
 
@@ -34,6 +35,10 @@ public class ListCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
+        if (model.getFilteredPersonList().isEmpty()) {
+            return new CommandResult(MESSAGE_EMPTY_LIST);
+        }
+
         if (role.equals("tutors")) {
             model.updateFilteredPersonList(PREDICATE_SHOW_ALL_TUTORS);
             return new CommandResult(MESSAGE_SUCCESS_TUTORS);

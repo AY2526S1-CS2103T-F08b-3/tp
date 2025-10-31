@@ -4,6 +4,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LEVEL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 
 import java.util.ArrayList;
@@ -34,6 +35,8 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         validateNotEmpty(args);
         ArgumentMultimap argMultimap = tokenizeArguments(args);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ROLE, PREFIX_NAME,
+                PREFIX_SUBJECT, PREFIX_LEVEL, PREFIX_PRICE);
         Predicate<Person> combinedPredicate = p -> true;
         combinedPredicate = addNamePredicate(argMultimap, combinedPredicate);
         combinedPredicate = addSubjectPredicate(argMultimap, combinedPredicate);

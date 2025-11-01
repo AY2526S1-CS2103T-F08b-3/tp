@@ -35,7 +35,7 @@ public class ListCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        if (model.getFilteredPersonList().isEmpty()) {
+        if (model.getAllPersonList().isEmpty()) {
             return new CommandResult(MESSAGE_EMPTY_LIST);
         }
 

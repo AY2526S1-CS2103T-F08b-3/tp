@@ -65,7 +65,8 @@ public class AddCommand extends Command {
 
         if (model.hasPerson(toAdd)) {
             throw new CommandException(
-                    String.format(MESSAGE_DUPLICATE_PERSON, model.getRepeatedEntry(toAdd), toAdd.getSubject()));
+                    String.format(MESSAGE_DUPLICATE_PERSON, model.getRepeatedEntry(toAdd),
+                            model.getRepeatedPerson(toAdd).getSubject()));
         }
         if (toAdd.getPersonId() == -1) {
             toAdd.setPersonId(Person.allocateNextId());

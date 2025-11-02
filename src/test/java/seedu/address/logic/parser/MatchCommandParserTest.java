@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
+import static seedu.address.logic.parser.MatchCommandParser.MESSAGE_INVALID_ID;
 
 import org.junit.jupiter.api.Test;
 
@@ -62,54 +63,54 @@ public class MatchCommandParserTest {
     @Test
     public void parse_invalidFirstId_throwsParseException() {
         assertParseFailure(parser, "a 2",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
 
         assertParseFailure(parser, "-1 2",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
 
         assertParseFailure(parser, "0 2",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
     }
 
     @Test
     public void parse_invalidSecondId_throwsParseException() {
         assertParseFailure(parser, "1 b",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
 
         assertParseFailure(parser, "1 -2",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
 
         assertParseFailure(parser, "1 0",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
     }
 
     @Test
     public void parse_bothIdsInvalid_throwsParseException() {
         assertParseFailure(parser, "a b",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
 
         assertParseFailure(parser, "-1 -2",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
 
         assertParseFailure(parser, "0 0",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
     }
 
     @Test
     public void parse_nonNumericInput_throwsParseException() {
         assertParseFailure(parser, "one two",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
 
         assertParseFailure(parser, "1.5 2.5",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
     }
 
     @Test
     public void parse_specialCharacters_throwsParseException() {
         assertParseFailure(parser, "1! 2@",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
 
         assertParseFailure(parser, "# $",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_ID));
     }
 }

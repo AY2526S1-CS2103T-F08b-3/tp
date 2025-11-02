@@ -9,7 +9,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
  * Parses input arguments and creates a new UnmatchCommand object
  */
 public class UnmatchCommandParser implements Parser<UnmatchCommand> {
-
+    public static final String MESSAGE_INVALID_ID = "IDs must be positive integers. Example: unmatch 1";
     @Override
     public UnmatchCommand parse(String args) throws ParseException {
         String trimmed = args.trim();
@@ -23,7 +23,7 @@ public class UnmatchCommandParser implements Parser<UnmatchCommand> {
             }
             return new UnmatchCommand(id);
         } catch (NumberFormatException e) {
-            throw new ParseException("IDs must be positive integers. Example: unmatch 1");
+            throw new ParseException(MESSAGE_INVALID_ID);
         }
     }
 }

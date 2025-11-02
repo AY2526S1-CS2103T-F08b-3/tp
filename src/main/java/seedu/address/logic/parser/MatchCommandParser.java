@@ -10,6 +10,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class MatchCommandParser implements Parser<MatchCommand> {
 
+    public static final String MESSAGE_INVALID_ID = "IDs must be positive integers. Example: match 12 34";
     @Override
     public MatchCommand parse(String args) throws ParseException {
         String[] parts = args.trim().split("\\s+");
@@ -24,7 +25,7 @@ public class MatchCommandParser implements Parser<MatchCommand> {
             }
             return new MatchCommand(firstId, secondId);
         } catch (NumberFormatException e) {
-            throw new ParseException("IDs must be positive integers. Example: match 12 34");
+            throw new ParseException(MESSAGE_INVALID_ID);
         }
     }
 }

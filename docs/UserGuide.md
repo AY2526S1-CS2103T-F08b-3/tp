@@ -3,7 +3,7 @@ layout: page
 title: ConnectEd User Guide
 ---
 ## 📘 **Welcome to ConnectEd!**
-ConnectEd is a desktop application that helps you manage your tutors and students efficiently. Instead of clicking through menus, you will type simple commands to get things done quickly. Think of it like using search on a website - you type what you want, press Enter, and get instant results. Once you learn a few basic commands, you will work much faster than with traditional software!
+ConnectEd is a desktop application that helps you manage your primary school tutors and students efficiently. Instead of clicking through menus, you will type simple commands to get things done quickly. Think of it like using search on a website - you type what you want, press Enter, and get instant results. Once you learn a few basic commands, you will work much faster than with traditional software!
 
 * Table of Contents
 {:toc}
@@ -80,7 +80,7 @@ Each tutor or student entry shows:
 * **Address** - Physical address
 * **Email** - Email address
 * **Subject** - What they teach/study (strictly only: Mathematics, English, Science)
-* **Level** - Grade level (e.g., Level: 3 means Primary 3)
+* **Level** - Grade level (Level 1-6 means Primary 1 - Primary 6)
 * **Price** - Hourly rate or price range (e.g., 20-30 means $20-$30 per hour)
 * **Matched** - Shows who they're paired with (if anyone)
 * **Session** - Shows scheduled lesson details (if any)

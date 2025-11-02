@@ -150,6 +150,10 @@ public class EditCommand extends Command {
             problems.append("- Level mismatch: ")
                     .append(student.getLevel()).append(" vs ").append(tutor.getLevel()).append("\n");
         }
+        if (!student.getPrice().overlaps(tutor.getPrice())) {
+            problems.append("- Price mismatch: ")
+                    .append(student.getPrice()).append(" vs ").append(tutor.getPrice()).append("\n");
+        }
 
         if (problems.length() > 0) {
             throw new CommandException(

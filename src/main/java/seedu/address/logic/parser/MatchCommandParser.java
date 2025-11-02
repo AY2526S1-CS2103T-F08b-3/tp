@@ -24,7 +24,7 @@ public class MatchCommandParser implements Parser<MatchCommand> {
             }
             return new MatchCommand(firstId, secondId);
         } catch (NumberFormatException e) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, MatchCommand.MESSAGE_USAGE));
+            throw new ParseException("IDs must be positive integers. Example: match 12 34");
         }
     }
 }

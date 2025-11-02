@@ -23,7 +23,7 @@ public class UnmatchCommandParser implements Parser<UnmatchCommand> {
             }
             return new UnmatchCommand(id);
         } catch (NumberFormatException e) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UnmatchCommand.MESSAGE_USAGE));
+            throw new ParseException("IDs must be positive integers. Example: unmatch 1");
         }
     }
 }

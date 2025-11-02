@@ -9,8 +9,12 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
-
+* This project is adapted from the original AddressBook Level 3 (AB3)
+  project created by the SE-EDU initiative
+  .
+  We would like to acknowledge and thank the following sources and contributors whose work formed the foundation of this project.
+* Documentation adapted from SE-EDU’s User Guide
+  and Developer Guide
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -117,7 +121,7 @@ How the parsing works:
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
-<img src="images/ModelClassDiagram.png" width="450" />
+<img src="images/ModelClassDiagram.png" width="500" />
 
 
 The `Model` component,
@@ -224,13 +228,13 @@ The `ListCommand` handles several error cases gracefully:
 
 
 
-### [Proposed] Find feature
+### Find feature
 
-#### Proposed Implementation
+#### Implementation
 
 The **Find feature** allows users to search for **tutors** or **students** in the database based on one or more criteria such as name, subject, level, or price range.
 
-The proposed mechanism is facilitated by the `FindCommand` class.  
+The mechanism is facilitated by the `FindCommand` class.  
 It is constructed by the `FindCommandParser` inside the `AddressBookParser`.  
 When executed, it updates the filtered list in the `Model` using a combined predicate built from user-specified filters.
 
@@ -253,8 +257,8 @@ The `AddressBookParser` identifies the keyword `find` and delegates parsing to t
 
 The `FindCommandParser` performs the following actions:
 
-* Extracts the **role** (`tutors` or `students`) from the preamble.
-* Tokenizes the remaining arguments using the prefixes `n/`, `s/`, `l/`, and `p/`.
+* Extracts the **role** (`tutors` or `students`) from the preamble if present.
+* Tokenizes the remaining arguments using the prefixes `n/`, `sbj/`, `l/`, and `p/`.
 * Parses and validates each argument value.
 * Creates individual predicates such as  
   `NameContainsKeywordsPredicate`, `MatchingSubjectPredicate`,  
@@ -311,11 +315,11 @@ The following sequence diagram shows how a find operation goes through the Logic
 ---
 
 
-### \[Proposed\] Match/Unmatch Feature
+### Match/Unmatch Feature
 
-#### Proposed Implementation
+#### Implementation
 
-The proposed match/unmatch mechanism is facilitated by `MatchCommand` and `UnmatchCommand`. It establishes or removes bidirectional references between a tutor and a student, ensuring one-to-one matching relationships.
+The match/unmatch mechanism is facilitated by `MatchCommand` and `UnmatchCommand`. It establishes or removes bidirectional references between a tutor and a student, ensuring one-to-one matching relationships.
 
 * `MatchCommand#execute()` — Creates a bidirectional match between a tutor and student, updating both entities.
 * `UnmatchCommand#execute()` — Removes the bidirectional match between a tutor and student.
@@ -378,11 +382,11 @@ The following sequence diagram shows how a match operation goes through the `Log
     * Pros: More convenient for users - single command to reassign. Fewer steps for common operation.
     * Cons: Risk of accidental match reassignment. Harder to undo mistakes. Less transparent to user what happened to previous match. Could cause confusion.
 
-### \[Proposed\] Recommend feature
+### Recommend feature
 
-#### Proposed Implementation
+#### Implementation
 
-The proposed recommend mechanism is facilitated by `RecommendCommand` and its associated predicate classes. It recommends persons in the person list based on specified criteria (subject, level, or price range) and displays matching results.
+The recommend mechanism is facilitated by `RecommendCommand` and its associated predicate classes. It recommends persons in the person list based on specified criteria (subject, level, or price range) and displays matching results.
 
 * `RecommendCommand#execute()` — Executes the recommend operation by applying the appropriate predicate to filter the list.
 * `RecommendCommandParser#parse()` — Parses and validates user input to create a valid `RecommendCommand`.
@@ -421,11 +425,11 @@ Step 2. The user executes `recommend 2 sbj/` command to find tutors/students mat
   * Pros: User always sees something in the list.
   * Cons: Confusing user experience - unclear whether search executed successfully or was ignored.
 
-### \[Proposed\] Sort Feature
+### Sort Feature
 
-#### Proposed Implementation
+#### Implementation
 
-The proposed sort mechanism is facilitated by `SortCommand`, which allows users to sort tutors or students by specified criteria (price and/or level). The sorting supports:
+The sort mechanism is facilitated by `SortCommand`, which allows users to sort tutors or students by specified criteria (price and/or level). The sorting supports:
 * Single criterion sorting (e.g., by price only)
 * Multi-criterion sorting with priority order (e.g., by price first, then by level)
 * Separate sorting for tutors and students 
@@ -461,7 +465,9 @@ The tutors are now displayed sorted by price from lowest to highest.
 </div>
 
 **Step 5.** The user executes `list students` to switch to viewing students. Since the sort was applied only to tutors, students are displayed in their original unsorted order.
+
 **Step 6.** The user executes `sort students l/ p/` to sort students by level first, then by price. Students are now organized by education level, with students at lower levels appearing first, and within each level, sorted by their budget (price range).
+
 **Step 7.** The user wants to return to viewing all persons without any filters. The user executes `sort reset` to clear all filters. The command calls `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS)` to display both tutors and students in their original order.
 
 #### Implementation Details
@@ -542,7 +548,7 @@ The sort command handles several error cases:
     * Cons: Less informative to users; doesn't distinguish between empty database and no matches
 
 ### Stats Feature
-#### Proposed Implementation
+#### Implementation
 
 The statistics feature is implemented via `StatsCommand` and `StatsCommandParser`. It provides a summary of key metrics (counts, averages) to help coordinators assess the database at a glance.
 
@@ -698,7 +704,8 @@ Use case ends.
       Use case ends.
 
 * 2b. Invalid role.
-    * 2b1. ConnectEd shows: “Invalid role. Please key in either students or tutors.” and correct command usage\
+    * 2b1. ConnectEd shows corresponding error message.
+  
       Use case ends
 
 * 2c. Invalid or malformed values (e.g. `p/250`, `l/7-2`, invalid subject).
@@ -707,7 +714,7 @@ Use case ends.
 
 * 3a. No persons match the filters.
     * 3a1. ConnectEd shows "No persons match your search."
-      Use case ends.
+     Use case ends.
   
 * 3b. Empty list
   * 3b1. ConnectEd shows "List is empty, there is no persons to find."
@@ -918,7 +925,7 @@ Use case ends.
 
 #### Definitions
 * **Tutor / Student** — Person types managed by the app (case-insensitive tokens `tutor` / `student`).
-* **Subject** — One of `{english, maths, chinese, science}`.
+* **Subject** — One of `{english, mathematics, chinese, science}`.
 * **Level** — Integer 1–6 (students: single level; tutors: single level or range `x-y`, 1≤x≤y≤6).
 * **Price range** — `min-max` dollars/hour, integers 1–200, `min ≤ max`, no internal spaces.
 * **Typed index** — `<INDEX>` (tutor) or `<INDEX>` (student), where `INDEX` is 1-based on the **current** list view.
@@ -944,9 +951,12 @@ testers are expected to do more *exploratory* testing.
 
 1. Initial launch
 
-   1. Download the jar file and copy into an empty folder
+   1. Download the [CS2103T-F08b-3][ConnectEd].jar file and copy into an empty folder
 
-   2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   2. `cd` into the folder you put the jar file in and use the
+      `java -jar [CS2103T-F08b-3][ConnectEd].jar` command OR double-click the jar file to run the application 
+   
+     Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
 2. Saving window preferences
 
@@ -960,7 +970,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Adding a tutor.
 
-   1. Test case: `add r/tutor n/aaron hp/ 91234567 a/ Blk 30 Geylang Street 29, #06-40 sbj/ mathematics l/1-3 p/ 20-30`<br>
+   1. Test case: `add r/tutor n/Aaron Tan hp/91234567 e/aarontan@example.com a/311, Clementi Ave 2, #02-25 sbj/Mathematics l/1-3 p/10-20`<br>
       Expected: Tutor is added to the list. Details of the added tutor shown in the status message. 
 
    2. Test case: `add aaron`<br>

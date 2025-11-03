@@ -647,10 +647,11 @@ Press Enter, and the application will close immediately.
 Click the red X button!
 
 > ⛔ **What happens when you exit?**
-> ✅ Your data is automatically saved!
+> <br>✅ Your data is automatically saved!
 > * All changes are saved instantly as you work 
 > * You don't need to manually save before exiting 
 > * Your data remains in the `ConnectEd.json` file
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Complete Command Reference
@@ -673,7 +674,7 @@ This section lists every command in ConnectEd with examples. Use this as a quick
 |---------|-----------------------------------------------------------------------------------------------|
 | **Add student** | `add r/student n/John hp/91234567 e/john@email.com a/123 Main St sbj/mathematics l/3 p/20-30` |
 | **Add tutor** | `add r/tutor n/Mary hp/98765432 e/mary@email.com a/456 Side Ave sbj/english l/2-5 p/30-45`    |
-| **Edit person** | `edit 1 hp/99998888 e/newemail@example.com`                                                   |
+| **Edit person** | `edit 1 hp/90189844 e/newemail@example.com`                                                   |
 | **Delete person** | `delete 3`                                                                                    |
 
 ### Searching & Filtering Commands

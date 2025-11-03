@@ -889,6 +889,8 @@ Use case ends.
     
     Use case ends.
 
+---
+
 **Use case: Exit application**
 
 **MSS**
@@ -1046,4 +1048,81 @@ testers are expected to do more *exploratory* testing.
    4. Other incorrect add commands to try: `recommend`, `recommend 5 e/`, `recommend x` (where x is larger than the list size or smaller than 1)<br>
         Expected: Error message shown.
 
+---
+## **Appendix: Effort**
+The ConnectEd project required a moderate-to-high level of effort, extending significantly beyond the baseline of
+AddressBook Level 3 (AB3). While AB3 manages a single entity type (Person), ConnectEd introduces two distinct roles
+– Tutor and Student – each with custom attributes, relationships, and operations such as matching, scheduling, and
+recommendation. This multi-entity architecture increased the design, implementation, and testing complexity.
+
+1. **Difficulty and Technical Challenges**
+* **Bidirectional Matching Logic**: Implementing the match and unmatch features required maintaining consistent references between two persons, ensuring data integrity after edits, deletions, and list filtering.
+
+* **Session Scheduling System**: Designing the Session class to store details like day, time, duration, and price involved careful parsing and validation, as well as conflict-checking between existing sessions.
+
+* **Recommendation Feature**: The recommend command required dynamic filtering across multiple attributes (subject, level, price) and logic for automatic attribute inference when prefixes were left empty.
+
+* **Persistent Unique IDs**: Unlike AB3’s list-based indices, ConnectEd introduced a persistent ID field stored in JSON to prevent mismatches after sorting or deletions. This required modifications across the parser, model, and storage layers.
+
+2. **Effort and Collaboration**
+
+* The project demanded extensive coordination between frontend logic, backend data modeling, and documentation.
+
+* Each developer was responsible for at least one major feature (for example, Match, Session, Recommend, Custom Fields, Sorting), plus cross-reviewing code through pull requests.
+
+* Weekly merges and conflict resolution sessions ensured integration across overlapping model components.
+
+* Significant time was devoted to JUnit testing, Developer Guide and User Guide writing, and PE-D feedback resolution.
+
+3. **Reuse and Adaptation**
+
+We reused and extended several AB3 components to accelerate development:
+
+* The AddressBookParser and Command framework from AB3 were retained but refactored for multi-entity commands.
+
+* The storage layer (JsonAdaptedPerson, JsonSerializableAddressBook) was modified to handle new attributes and IDs.
+
+* 10–15% of the total effort was saved through this reuse, but substantial re-engineering was required to adapt AB3’s single-entity design to ConnectEd’s multi-role system.
+
+4. **Achievements**
+
+* Designed and implemented a robust Tutor–Student relationship model with persistent matching and session tracking.
+
+* Enhanced usability with custom fields, recommendation filters, and sorting for more efficient contact management.
+
+* Achieved high code quality with meaningful abstractions, comprehensive test coverage, and detailed documentation.
+
+Overall, this project was a rewarding journey that pushed us far beyond AB3. It challenged us to think deeply about how data connects, how systems interact, and how to build something meaningful and reliable. Through countless iterations, we grew not only as developers but as a team committed to creating a product that truly works for its users.
+
+---
+
+## **Appendix: Planned Enhancements**
+
+Team size: 5
+
+The following enhancements are planned for the next iteration of ConnectEd, addressing current feature limitations
+identified during v1.6. Each item below corresponds to a known feature flaw or constraint, and describes how it 
+will be improved.
+
+1. **Allow each person to have multiple subjects**: Currently, each tutor or student can only have one subject
+(e.g., Mathematics). We plan to let every person store multiple subjects so tutors can teach, and students can take,
+more than one subject. The display will show all subjects on the person card, and matching/recommendation
+will succeed if at least one subject overlaps. Example: `add r/tutor n/John Tan sbj/Mathematics sbj/english` → both
+subjects are stored and visible.
+
+2. **Support multiple concurrent matches per person**: At present, each tutor or student can only be matched with one
+counterpart. We plan to allow many-to-many matching so that one tutor can teach several students, or a student can have
+multiple tutors. Example: `match 2 5` and `match 2 6` → Tutor 2 matched with Students 5 and 6, displayed in a list on the
+tutor card.
+
+3. **Enable multiple sessions per matched pair**: Currently, only one session can exist between a tutor–student pair. We
+plan to allow multiple scheduled sessions with independent day, time, duration, and
+price fields. Example: `sessionadd 1 day/Monday time/18:00 dur/02:00 sbj/ mathematics p/60` and
+`sessionadd 1 day/Thursday time/16:00 dur/01:00 sbj/mathematics p/30` will
+both appear under that pair’s session list.
+
+4. **Expand subject library beyond the default three**: Currently, only Mathematics, English, and Science are valid
+subjects. We plan to broaden the accepted subject list to include commonly requested subjects like Chinese, Malay,
+Tamil. This will allow greater flexibility for users in primary school, without
+affecting existing validation rules.
 

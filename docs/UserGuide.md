@@ -39,9 +39,9 @@ Before you can use ConnectEd, you need to install it on your computer. Follow th
 
 ### Step 2: Download ConnectEd
 10. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-F08b-3/tp/releases).
-11. Download the file named `CS2103T-F08b-3.ConnectEd.jar`.
+11. Download the file named `ConnectEd.jar`.
 12. Create a new folder on your computer called ConnectEd. 
-13. Move the downloaded `CS2103T-F08b-3.ConnectEd.jar` file into this folder.
+13. Move the downloaded `ConnectEd.jar` file into this folder.
 >💡 **Tip**
 > <br>Create the ConnectEd folder in an easy-to-find location like your Desktop or Documents folder. You will be accessing it regularly!
 
@@ -50,7 +50,7 @@ Now, let's start the application:
 14. Open Terminal/Command Prompt again. (Refer to Step 2 above)
 15. Type `cd` followed by a space, then the location of your ConnectEd folder (e.g., `cd Desktop` or `cd Documents`)
 16. Type `cd ConnectEd` to access ConnectEd.
-17. Type exactly: `java -jar CS2103T-F08b-3.ConnectEd.jar`.
+17. Type exactly: `java -jar ConnectEd.jar`.
 18. Press enter.
 > ✅ **Success!**
 > <br>A pink window like the one below should appear after a few seconds. This is ConnectEd!

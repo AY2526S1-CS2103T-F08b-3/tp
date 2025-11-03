@@ -20,6 +20,8 @@ public class SessionAddCommand extends Command {
 
     public static final String MESSAGE_SUBJECT_MISMATCH =
             "Cannot add session: subject mismatch.\nPerson’s subject: %s\nSession’s subject: %s";
+    public static final String MESSAGE_PRICE_OUT_OF_RANGE = "Cannot add session: price mismatch.\n Tutor’s price range:"
+            + " %s\n Student’s price range: %s\n Session price: %s";
     private final Index targetIndex;
     private final Session session;
 
@@ -45,7 +47,9 @@ public class SessionAddCommand extends Command {
         if (b == null) {
             throw new CommandException(a.getName() + " is not matched with anyone. Cannot create a session.");
         }
+        ensureDurationWithinDay(session);
         ensureSameSubject(a, session);
+        ensurePriceWithinIntersection(a, b, session);
 
         // 1) Clone both, preserving IDs (constructor order matches your sample)
         Person aClone = clonePreservingId(a);
@@ -68,6 +72,13 @@ public class SessionAddCommand extends Command {
                 "Updated session for %s and their matched partner %s:\n%s",
                 aClone.getName(), bClone.getName(), session));
     }
+    /** Ensures the session duration is between 00:01 and 24:00. */
+    private void ensureDurationWithinDay(Session s) throws CommandException {
+        var d = s.getDuration();
+        if (d.isNegative() || d.isZero() || d.compareTo(java.time.Duration.ofHours(24)) > 0) {
+            throw new CommandException("Cannot add session: duration must be between 00:01 and 24:00.");
+        }
+    }
     /**
      * Ensures the session subject matches the person's subject.
      * If the subjects differ, this method throws a {@link CommandException}
@@ -82,6 +93,17 @@ public class SessionAddCommand extends Command {
             throw new CommandException(String.format(
                     MESSAGE_SUBJECT_MISMATCH, person.getSubject(), session.getSubject()
             ));
+        }
+    }
+    /**
+     * Ensures the session price is within BOTH matched persons' price ranges.Throws a detailed mismatch message if not.
+     */
+    private void ensurePriceWithinIntersection(Person t, Person s, Session sess) throws CommandException {
+        int val = sess.getPrice().isSingle() ? Integer.parseInt(sess.getPrice().toString())
+                : (Integer.parseInt(sess.getPrice().toString().split("-")[0])
+                + Integer.parseInt(sess.getPrice().toString().split("-")[1])) / 2;
+        if (!t.getPrice().includesSingle(val) || !s.getPrice().includesSingle(val)) {
+            throw new CommandException(String.format(MESSAGE_PRICE_OUT_OF_RANGE, t.getPrice(), s.getPrice(), val));
         }
     }
     /** Your cloning helper — preserves personId and copies fields/tags. */

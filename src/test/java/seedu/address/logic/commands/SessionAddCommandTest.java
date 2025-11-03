@@ -145,7 +145,7 @@ public class SessionAddCommandTest {
 
         Session session2 = new Session(
                 DayOfWeek.TUESDAY, LocalTime.of(10, 0),
-                Duration.ofHours(2), new Subject("Mathematics"), new Price(50, 50));
+                Duration.ofHours(2), new Subject("Mathematics"), new Price(40, 40));
         SessionAddCommand command2 = new SessionAddCommand(Index.fromOneBased(1), session2);
         command2.execute(model);
 

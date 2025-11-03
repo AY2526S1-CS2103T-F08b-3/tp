@@ -72,6 +72,25 @@ Let's get familiar with what you see on the screen:
 > 
 > Bottom: Shows the file location where your data is saved
 
+## Understanding ID Numbers vs List Positions
+
+ConnectEd uses two different numbering systems. It's important to understand the difference!
+
+### 🆔 ID Number (shown as "id: #1", "id: #2", etc.)
+- **Permanent identifier** that never changes, even when you sort or filter
+- Automatically assigned when you add a person
+- Used for `match` and `unmatch` commands
+
+### 📋 List Position (shown as "1.", "2.", "3.", etc.)
+- The person's current position in the displayed list
+- **Changes** when you sort, filter, or modify the list
+- Used for most commands: `edit`, `delete`, `sessionadd`, `sessiondelete`, `recommend`
+
+### ⚠️ Important Notes
+- After filtering or sorting, list positions change but ID numbers stay the same
+- Always use `list` to see current positions before running commands
+- ID numbers may have gaps if you've deleted people (e.g., #1, #3, #5)
+
 ### What Information You Will See for Each Person
 Each tutor or student entry shows:
 * **Name** - The person's full name
@@ -158,9 +177,12 @@ add r/student n/Sarah Tan hp/91234567 e/sarah.tan@email.com a/Blk 123 Ang Mo Kio
 > ⚠️ **Important Rules**
 > * Each piece of information needs its label (r/, n/, hp/, etc.)
 > * Don't put spaces around the / symbol 
-> * **hp/**: Phone numbers can only be 8 digits (Singapore phone numbers), only numbers are allowed (no spaces or special characters except between the 4th and 5th number)
+> * **hp/: Phone numbers must follow Singapore format:**
+>   * Exactly 8 digits (no more, no less)
 >   * 1st digit must be 9/8/6
->   * 2nd digit if 1st digit is 9 must be from 0-8 only
+>   * If 1st digit is 9, second digit must be 0-8 (not 9)
+>   * Optional space after 4th digit allowed
+>   * No other spaces or special characters allowed
 > * **sbj/**: Subject must be: english, mathematics, or science (lowercase is fine)
 > * **l/**: Level must be a single number from 1-6 for students 
 > * **p/**: Price can either be a single integer OR two numbers (min - max) with a dash: 20-30 (no spaces, no $). Accepts values from 1-200.
@@ -300,6 +322,32 @@ match 2 5
 ![match](images/match(1)UG.jpg)
 ![match](images/match(2)UG.jpg)
 
+### 📋 Matching Rules (Must ALL Be Met!)
+
+Before you can match a student and tutor, they must have compatible requirements:
+
+#### ✅ Rule 1: Same Subject
+Subject must be **identical** (case-insensitive).
+
+**Examples:**
+- Student: Mathematics ✓ Tutor: Mathematics → Can match ✅
+- Student: Mathematics ✗ Tutor: English → Cannot match ❌
+
+#### ✅ Rule 2: Compatible Levels
+The tutor's level range must **include** the student's level.
+
+**Examples:**
+- Student: Level 3 ✓ Tutor: Level 2-5 → Can match ✅ (3 is within 2-5)
+- Student: Level 1 ✗ Tutor: Level 3-6 → Cannot match ❌ (1 is not within 3-6)
+
+#### ✅ Rule 3: Overlapping Price Ranges
+Their price ranges must have **at least some overlap**.
+
+**Examples:**
+- Student: $20-30 ✓ Tutor: $25-40 → Can match ✅ (overlap: $25-30)
+- Student: $20-30 ✗ Tutor: $35-50 → Cannot match ❌ (no overlap)
+- Student: $30 ✓ Tutor: $20-40 → Can match ✅ ($30 is within $20-40)
+
 > ✨ **What happens when you match**
 > * Both the student and tutor will show each other's name under "Matched:"
 > * The order doesn't matter: match 2 5 and match 5 2 do the same thing 
@@ -328,9 +376,29 @@ unmatch 2
 ### Scheduling a Tutoring Session
 After matching a student and tutor, you'll want to schedule their weekly lesson.
 
-> ⚠️ **Important**
-> <br>A student and tutor must be matched BEFORE you can add a session!
-> You cannot schedule a session for unmatched people.
+### ⚠️ Session Requirements (MUST ALL Be Met!)
+
+Before adding a session, verify:
+
+#### ✅ Requirement 1: Already Matched
+- The student and tutor **must be matched first**
+- You cannot schedule a session for unmatched people
+- Use `match` command before `sessionadd`
+
+#### ✅ Requirement 2: Subject Must Match BOTH Persons
+- Session subject must be **identical** to both the student's and tutor's subject
+- Example: If Student studies Math and Tutor teaches Math → Session subject must be Math ✅
+- Example: If Student studies Math and Tutor teaches English → **Cannot add session** ❌
+
+#### ✅ Requirement 3: Price Must Be Within BOTH Price Ranges
+- Session price must fall within **both** persons' acceptable ranges
+- Example: Student ($20-30) and Tutor ($25-40) → Session price must be $25-30 ✅
+- Example: Student ($20-30) and Tutor ($35-50) → **No valid session price** ❌
+
+#### ✅ Requirement 4: Valid Duration
+- Duration must be between **00:01 and 24:00**
+- Cannot be 00:00 (zero duration)
+- Format: HH:mm (e.g., 01:30 for 1 hour 30 minutes)
 
 #### Adding a Session
 **Command structure:**
@@ -376,9 +444,46 @@ sessiondelete 1
 ### Editing Someone's Information
 When a tutor or student's details change (new phone number, moved house, changed rates), you can update their information.
 
+### ✏️ What You Can Edit
+
+| Field | Prefix | Example |
+|-------|--------|---------|
+| Name | `n/` | `n/Mary Wong` |
+| Phone | `hp/` | `hp/90189844` |
+| Email | `e/` | `e/newemail@example.com` |
+| Address | `a/` | `a/Blk 123 Ang Mo Kio Ave 5` |
+| Subject | `sbj/` | `sbj/Science` |
+| Level | `l/` | `l/3` (students), `l/2-5` (tutors) |
+| Price | `p/` | `p/35-50` |
+
+- You can update **one field** or **multiple fields** at once
+- You don't need to include fields you're not changing
+- At least one field must be provided
+
+### ❌ What You CANNOT Edit
+
+These fields are **permanent** and cannot be changed:
+
+1. **Role (tutor/student)**
+   - Once someone is added as a tutor, they stay a tutor forever
+   - Once someone is added as a student, they stay a student forever
+   - **Solution:** Delete the person and add them again with the correct role
+
+2. **Person ID**
+   - ID numbers never change
+   - They are permanent identifiers
+
+3. **Matched Status** (directly)
+   - You cannot edit who someone is matched with using `edit`
+   - **Solution:** Use `unmatch` then `match` commands instead
+
 > ⚠️ **Important**
 > <br>A student's level cannot be edited to have a range.
 > Only possible for tutors to have a range of levels.
+> If the person is currently matched, the edit **must maintain compatibility** with their match:
+   * ✅ Subject must still match
+   * ✅ Level must still be compatible
+   * ✅ Price ranges must still overlap
 
 **Command structure:**
 ```
@@ -438,12 +543,18 @@ You can organize your tutor or student lists by price or level to find what you 
 ```
 sort <tutors/students> <CRITERIA (see below)> OR sort reset
 ```
-**criteria**
-* p/ (sort by price only)
-* l/ (sort by level only)
-* p/ l/ (sort by price, then level)
-* l/ p/ (sort by level, then price)
-* sort reset (reset to full list)
+
+### Sorting Criteria
+
+| Criteria | What it does | Example |
+|----------|--------------|---------|
+| `p/` | Sort by price (lowest to highest) | `sort tutors p/` |
+| `l/` | Sort by level (lowest to highest) | `sort students l/` |
+| `p/ l/` | Sort by price first, then by level | `sort tutors p/ l/` |
+| `l/ p/` | Sort by level first, then by price | `sort students l/ p/` |
+| `reset` | Remove ALL sorting and filtering | `sort reset` |
+
+### Single Criteria Sorting
 
 **Sort tutors by price (lowest to highest):**
 ```
@@ -455,11 +566,20 @@ sort tutors p/
 ```
 sort students l/
 ```
+### Multiple Criteria Sorting
+
+You can sort by two criteria - the first is primary, second breaks ties.
+
 **Sort tutors by price, then by level:**
 ```
 sort tutors p/ l/
 ```
-**Reset sorting and show everyone:**
+
+**How it works:**
+1. First sorts everyone by price (low to high)
+2. If two tutors have the same price, sorts them by level
+
+3. **Reset sorting and show everyone:**
 ```
 sort reset
 ```
@@ -491,6 +611,46 @@ The statistics window will show you:
 > * If you make changes to the address book after executing `stats`, remember to close the `stats` window and run the `stats` command again in order to see the updated statistics.
 > * If there is an equal number of subjects, the latest subject added for that role will be displayed as the most common subject.
 
+### Clearing All Data
+ConnectEd provides a command to delete everything in your database.
+
+**Command Structure:**
+```
+clear
+```
+
+> 🚨 Important!
+> **This command will:**
+> * ❌ Delete ALL tutors permanently
+> * ❌ Delete ALL students permanently
+> * ❌ Delete ALL matches permanently 
+> * ❌ Delete ALL sessions permanently 
+> * ❌ **CANNOT BE UNDONE**
+
+### ✅ When to Use (Rarely!)
+
+**Use `clear` only when:**
+- You're starting completely fresh (new agency, new school year)
+- You're testing the system with dummy data
+- You've made a backup and intentionally want to wipe everything
+
+### Exiting ConnectEd
+When you're finished using ConnectEd, you can close the application using any of these methods:
+
+#### Using the Exit Command
+```
+exit
+```
+Press Enter, and the application will close immediately.
+
+#### Using the Window Close Button
+Click the red X button!
+
+> ⛔ **What happens when you exit?**
+> ✅ Your data is automatically saved!
+> * All changes are saved instantly as you work 
+> * You don't need to manually save before exiting 
+> * Your data remains in the `ConnectEd.json` file
 --------------------------------------------------------------------------------------------------------------------
 
 ## Complete Command Reference

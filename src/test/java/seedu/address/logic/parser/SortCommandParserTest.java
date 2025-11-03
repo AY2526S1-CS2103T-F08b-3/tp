@@ -80,10 +80,10 @@ public class SortCommandParserTest {
     public void parse_resetWithExtraArgs_throwsParseException() {
         // reset should not have additional arguments
         assertParseFailure(parser, "reset p/",
-                "Command must be: sort reset!\n");
+                "Command must be: sort reset\n");
 
         assertParseFailure(parser, "reset tutors",
-                "Command must be: sort reset!\n");
+                "Command must be: sort reset\n");
     }
 
     @Test
@@ -107,31 +107,31 @@ public class SortCommandParserTest {
     @Test
     public void parse_invalidRole_throwsParseException() {
         assertParseFailure(parser, "teacher p/",
-                "role given must be tutors/students/reset!\n");
+                "Role given must be tutors/students/reset.\n");
 
         assertParseFailure(parser, "tutor p/",
-                "role given must be tutors/students/reset!\n");
+                "Role given must be tutors/students/reset.\n");
 
         assertParseFailure(parser, "student l/",
-                "role given must be tutors/students/reset!\n");
+                "Role given must be tutors/students/reset.\n");
 
         assertParseFailure(parser, "all p/",
-                "role given must be tutors/students/reset!\n");
+                "Role given must be tutors/students/reset.\n");
     }
 
     @Test
     public void parse_invalidField_throwsParseException() {
         assertParseFailure(parser, "tutors n/",
-                "n/ is not p/ or l/!\n");
+                "Invalid parameter: n/ is not a valid parameter for this command\n");
 
         assertParseFailure(parser, "students e/",
-                "e/ is not p/ or l/!\n");
+                "Invalid parameter: e/ is not a valid parameter for this command\n");
 
         assertParseFailure(parser, "tutors price",
-                "price is not p/ or l/!\n");
+                "Invalid parameter: price is not a valid parameter for this command\n");
 
         assertParseFailure(parser, "students level",
-                "level is not p/ or l/!\n");
+                "Invalid parameter: level is not a valid parameter for this command\n");
     }
 
     @Test
@@ -152,13 +152,13 @@ public class SortCommandParserTest {
     @Test
     public void parse_mixedValidAndInvalidFields_throwsParseException() {
         assertParseFailure(parser, "tutors p/ n/",
-                "n/ is not p/ or l/!\n");
+                "Invalid parameter: n/ is not a valid parameter for this command\n");
 
         assertParseFailure(parser, "students l/ e/",
-                "e/ is not p/ or l/!\n");
+                "Invalid parameter: e/ is not a valid parameter for this command\n");
 
         assertParseFailure(parser, "tutors n/ p/",
-                "n/ is not p/ or l/!\n");
+                "Invalid parameter: n/ is not a valid parameter for this command\n");
     }
 
     @Test
@@ -175,12 +175,12 @@ public class SortCommandParserTest {
     public void parse_caseInsensitiveRole_throwsParseException() {
         // roles should be case-sensitive
         assertParseFailure(parser, "Tutors p/",
-                "role given must be tutors/students/reset!\n");
+                "Role given must be tutors/students/reset.\n");
 
         assertParseFailure(parser, "STUDENTS l/",
-                "role given must be tutors/students/reset!\n");
+                "Role given must be tutors/students/reset.\n");
 
         assertParseFailure(parser, "Reset",
-                "role given must be tutors/students/reset!\n");
+                "Role given must be tutors/students/reset.\n");
     }
 }

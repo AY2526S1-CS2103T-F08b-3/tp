@@ -1010,7 +1010,7 @@ testers are expected to do more *exploratory* testing.
     2. Test case: `find student`<br>
         Expected: No student is listed. Error details shown in the status message. Status bar remains the same.
 
-    3. Other incorrect add commands to try: `find`, `find student sbj/ eng`<br>
+    3. Other incorrect find commands to try: `find`, `find student sbj/ eng`<br>
         Expected: Similar to previous.
 
 ### Matching a student and tutor

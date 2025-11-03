@@ -823,7 +823,7 @@ Use case ends.
 **Extensions**
 
 * 2a. Wrong format.
-  * 2a1. ConnectEd shows error message “Invalid command format! ”.
+  * 2a1. ConnectEd shows error message “Invalid command format!”.
 
     Use case ends.
 
@@ -845,8 +845,9 @@ Use case ends.
 **Preconditions: At least one tutor and one student exist in the database.**
 
 **Guarantees: On success, the user receives a list of recommended tutors for a student, or students for a tutor, based on subject, level, and price compatibility.**
+
 **MSS**
-1. User requests recommendations for a person using `recommend <INDEX> [subject] [level] [price]` (e.g., `recommend 1 /s /l`).
+1. User requests recommendations for a person using `recommend <INDEX> [subject] [level] [price]` (e.g., `recommend 1 sbj/ l/`).
 2. ConnectEd validates the index and checks that it refers to a valid person in the current list.
 3. ConnectEd retrieves the profile of the specified student/tutor.
 4. ConnectEd determines the role (student or tutor) and applies the relevant filters:
@@ -861,7 +862,12 @@ Use case ends.
 
 * 2a. Index is invalid/out of range/not visible.
     * 2a1. ConnectEd shows "The person index provided is invalid"
-    Use case ends.
+
+      Use case ends.
+* 4a. There are no students/tutors that match the student.
+    * 4a1. ConnectEd shows "No students/tutors match your requirements.".
+
+      Use case ends.
 
 ---
 

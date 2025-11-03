@@ -165,12 +165,14 @@ When a new student registers with your agency, you need to add them to ConnectEd
 
 **Command Structure:**
 ```
-add r/student n/<NAME> hp/<PHONE> e/<EMAIL> a/<ADDRESS> sbj/<SUBJECT> l/<LEVEL> p/<PRICE/ PRICE RANGE (MIN-MAX)>
+add r/student n/<NAME> hp/<PHONE> e/<EMAIL> a/<ADDRESS> 
+sbj/<SUBJECT> l/<LEVEL> p/<PRICE/ PRICE RANGE (MIN-MAX)>
 ```
 **Real Example:**
 <br>Let's say Sarah Tan registers. She's a Primary 3 student who needs help with Mathematics, budget $20-30/hour:
 ```
-add r/student n/Sarah Tan hp/91234567 e/sarah.tan@email.com a/Blk 123 Ang Mo Kio Ave 3, #05-10 sbj/mathematics l/3 p/20-30
+add r/student n/Sarah Tan hp/91234567 e/sarah.tan@email.com 
+a/Blk 123 Ang Mo Kio Ave 3, #05-10 sbj/mathematics l/3 p/20-30
 ```
 ![add](images/addStudentCommandUG.jpg)
 

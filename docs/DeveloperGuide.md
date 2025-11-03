@@ -419,7 +419,7 @@ Step 2. The user executes `recommend 2 sbj/` command to find tutors/students mat
 
 * **Alternative 1 (current choice):** Display appropriate message, keep filter applied.
   * Pros: User understands why list is empty. Clear feedback on search outcome.
-  * Cons: User must execute `list tutors/students` to see full list again.
+  * Cons: User must execute `list`, `list tutors` or `list students` to see full list again.
 
 * **Alternative 2:** Automatically reset to full list when no results found.
   * Pros: User always sees something in the list.
@@ -555,13 +555,14 @@ The statistics feature is implemented via `StatsCommand` and `StatsCommandParser
 #### Key Components
 - `StatsCommand#execute()` — Retrieves aggregated statistics from the Model and formats them for display.
 
-- `StatsCommandParser#parse()` — Parses optional filters (e.g., role/ tutors or role/ students) and constructs a `StatsCommand`.
+- `StatsCommandParser#parse()` — Validates the correctness of the command and constructs a `StatsCommand`.
 
-- `Model#getStatistics(Optional<Role> role) `— Computes and returns a Statistics object containing (at minimum):
+- `Model#getStatistics(Optional<Role> role) `— Computes and returns a Statistics object containing:
 
-  * Total tutors and students 
+  * Total tutors and students
+  * Average prices
+  * Most common subject
   * Subject distribution
-  * Average hourly price (tutors) / average budget (students)
   * Number of matched pairs
 
 
@@ -661,7 +662,7 @@ Use case ends.
 
 ---
 
-**Use case: List tutors/students, or both**
+**Use case: List tutors, students, or both**
 
 **MSS**
 

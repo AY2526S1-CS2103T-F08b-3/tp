@@ -18,6 +18,7 @@ Before you can use ConnectEd, you need to install it on your computer. Follow th
 2. Type `cmd` and press Enter. A black window will appear - this is the Command Prompt.
 3. In the black window, type exactly: `java -version`.
 4. Press Enter.
+
 #### Mac Users
 1. Type command + space bar to activate Spotlight Search.
 2. Search for `Terminal` and click on it. A black window should appear - this is the Terminal.
@@ -156,7 +157,9 @@ add r/student n/Sarah Tan hp/91234567 e/sarah.tan@email.com a/Blk 123 Ang Mo Kio
 > ⚠️ **Important Rules**
 > * Each piece of information needs its label (r/, n/, hp/, etc.)
 > * Don't put spaces around the / symbol 
-> * **hp/**: Phone numbers can only be 8 digits (Singapore phone numbers), only numbers are allowed (no spaces or special characters)
+> * **hp/**: Phone numbers can only be 8 digits (Singapore phone numbers), only numbers are allowed (no spaces or special characters except between the 4th and 5th number)
+>   * 1st digit must be 9/8/6
+>   * 2nd digit if 1st digit is 9 must be from 0-8 only
 > * **sbj/**: Subject must be: english, mathematics, or science (lowercase is fine)
 > * **l/**: Level must be a single number from 1-6 for students 
 > * **p/**: Price can either be a single integer OR two numbers (min - max) with a dash: 20-30 (no spaces, no $). Accepts values from 1-200.
@@ -164,7 +167,8 @@ add r/student n/Sarah Tan hp/91234567 e/sarah.tan@email.com a/Blk 123 Ang Mo Kio
 
 > 📢 **Duplicate Entries**
 > <br> If 2 entries have the same:
-> * Phone number 
+> * Phone number
+> OR
 > * Email
 > 
 > They will be counted as the same person!
@@ -172,6 +176,7 @@ add r/student n/Sarah Tan hp/91234567 e/sarah.tan@email.com a/Blk 123 Ang Mo Kio
 ### Adding a New Tutor 
 Adding a tutor is almost the same as adding a student, with one difference: **tutors can teach multiple grade levels**.
 <br> Tutors can only teach one subject. 
+
 **Command Structure:**
 ```
 add r/tutor n/<NAME> hp/<PHONE> e/<EMAIL> a/<ADDRESS> sbj/<SUBJECT> l/<LEVEL/ LEVEL RANGE (MIN-MAX)> p/<PRICE/ PRICE RANGE( MIN-MAX)>
@@ -246,7 +251,8 @@ This will show all tutors who:
 ![recommend](images/recommend(2)UG.jpg)
 
 **Filtering Recommendations:**
-You can also ask for recommendations based on just one or two criteria:
+<br>You can also ask for recommendations based on just one or two criteria:
+
 **Recommend based on subject only:**
 ```
 recommend 1 sbj/
@@ -292,7 +298,7 @@ If a tutoring arrangement ends, you can unmatch them:
 
 **Command Structure:**
 ```
-match <id>
+unmatch <id>
 ```
 * ID can be either the student's or the tutor's ID
 

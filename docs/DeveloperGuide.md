@@ -243,7 +243,7 @@ These operations are exposed in the `Logic` and `Model` components as `LogicMana
 Given below is an example usage scenario and how the find mechanism behaves at each step.
 
 
-##### Step 1. User executes the `find` command
+Step 1. User executes the `find` command
 
 The user enters the command below in the command box: eg `"find tutors sbj/Mathematics"`
 
@@ -253,7 +253,7 @@ The `AddressBookParser` identifies the keyword `find` and delegates parsing to t
 
 
 
-##### Step 2. `FindCommandParser` processes the arguments
+Step 2. `FindCommandParser` processes the arguments
 
 The `FindCommandParser` performs the following actions:
 
@@ -267,32 +267,32 @@ The `FindCommandParser` performs the following actions:
 
 After successful parsing, the parser returns a new `FindCommand` containing this composite predicate.
 
-##### Step 3. `FindCommand` execution
+Step 3. `FindCommand` execution
 
 When the `LogicManager` calls `FindCommand#execute(Model model)`,  
 the command filters the current person list according to the predicate:
 
-```java
-@Override
-public CommandResult execute(Model model) {
-    requireNonNull(model);
-    model.updateFilteredPersonList(predicate);
-    return new CommandResult(
-            String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
-}
-```
-##### Step 4. Model updates the filtered list
+Step 4. Model updates the filtered list
 
 The Model receives the request through `updateFilteredPersonList(predicate)` and applies the predicate to its stored list of persons.
 The updated filtered list is automatically reflected in the UI panel.
 
-##### Step 5. Command execution summary
+Step 5. Command execution summary
 The following sequence diagram shows how a find operation goes through the Logic component:
 ![FindSequenceDiagram](images/FindSequenceDiagram2-Logic.png)
 :information_source: **Note:** The lifeline for `FindCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
+
+#### Error Handling
+The find command handles several error cases:
+1. **Invalid role:** Returns parse exception if role(optional) is not "tutors" or "students". 
+2. **Missing field:** Returns parse exception if there is no prefix that is "n/", "sbj/", "p/" or "l/".
+3. **Missing parameters:** Returns parse exception if fields behind valid prefixes are empty.
+4. **Empty list:** Returns appropriate message if the address book is empty or no tutors/students found.
+5. **No matches** Returns appropriate message if no matches are found.
+
 #### Design considerations:
 
-##### Aspect: How filtering evolved from AB3
+Aspect: How filtering evolved from AB3
 
 * **Alternative 1 (previous AB3 implementation)**: Single-prefix search using only `NameContainsKeywordsPredicate`.
     * **Pros:** Simple and fast, performs a basic name-based keyword search.
@@ -302,14 +302,14 @@ The following sequence diagram shows how a find operation goes through the Logic
     * **Pros:** Far more flexible and supports complex searches like `find tutors sbj/Mathematics l/4 p/10-30`. Uses modular predicates for each attribute.
     * **Cons:** Slightly more complex parser and predicate logic, higher validation overhead.
 
-##### Aspect: How logical conditions are applied
+Aspect: How logical conditions are applied
 
 * **Alternative 1 (previous AB3 implementation)**: Used only **OR** matching across names.
     * **Pros:** Simple and intuitive for name-based search.
     * **Cons:** Not suitable for combining multiple filters, e.g., searching by subject *and* level simultaneously.
 
 * **Alternative 2 (current choice)**: Applies **AND logic** between different prefixes and **OR logic** within a single prefix.
-    * **Pros:** Allows precise, realistic filtering (e.g., tutors teaching Math **and** Level 4). Matches user expectations.
+    * **Pros:** Allows precise, realistic filtering (e.g., tutors teaching Mathematics **and** Level 4). Matches user expectations.
     * **Cons:** Slightly more complex to implement due to multiple predicate combinations.
 
 ---
@@ -417,12 +417,12 @@ Step 2. The user executes `recommend 2 sbj/` command to find tutors/students mat
 
 **Aspect: How to handle empty results:**
 
-* **Alternative 1 (current choice):** Display appropriate message, keep filter applied.
+* **Alternative 1:** Display appropriate message, keep filter applied.
   * Pros: User understands why list is empty. Clear feedback on search outcome.
   * Cons: User must execute `list tutors/students` to see full list again.
 
-* **Alternative 2:** Automatically reset to full list when no results found.
-  * Pros: User always sees something in the list.
+* **Alternative 2 (current choice):** Automatically reset to full list when no results found.
+  * Pros: User always sees something in the list and gets corresponding result message.
   * Cons: Confusing user experience - unclear whether search executed successfully or was ignored.
 
 ### Sort Feature
@@ -451,10 +451,11 @@ Given below is an example usage scenario and how the sort mechanism behaves at e
 **Step 2.** The user executes `list tutors` to view only tutors. The `ListCommand` calls `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_TUTORS)` to filter the displayed list to show only tutors.
 
 **Step 3.** The user notices that tutors are not organized by price and wants to find affordable options. The user executes `sort tutors p/` command to sort tutors by their hourly rates. The `SortCommandParser` validates the input (checking that "tutors" is a valid role and "p/" is a valid field) and creates a `SortCommand` with role "tutors" and sort criteria ["p/"]. The command executes and performs the following:
-    1. Calls `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_TUTORS)` to ensure only tutors are displayed
-    2. Calls `Model#sortPersons(["p/"])` which creates a comparator for price
-    3. The comparator sorts tutors in ascending order by their minimum price value
-    4. Returns a success message: "Sorted all tutors by price"
+    
+1. Calls `Model#updateFilteredPersonList(PREDICATE_SHOW_ALL_TUTORS)` to ensure only tutors are displayed
+2. Calls `Model#sortPersons(["p/"])` which creates a comparator for price
+3. The comparator sorts tutors in ascending order by their minimum price value
+4. Returns a success message: "Sorted all tutors by price"
 The tutors are now displayed sorted by price from lowest to highest.
 <div markdown="span" class="alert alert-info">:information_source: **Note:** If a sort command fails validation (e.g., invalid role like "tutor" instead of "tutors", invalid field like "x/", or duplicate fields like "p/ p/"), the `SortCommandParser` will throw a `ParseException`, and the command will not execute. The user will see an appropriate error message.
 </div>
@@ -629,7 +630,7 @@ Priorities: High (must have)
 
 **MSS**
 
-1. User requests to add a person by providing role (tutor/student), name, phone, address, subject, level, and price.
+1. User requests to add a person by providing role (tutor/student), name, phone, email, address, subject, level, and price.
 2. ConnectEd validates all fields.
 3. ConnectEd adds the new person to the database.
 4. ConnectEd shows a success message and the updated list.
@@ -643,12 +644,12 @@ Use case ends.
 
     Use case resumes at step 1 with corrected input.
 
-* 2b. A duplicate person (same role, same name, same phone) exists.
+* 2b. A duplicate person (same phone, same email) exists.
   ConnectEd rejects the add and shows a duplicate warning.
 
     Use case ends.
 
-* 2c. Invalid data format (Subject, Price, Level).
+* 2c. Invalid data format (Phone, Email, Subject, Price, Level).
   ConnectEd rejects the add and shows correct data format to be inputted.
 
   Use case resumes at step 1 with corrected input.
@@ -700,26 +701,29 @@ Use case ends.
 **Extensions**
 
 * 2a. No valid prefixes or empty values (e.g. `n/ `, `sbj/ `).
-    * 2a1. ConnectEd shows corresponding error message.  
-      Use case ends.
+    * 2a1. ConnectEd shows corresponding error message. 
+            
+        Use case ends.
 
 * 2b. Invalid role.
-    * 2b1. ConnectEd shows corresponding error message.
-  
-      Use case ends
+    * 2b1. ConnectEd shows corresponding error message. 
+     
+        Use case ends. 
 
 * 2c. Invalid or malformed values (e.g. `p/250`, `l/7-2`, invalid subject).
-    * 2c1. ConnectEd shows the corresponding validation message.  
-      Use case ends.
+    * 2c1. ConnectEd shows the corresponding validation message. 
+     
+        Use case ends.
 
 * 3a. No persons match the filters.
-    * 3a1. ConnectEd shows "No persons match your search."
-     Use case ends.
+    * 3a1. ConnectEd shows "No persons match your search." 
+     
+        Use case ends.
   
 * 3b. Empty list
   * 3b1. ConnectEd shows "List is empty, there is no persons to find."
-
-    Use case ends.
+   
+      Use case ends.
 
 ---
 

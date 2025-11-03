@@ -10,11 +10,9 @@ title: Developer Guide
 ## **Acknowledgements**
 
 * This project is adapted from the original AddressBook Level 3 (AB3)
-  project created by the SE-EDU initiative
-  .
+  project created by the SE-EDU initiative.
   We would like to acknowledge and thank the following sources and contributors whose work formed the foundation of this project.
-* Documentation adapted from SE-EDU’s User Guide
-  and Developer Guide
+* Documentation adapted from SE-EDU’s User Guide and Developer Guide
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -298,7 +296,7 @@ Aspect: How filtering evolved from AB3
     * **Pros:** Simple and fast, performs a basic name-based keyword search.
     * **Cons:** Limited and cannot filter by subjects, levels, prices, or distinguish tutors from students.
 
-* **Alternative 2 (current choice)**: Enhanced `FindCommand` supporting multiple prefixes (`n/`, `s/`, `l/`, `p/`) and optional roles (`tutors`, `students`).
+* **Alternative 2 (current choice)**: Enhanced `FindCommand` supporting multiple prefixes (`n/`, `sbj/`, `l/`, `p/`) and optional roles (`tutors`, `students`).
     * **Pros:** Far more flexible and supports complex searches like `find tutors sbj/Mathematics l/4 p/10-30`. Uses modular predicates for each attribute.
     * **Cons:** Slightly more complex parser and predicate logic, higher validation overhead.
 
@@ -606,22 +604,22 @@ Priorities: High (must have)
 `* * *` Medium (nice to have) 
 `* *` Low (optional) `*`
 
-| Priority | As a … | I want to …                                                           | So that I can …                                                                         |
-|---------|---------|-----------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| `* * *` | tuition coordinator | **add** a *student* with name, phone, address, subject, level, and price | record student requests systematically                                                  |
-| `* * *` | tuition coordinator | **add** a *tutor* with name, phone, address, subject, level(s), and price | maintain an updated list of available tutors                                            |
-| `* * *` | tuition coordinator | **list** all *tutors* or *students*                                   | view one role category at a time for clarity                                            |
-| `* * *` | tuition coordinator | **find** tutors/students by **name, subject, level, or price**        | identify suitable tutors or students efficiently                                        |
-| `* * *` | tuition coordinator | **match** a tutor with a student                                      | confirm successful tuition pairings                                                     |
-| `* * *` | tuition coordinator | **unmatch** a tutor or student                                        | correct pairing mistakes or cancellations quickly                                       |
-| `* * *` | tuition coordinator | **delete** a tutor or student entry                                   | remove outdated records                                                                 |
-| `* * *` | tuition coordinator | **sort** tutors or students by **price** or **level**                 | compare affordability and experience easily                                             |
-| `* *` | tuition coordinator | **add a session** to a tutor and student                              | see what are the details of the arranged tuition session between student and tutor      |
-| `* *` | tuition coordinator | **recommend** tutors to a student, or students to a tutor             | receive automated personal suggestions based on subject, level, and price compatibility |
-| `* *` | tuition coordinator | view **clear error messages** for invalid commands                    | fix mistakes easily and continue working                                                |
-| `* *` | tuition coordinator | prevent adding **duplicate entries**                                  | ensure data remains clean and accurate                                                  |
-| `*` | tuition coordinator | **edit** tutor or student details                                     | update information without re-adding                                                    |
-| `*` | tuition coordinator | **reset** the current filter view                                     | return to the complete tutor/student list                                               |
+| Priority | As a … | I want to …                                                                      | So that I can …                                                                         |
+|---------|---------|----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| `* * *` | tuition coordinator | **add** a *student* with name, phone, email, address, subject, level, and price  | record student requests systematically                                                  |
+| `* * *` | tuition coordinator | **add** a *tutor* with name, phone, email, address, subject, level(s), and price | maintain an updated list of available tutors                                            |
+| `* * *` | tuition coordinator | **list** all *tutors* or *students*                                              | view one role category at a time for clarity                                            |
+| `* * *` | tuition coordinator | **find** tutors/students by **name, subject, level, or price**                   | identify suitable tutors or students efficiently                                        |
+| `* * *` | tuition coordinator | **match** a tutor with a student                                                 | confirm successful tuition pairings                                                     |
+| `* * *` | tuition coordinator | **unmatch** a tutor or student                                                   | correct pairing mistakes or cancellations quickly                                       |
+| `* * *` | tuition coordinator | **delete** a tutor or student entry                                              | remove outdated records                                                                 |
+| `* * *` | tuition coordinator | **sort** tutors or students by **price** or **level**                            | compare affordability and experience easily                                             |
+| `* *` | tuition coordinator | **add a session** to a tutor and student                                         | see what are the details of the arranged tuition session between student and tutor      |
+| `* *` | tuition coordinator | **recommend** tutors to a student, or students to a tutor                        | receive automated personal suggestions based on subject, level, and price compatibility |
+| `* *` | tuition coordinator | view **clear error messages** for invalid commands                               | fix mistakes easily and continue working                                                |
+| `* *` | tuition coordinator | prevent adding **duplicate entries**                                             | ensure data remains clean and accurate                                                  |
+| `*` | tuition coordinator | **edit** tutor or student details                                                | update information without re-adding                                                    |
+| `*` | tuition coordinator | **reset** the current filter view                                                | return to the complete tutor/student list                                               |
 
 ### Use cases
 
@@ -824,7 +822,7 @@ Use case ends.
 **Extensions**
 
 * 2a. Wrong format.
-  * 2a1. ConnectEd shows error message “Invalid command format! ”.
+  * 2a1. ConnectEd shows error message “Invalid command format!”.
 
     Use case ends.
 
@@ -846,8 +844,9 @@ Use case ends.
 **Preconditions: At least one tutor and one student exist in the database.**
 
 **Guarantees: On success, the user receives a list of recommended tutors for a student, or students for a tutor, based on subject, level, and price compatibility.**
+
 **MSS**
-1. User requests recommendations for a person using `recommend <INDEX> [subject] [level] [price]` (e.g., `recommend 1 /s /l`).
+1. User requests recommendations for a person using `recommend <INDEX> [subject] [level] [price]` (e.g., `recommend 1 sbj/ l/`).
 2. ConnectEd validates the index and checks that it refers to a valid person in the current list.
 3. ConnectEd retrieves the profile of the specified student/tutor.
 4. ConnectEd determines the role (student or tutor) and applies the relevant filters:
@@ -862,7 +861,12 @@ Use case ends.
 
 * 2a. Index is invalid/out of range/not visible.
     * 2a1. ConnectEd shows "The person index provided is invalid"
-    Use case ends.
+
+      Use case ends.
+* 4a. There are no students/tutors that match the student.
+    * 4a1. ConnectEd shows "No students/tutors match your requirements.".
+
+      Use case ends.
 
 ---
 

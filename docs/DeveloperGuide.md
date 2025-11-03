@@ -10,11 +10,9 @@ title: Developer Guide
 ## **Acknowledgements**
 
 * This project is adapted from the original AddressBook Level 3 (AB3)
-  project created by the SE-EDU initiative
-  .
+  project created by the SE-EDU initiative.
   We would like to acknowledge and thank the following sources and contributors whose work formed the foundation of this project.
-* Documentation adapted from SE-EDU’s User Guide
-  and Developer Guide
+* Documentation adapted from SE-EDU’s User Guide and Developer Guide
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -298,7 +296,7 @@ Aspect: How filtering evolved from AB3
     * **Pros:** Simple and fast, performs a basic name-based keyword search.
     * **Cons:** Limited and cannot filter by subjects, levels, prices, or distinguish tutors from students.
 
-* **Alternative 2 (current choice)**: Enhanced `FindCommand` supporting multiple prefixes (`n/`, `s/`, `l/`, `p/`) and optional roles (`tutors`, `students`).
+* **Alternative 2 (current choice)**: Enhanced `FindCommand` supporting multiple prefixes (`n/`, `sbj/`, `l/`, `p/`) and optional roles (`tutors`, `students`).
     * **Pros:** Far more flexible and supports complex searches like `find tutors sbj/Mathematics l/4 p/10-30`. Uses modular predicates for each attribute.
     * **Cons:** Slightly more complex parser and predicate logic, higher validation overhead.
 
@@ -419,7 +417,7 @@ Step 2. The user executes `recommend 2 sbj/` command to find tutors/students mat
 
 * **Alternative 1:** Display appropriate message, keep filter applied.
   * Pros: User understands why list is empty. Clear feedback on search outcome.
-  * Cons: User must execute `list tutors/students` to see full list again.
+  * Cons: User must execute `list` to see full list again.
 
 * **Alternative 2 (current choice):** Automatically reset to full list when no results found.
   * Pros: User always sees something in the list and gets corresponding result message.
@@ -561,8 +559,9 @@ The statistics feature is implemented via `StatsCommand` and `StatsCommandParser
 - `Model#getStatistics(Optional<Role> role) `— Computes and returns a Statistics object containing (at minimum):
 
   * Total tutors and students 
-  * Subject distribution
   * Average hourly price (tutors) / average budget (students)
+  * Most popular subjects
+  * Subject distribution
   * Number of matched pairs
 
 
@@ -605,22 +604,22 @@ Priorities: High (must have)
 `* * *` Medium (nice to have) 
 `* *` Low (optional) `*`
 
-| Priority | As a … | I want to …                                                           | So that I can …                                                                         |
-|---------|---------|-----------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| `* * *` | tuition coordinator | **add** a *student* with name, phone, address, subject, level, and price | record student requests systematically                                                  |
-| `* * *` | tuition coordinator | **add** a *tutor* with name, phone, address, subject, level(s), and price | maintain an updated list of available tutors                                            |
-| `* * *` | tuition coordinator | **list** all *tutors* or *students*                                   | view one role category at a time for clarity                                            |
-| `* * *` | tuition coordinator | **find** tutors/students by **name, subject, level, or price**        | identify suitable tutors or students efficiently                                        |
-| `* * *` | tuition coordinator | **match** a tutor with a student                                      | confirm successful tuition pairings                                                     |
-| `* * *` | tuition coordinator | **unmatch** a tutor or student                                        | correct pairing mistakes or cancellations quickly                                       |
-| `* * *` | tuition coordinator | **delete** a tutor or student entry                                   | remove outdated records                                                                 |
-| `* * *` | tuition coordinator | **sort** tutors or students by **price** or **level**                 | compare affordability and experience easily                                             |
-| `* *` | tuition coordinator | **add a session** to a tutor and student                              | see what are the details of the arranged tuition session between student and tutor      |
-| `* *` | tuition coordinator | **recommend** tutors to a student, or students to a tutor             | receive automated personal suggestions based on subject, level, and price compatibility |
-| `* *` | tuition coordinator | view **clear error messages** for invalid commands                    | fix mistakes easily and continue working                                                |
-| `* *` | tuition coordinator | prevent adding **duplicate entries**                                  | ensure data remains clean and accurate                                                  |
-| `*` | tuition coordinator | **edit** tutor or student details                                     | update information without re-adding                                                    |
-| `*` | tuition coordinator | **reset** the current filter view                                     | return to the complete tutor/student list                                               |
+| Priority | As a … | I want to …                                                                      | So that I can …                                                                         |
+|---------|---------|----------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| `* * *` | tuition coordinator | **add** a *student* with name, phone, email, address, subject, level, and price  | record student requests systematically                                                  |
+| `* * *` | tuition coordinator | **add** a *tutor* with name, phone, email, address, subject, level(s), and price | maintain an updated list of available tutors                                            |
+| `* * *` | tuition coordinator | **list** all *tutors* or *students*                                              | view one role category at a time for clarity                                            |
+| `* * *` | tuition coordinator | **find** tutors/students by **name, subject, level, or price**                   | identify suitable tutors or students efficiently                                        |
+| `* * *` | tuition coordinator | **match** a tutor with a student                                                 | confirm successful tuition pairings                                                     |
+| `* * *` | tuition coordinator | **unmatch** a tutor or student                                                   | correct pairing mistakes or cancellations quickly                                       |
+| `* * *` | tuition coordinator | **delete** a tutor or student entry                                              | remove outdated records                                                                 |
+| `* * *` | tuition coordinator | **sort** tutors or students by **price** or **level**                            | compare affordability and experience easily                                             |
+| `* *` | tuition coordinator | **add a session** to a tutor and student                                         | see what are the details of the arranged tuition session between student and tutor      |
+| `* *` | tuition coordinator | **recommend** tutors to a student, or students to a tutor                        | receive automated personal suggestions based on subject, level, and price compatibility |
+| `* *` | tuition coordinator | view **clear error messages** for invalid commands                               | fix mistakes easily and continue working                                                |
+| `* *` | tuition coordinator | prevent adding **duplicate entries**                                             | ensure data remains clean and accurate                                                  |
+| `*` | tuition coordinator | **edit** tutor or student details                                                | update information without re-adding                                                    |
+| `*` | tuition coordinator | **reset** the current filter view                                                | return to the complete tutor/student list                                               |
 
 ### Use cases
 

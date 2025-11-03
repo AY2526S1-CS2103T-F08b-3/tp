@@ -4,7 +4,6 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LEVEL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 
 import java.util.ArrayList;
@@ -35,8 +34,7 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         validateNotEmpty(args);
         ArgumentMultimap argMultimap = tokenizeArguments(args);
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ROLE, PREFIX_NAME,
-                PREFIX_SUBJECT, PREFIX_LEVEL, PREFIX_PRICE);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_SUBJECT, PREFIX_LEVEL, PREFIX_PRICE);
         Predicate<Person> combinedPredicate = p -> true;
         combinedPredicate = addNamePredicate(argMultimap, combinedPredicate);
         combinedPredicate = addSubjectPredicate(argMultimap, combinedPredicate);
@@ -69,8 +67,8 @@ public class FindCommandParser implements Parser<FindCommand> {
             String parsedRole = ParserUtil.parseRole(preamble);
             return combinedPredicate.and(new RolePredicate(parsedRole));
         } catch (ParseException e) {
-            throw new ParseException(
-                    "Invalid role. Please key in either students or tutors.\n"
+            throw new ParseException(String.format("%s is not a valid role. \n", preamble)
+                    + "Please key in either students or tutors.\n"
                             + String.format(FindCommand.MESSAGE_USAGE));
         }
     }

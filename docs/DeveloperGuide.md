@@ -13,6 +13,7 @@ title: Developer Guide
   project created by the SE-EDU initiative.
   We would like to acknowledge and thank the following sources and contributors whose work formed the foundation of this project.
 * Documentation adapted from SE-EDU’s User Guide and Developer Guide
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Setting up, getting started**
@@ -162,12 +163,6 @@ It serves as a core navigation command that resets the filtered list view based 
     * The role is one of `"tutors"`, `"students"`. The role is case-insensitive.
     * If no argument is provided, it defaults to show all the persons.
     * If an invalid argument is provided, a `ParseException` is thrown with a usage message:
-      
-```
-  Invalid command format!
-  list: Lists all tutors or students and displays them as a list with index numbers.
-  Parameter: 'tutors' / 'students'
-  ```
 
 2. **Filtering:**  
    Before listing, the command updates the filtered person list using the appropriate predicate:
@@ -936,7 +931,7 @@ Use case ends.
 #### Definitions
 * **Tutor / Student** — Person types managed by the app (case-insensitive tokens `tutor` / `student`).
 * **Subject** — One of `{english, mathematics, science}`.
-* **Level** — Integer 1–6 (students: single level; tutors: single level or range `x-y`, 1≤x≤y≤6).
+* **Level** — Integer 1–6 (students: single level; tutors: single level or range `x-y`, 1≤x≤y≤6). "Primary" and "Level" are used interchangeably in this guide.
 * **Price range** — `min-max` dollars/hour, integers 1–200, `min ≤ max`, no internal spaces.
 * **Typed index** — `<INDEX>` (tutor) or `<INDEX>` (student), where `INDEX` is 1-based on the **current** list view.
 * **ID** - Unique ID given to each person upon adding them into the database.

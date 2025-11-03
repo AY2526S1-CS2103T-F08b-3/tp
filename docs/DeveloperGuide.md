@@ -951,10 +951,10 @@ testers are expected to do more *exploratory* testing.
 
 1. Initial launch
 
-   1. Download the [CS2103T-F08b-3][ConnectEd].jar file and copy into an empty folder
+   1. Download the ConnectEd.jar file and copy into an empty folder
 
    2. `cd` into the folder you put the jar file in and use the
-      `java -jar [CS2103T-F08b-3][ConnectEd].jar` command OR double-click the jar file to run the application 
+      `java -jar ConnectEd.jar` command OR double-click the jar file to run the application 
    
      Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 

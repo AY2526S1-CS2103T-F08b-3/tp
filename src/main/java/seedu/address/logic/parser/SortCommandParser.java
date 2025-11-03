@@ -38,14 +38,14 @@ public class SortCommandParser implements Parser<SortCommand> {
         String role = splitArgs[0];
         if (role.equals("reset")) {
             if (splitArgs.length != 1) {
-                throw new ParseException("Command must be: sort reset!\n");
+                throw new ParseException("Command must be: sort reset\n");
             }
             return new SortCommand(role);
         }
 
         if (!role.equals("tutors") && !role.equals("students")) {
             throw new ParseException(
-                    String.format("role given must be tutors/students/reset!\n", SortCommand.MESSAGE_USAGE));
+                    String.format("Role given must be tutors/students/reset.\n", SortCommand.MESSAGE_USAGE));
         }
 
         List<String> sortCriteria = new ArrayList<>();
@@ -58,9 +58,10 @@ public class SortCommandParser implements Parser<SortCommand> {
 
             if (!VALID_FIELDS.contains(currentCriteria)) {
                 throw new ParseException(
-                        String.format(currentCriteria + " is not p/ or l/!\n", SortCommand.MESSAGE_USAGE));
+                        String.format("Invalid parameter: "
+                                + currentCriteria + " is not a valid parameter for this command\n",
+                                SortCommand.MESSAGE_USAGE));
             }
-
             if (seenCriteria.contains(currentCriteria)) {
                 throw new ParseException(currentCriteria + " is a duplicate field!\n" + SortCommand.MESSAGE_USAGE);
             }

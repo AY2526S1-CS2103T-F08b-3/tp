@@ -72,7 +72,7 @@ Let's get familiar with what you see on the screen:
 > 
 > Bottom: Shows the file location where your data is saved
 
-## Understanding ID Numbers vs List Positions
+## Understanding ID Numbers vs Index
 
 ConnectEd uses two different numbering systems. It's important to understand the difference!
 
@@ -81,13 +81,13 @@ ConnectEd uses two different numbering systems. It's important to understand the
 - Automatically assigned when you add a person
 - Used for `match` and `unmatch` commands
 
-### 📋 List Position (shown as "1.", "2.", "3.", etc.)
+### 📋 Index (shown as "1.", "2.", "3.", etc.)
 - The person's current position in the displayed list
 - **Changes** when you sort, filter, or modify the list
 - Used for most commands: `edit`, `delete`, `sessionadd`, `sessiondelete`, `recommend`
 
 ### ⚠️ Important Notes
-- After filtering or sorting, list positions change but ID numbers stay the same
+- After filtering or sorting, indexs change but ID numbers stay the same
 - Always use `list` to see current positions before running commands
 - ID numbers may have gaps if you've deleted people (e.g., #1, #3, #5)
 

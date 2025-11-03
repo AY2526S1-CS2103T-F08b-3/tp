@@ -55,7 +55,7 @@ Now, let's start the application:
 18. Press enter.
 > ✅ **Success!**
 > <br>A pink window like the one below should appear after a few seconds. This is ConnectEd!
-   ![Ui](images/Ui.png)
+   ![ConnectEd](images/ConnectEd.png)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -96,7 +96,7 @@ Shows all your tutors and students.
 ```
 list
 ```
-![list](images/listCommandUG.jpg)
+![list](images/listUG.jpg)
 
 > 💡 **What you'll see**
 > <br>Everyone in your database will appear in the main display area.
@@ -109,13 +109,13 @@ Sometimes you want to see only students or only tutors:
 ```
 list students
 ```
-![list students](images/listStudentsCommandUG.png)
+![list students](images/listStudentsUG.png)
 
 **Show only tutors:**
 ```
 list tutors
 ```
-![list tutors](images/listTutorsCommandUG.png)
+![list tutors](images/listTutorsUG.png)
 
 ### Getting Help
 Shows a message explaining how to access the help page.
@@ -131,7 +131,7 @@ Here are the tasks you'll do most often as a tuition coordinator. Each task incl
 
 ### Adding a New Student
 When a new student registers with your agency, you need to add them to ConnectEd.
-<br> Students can only read one subject.
+<br> Students can only take one subject.
 
 > 📝 **Information you'll need**
 > * Whether they're a student or tutor 
@@ -203,7 +203,7 @@ When you need to find tutors who match a student's requirements, and vice versa,
 
 **Command Structure:**
 ```
-find [tutors/students] [n/ NAME] [s/ SUBJECT] 
+find [tutors/students] [n/ NAME] [sbj/ SUBJECT] 
 [l/ LEVEL (single or range)] [p/ PRICE (single or range)]
 ```
 **[] = optional fields**
@@ -231,6 +231,13 @@ find tutors sbj/english l/5 p/25-40
 > 
 > **Price**: Finds tutors whose price range **overlaps** with your budget / finds students whose price range **includes** the given value or range. 
 > * Example: If a tutor teaches levels 2-5 and you search for level 3, that tutor will appear in the results!
+> 
+> **Things to Note**
+> <br> The find command role field (tutors or students) is optional, but it must include at least one valid prefix and its corresponding field.
+>
+> Name searches require full keywords (no partials), so "Al" will not match "Alex".
+>
+>Price and level filters can include multiple ranges, e.g. `find tutors l/1-2 4-5 p/20-30 40-50` searches for tutors teaching primary 1, 2, 4 and 5 while offering a price from \$20 to \$30 and from \$40 to \$50.
 
 ### Getting Recommendations
 ConnectEd can recommend suitable tutors for a student (or suitable students for a tutor) based on their requirements.
@@ -240,6 +247,8 @@ ConnectEd can recommend suitable tutors for a student (or suitable students for 
 recommend INDEX [sbj/] [l/] [p/]
 ```
 **[] = optional fields**
+
+**Prefixes do not need any values for `recommend` command**
 
 **Recommend tutors for the student at `index` 1:**
 ```
@@ -329,9 +338,9 @@ sessionadd <INDEX> d/<DAY> t/<TIME> dur/<DURATION> sbj/<SUBJECT> p/<PRICE>
 ```
 
 **Real Example:**
-Schedule a Monday session at 4:00 PM, 2 hours long, Mathematics, $30/hour for the person with ID #1:
+Schedule a Monday session at 4:00 PM, 2 hours long, Science, $30/hour for the person with ID #1:
 ```
-sessionadd 1 d/Monday t/16:00 dur/02:00 sbj/mathematics p/30
+sessionadd 1 d/Monday t/16:00 dur/02:00 sbj/science p/30
 ```
 ![session](images/session(1)UG.jpg)
 ![session](images/session(2)UG.jpg)
@@ -380,7 +389,7 @@ Update phone number and email for person #1:
 ```
 edit 1 hp/90189844 e/newemail@example.com
 ```
-![edit](images/edit.jpeg)
+![edit](images/editUG.jpeg)
 
 Update price range for person #3:
 ```
@@ -418,9 +427,8 @@ delete 3
 
 > ⚠️ **Warning: Be Careful!**
 > * Deleting cannot be undone!
-> * Always double-check the ID number before deleting
-> * If the person is matched with someone, they will be automatically unmatched
-> * Their session information will also be deleted
+> * Always double-check the index before deleting
+> * If the person is matched with someone, you must unmatch them first before deleting
 
 ### Sorting Your Lists
 You can organize your tutor or student lists by price or level to find what you need more easily.
@@ -652,7 +660,7 @@ Don't panic if something goes wrong! Here are solutions to the most common probl
 > **Problem:** Someone with identical details is already in the system
 >
 > **Solution:**
-> - You cannot have two people with the exact same name, phone, email, and address
+> - You cannot have two people with the exact phone or email
 > - If this is genuinely a different person, change at least one detail
 > - If you're trying to update existing info, use `edit` instead of `add`
 
@@ -687,7 +695,7 @@ Your data is saved in a file called `ConnectEd.json` located in:
 
 > 📁 **Finding your data file**
 >
-> 1. Go to the folder where you put `connected.jar`
+> 1. Go to the folder where you put `ConnectEd.jar`
 > 2. Look for a folder called `data`
 > 3. Inside, you'll find `ConnectEd.json` - this is your database!
 >

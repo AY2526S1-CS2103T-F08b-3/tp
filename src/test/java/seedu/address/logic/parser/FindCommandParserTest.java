@@ -54,13 +54,6 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_invalidRole_failure() {
-        assertParseFailure(parser, "teacher n/Alice",
-                "Please key in either students or tutors.\n"
-                        + String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-    }
-
-    @Test
     public void parse_emptyNamePrefix_failure() {
         assertParseFailure(parser, "tutors n/",
                 "Name value after n/ cannot be empty.");

@@ -147,6 +147,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public Person getRepeatedPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public String getRepeatedEntry(Person person) {
             throw new AssertionError("This method should not be called.");
         }
@@ -203,6 +208,12 @@ public class AddCommandTest {
         public String getRepeatedEntry(Person person) {
             requireNonNull(person);
             return this.person.getName().toString();
+        }
+
+        @Override
+        public Person getRepeatedPerson(Person person) {
+            requireNonNull(person);
+            return this.person;
         }
     }
 

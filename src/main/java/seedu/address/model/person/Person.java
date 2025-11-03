@@ -152,6 +152,14 @@ public class Person {
         return isStudent;
     }
 
+    public String getFormattedRole() {
+        if (isTutor) {
+            return "Tutor";
+        } else {
+            return "Student";
+        }
+    }
+
     public void setMatchedPerson(Person person) {
         this.matchedPerson = person;
         this.isMatched = true;
@@ -235,8 +243,7 @@ public class Person {
         }
 
         return otherPerson != null
-                && (otherPerson.getName().equals(getName())
-                || otherPerson.getPhone().equals(getPhone())
+                && (otherPerson.getPhone().equals(getPhone())
                 || otherPerson.getEmail().equals(getEmail()));
     }
 

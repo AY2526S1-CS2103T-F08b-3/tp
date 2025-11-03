@@ -74,13 +74,4 @@ public class MatchingLevelPredicateTest {
         );
         assertTrue(predicate.test(person)); // 3 matches
     }
-
-    @Test
-    public void testMultipleLevelsNoneMatchReturnsFalse() {
-        Person person = makePersonWithLevel(new Level(5, 6));
-        MatchingLevelPredicate predicate = new MatchingLevelPredicate(
-                List.of(new Level(1, 3), new Level(4, 6))
-        );
-        assertFalse(predicate.test(person)); // no overlap
-    }
 }

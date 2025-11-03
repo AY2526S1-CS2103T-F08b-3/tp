@@ -473,23 +473,23 @@ sort reset
 > * Use `sort reset` to go back to seeing everyone
 
 ### Viewing Statistics
-Want to see an overview of your agency's data? Use the stats command!
-
-**Show statistics:**
+Want to see an overview of your agency's data? Use the `stats` command!
 ```
 stats
 ```
 The statistics window will show you:
 * Total number of tutors and students
 * Average price for tutors and students
-* Most popular subjects
+* Most common subjects
 * Subject distribution (how many people for each subject)
 * Number of matched pairs
 
 ![stats](images/stats.png)
 
 > 📝**Note**
-> <br> Remember to close the `stats` window and use the `stats` command again in order to see the latest updated data.
+> <br>
+> * If you make changes to the address book after executing `stats`, remember to close the `stats` window and run the `stats` command again in order to see the updated statistics.
+> * If there is an equal number of subjects, the latest subject added for that role will be displayed as the most common subject.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -743,5 +743,6 @@ A: Currently, ConnectEd supports one session per matched pair. If you add a new 
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+3. **In the statistics window**, if there is an equal number of subjects for a given role (`student` or `tutor`), the latest subject added for that role will be displayed as the most common subject.
 
 --------------------------------------------------------------------------------------------------------------------

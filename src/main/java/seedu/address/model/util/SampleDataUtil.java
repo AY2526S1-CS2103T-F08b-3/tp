@@ -28,7 +28,7 @@ public class SampleDataUtil {
                     new Address("Blk 30 Geylang Street 29, #06-40"), new Subject("Mathematics"), Level.parse("2-5"),
                     Price.parse("30-45"), Collections.emptySet(), 1),
 
-            new Person("student", new Name("Bernice Yu"), new Phone("99272758"),
+            new Person("student", new Name("Bernice Yu"), new Phone("98272758"),
                     new Email("berniceyu@example.com"),
                     new Address("Blk 30 Lorong 3 Serangoon Gardens, #07-18"),
                     new Subject("Science"), Level.parse("2"),

@@ -30,20 +30,25 @@ public class PhoneTest {
         assertFalse(Phone.isValidPhone("91")); // less than 3 numbers
         assertFalse(Phone.isValidPhone("phone")); // non-numeric
         assertFalse(Phone.isValidPhone("9011p041")); // alphabets within digits
-        assertFalse(Phone.isValidPhone("9312 1534")); // spaces within digits
+        assertFalse(Phone.isValidPhone("911")); // exactly 3 numbers
+        assertFalse(Phone.isValidPhone("124293842033123")); // long phone numbers
+        assertFalse(Phone.isValidPhone("99887766")); // 9 as the 2nd digit after 9 as the 1st digit
+        assertFalse(Phone.isValidPhone("71234567")); // does not start with 6,8 or 9
+        assertFalse(Phone.isValidPhone("93 121532")); // spaces not between 4th and 5th digits
 
         // valid phone numbers
-        assertTrue(Phone.isValidPhone("911")); // exactly 3 numbers
-        assertTrue(Phone.isValidPhone("93121534"));
-        assertTrue(Phone.isValidPhone("124293842033123")); // long phone numbers
+        assertTrue(Phone.isValidPhone("93121534")); // starts with 9
+        assertTrue(Phone.isValidPhone("83121534")); // starts with 8
+        assertTrue(Phone.isValidPhone("62121534")); // starts with 6
+        assertTrue(Phone.isValidPhone("9312 1534")); // spaces within 4th and 5th digits
     }
 
     @Test
     public void equals() {
-        Phone phone = new Phone("999");
+        Phone phone = new Phone("98889999");
 
         // same values -> returns true
-        assertTrue(phone.equals(new Phone("999")));
+        assertTrue(phone.equals(new Phone("98889999")));
 
         // same object -> returns true
         assertTrue(phone.equals(phone));
@@ -55,6 +60,6 @@ public class PhoneTest {
         assertFalse(phone.equals(5.0f));
 
         // different values -> returns false
-        assertFalse(phone.equals(new Phone("995")));
+        assertFalse(phone.equals(new Phone("98556677")));
     }
 }

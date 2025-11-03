@@ -931,7 +931,7 @@ Use case ends.
 #### Definitions
 * **Tutor / Student** — Person types managed by the app (case-insensitive tokens `tutor` / `student`).
 * **Subject** — One of `{english, mathematics, science}`.
-* **Level** — Integer 1–6 (students: single level; tutors: single level or range `x-y`, 1≤x≤y≤6).
+* **Level** — Integer 1–6 (students: single level; tutors: single level or range `x-y`, 1≤x≤y≤6). "Primary" and "Level" are used interchangeably in this guide.
 * **Price range** — `min-max` dollars/hour, integers 1–200, `min ≤ max`, no internal spaces.
 * **Typed index** — `<INDEX>` (tutor) or `<INDEX>` (student), where `INDEX` is 1-based on the **current** list view.
 * **ID** - Unique ID given to each person upon adding them into the database.

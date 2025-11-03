@@ -179,12 +179,14 @@ Adding a tutor is almost the same as adding a student, with one difference: **tu
 
 **Command Structure:**
 ```
-add r/tutor n/<NAME> hp/<PHONE> e/<EMAIL> a/<ADDRESS> sbj/<SUBJECT> l/<LEVEL/ LEVEL RANGE (MIN-MAX)> p/<PRICE/ PRICE RANGE( MIN-MAX)>
+add r/tutor n/<NAME> hp/<PHONE> e/<EMAIL> a/<ADDRESS> sbj/<SUBJECT> 
+l/<LEVEL/ LEVEL RANGE (MIN-MAX)> p/<PRICE/ PRICE RANGE( MIN-MAX)>
 ```
 **Real Example:**
 <br>Mary Wong is a tutor who teaches English for Primary 2-5 students, charges $30-45/hour:
 ```
-add r/tutor n/Mary Wong hp/98887777 e/mary.wong@email.com a/Blk 456 Tampines Ave 1 sbj/english l/2-5 p/30-45
+add r/tutor n/Mary Wong hp/98887777 e/mary.wong@email.com 
+a/Blk 456 Tampines Ave 1 sbj/english l/2-5 p/30-45
 ```
 ![add](images/addTutorCommandUG.jpg)
 
@@ -201,7 +203,8 @@ When you need to find tutors who match a student's requirements, and vice versa,
 
 **Command Structure:**
 ```
-find [tutors/students] [n/ NAME] [s/ SUBJECT] [l/ LEVEL (single or range)] [p/ PRICE (single or range)]
+find [tutors/students] [n/ NAME] [s/ SUBJECT] 
+[l/ LEVEL (single or range)] [p/ PRICE (single or range)]
 ```
 **[] = optional fields**
 
@@ -375,7 +378,7 @@ edit <INDEX> [fields to update]
 **Real Examples:**
 Update phone number and email for person #1:
 ```
-edit 1 hp/99998888 e/newemail@example.com
+edit 1 hp/90189844 e/newemail@example.com
 ```
 ![edit](images/edit.jpeg)
 

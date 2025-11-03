@@ -850,10 +850,10 @@ Use case ends.
 2. ConnectEd validates the index and checks that it refers to a valid person in the current list.
 3. ConnectEd retrieves the profile of the specified student/tutor.
 4. ConnectEd determines the role (student or tutor) and applies the relevant filters:
-    * For students: recommends tutors matching subject, level, and price.
-    * For tutors: recommends students matching subject, level, and price.
+    * For students: recommends tutors matching subject, level, and/or price as specified by user.
+    * For tutors: recommends students matching subject, level, and/or price as specified by user.
     * If no flags are specified, all requirements are used.
-5. ConnectEd displays a ranked list of recommended tutors (for a student) or students (for a tutor), with indices and key details.
+5. ConnectEd displays a list of recommended tutors (for a student) or students (for a tutor).
 
     Use case ends.
 

@@ -47,7 +47,7 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
 
-    public static final String MESSAGE_DUPLICATE_PERSON = "Duplicate entry detected! %1$s already exists!";
+    public static final String MESSAGE_DUPLICATE_PERSON = "Duplicate entry detected! %1$s already exists for %2$s!";
 
     private final Person toAdd;
 
@@ -64,7 +64,9 @@ public class AddCommand extends Command {
         requireNonNull(model);
 
         if (model.hasPerson(toAdd)) {
-            throw new CommandException(String.format(MESSAGE_DUPLICATE_PERSON, model.getRepeatedEntry(toAdd)));
+            throw new CommandException(
+                    String.format(MESSAGE_DUPLICATE_PERSON, model.getRepeatedEntry(toAdd),
+                            model.getRepeatedPerson(toAdd).getSubject()));
         }
         if (toAdd.getPersonId() == -1) {
             toAdd.setPersonId(Person.allocateNextId());

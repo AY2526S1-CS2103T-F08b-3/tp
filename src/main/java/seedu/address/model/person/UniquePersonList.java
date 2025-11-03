@@ -38,6 +38,20 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
+     * Returns the repeated person in the list as the given argument.
+     * Returns null if no such person exists.
+     */
+    public Person getRepeatedPerson(Person toCheck) {
+        requireNonNull(toCheck);
+        for (Person person : internalList) {
+            if (toCheck.isSamePerson(person)) {
+                return person;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Returns true if the list contains an equivalent person as the given argument.
      */
     public String getRepeatedEntry(Person toCheck) {

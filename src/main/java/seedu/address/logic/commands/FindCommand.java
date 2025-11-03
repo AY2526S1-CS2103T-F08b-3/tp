@@ -23,7 +23,7 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds persons that match the specified criteria.\n"
             + "Format: " + COMMAND_WORD
-            + " [ROLE] [n/ NAME] [s/ SUBJECT] [l/ LEVEL (single or range)] [p/ PRICE (single or range)]\n"
+            + " [ROLE] [n/ NAME] [sbj/ SUBJECT] [l/ LEVEL (single or range)] [p/ PRICE (single or range)]\n"
             + "Note: You may include multiple values per prefix, and prefix order does not matter.\n"
             + "Example: " + COMMAND_WORD + " tutors n/ Aaron sbj/ Mathematics English l/ 1-3 p/ 20-50";
 

@@ -121,7 +121,7 @@ How the parsing works:
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
-<img src="images/ModelClassDiagram.png" width="500" />
+<img src="images/ModelClassDiagram.png" width="600" />
 
 
 The `Model` component,
@@ -243,7 +243,7 @@ These operations are exposed in the `Logic` and `Model` components as `LogicMana
 Given below is an example usage scenario and how the find mechanism behaves at each step.
 
 
-#### Step 1. User executes the `find` command
+##### Step 1. User executes the `find` command
 
 The user enters the command below in the command box: eg `"find tutors sbj/Mathematics"`
 
@@ -253,7 +253,7 @@ The `AddressBookParser` identifies the keyword `find` and delegates parsing to t
 
 
 
-#### Step 2. `FindCommandParser` processes the arguments
+##### Step 2. `FindCommandParser` processes the arguments
 
 The `FindCommandParser` performs the following actions:
 
@@ -267,7 +267,7 @@ The `FindCommandParser` performs the following actions:
 
 After successful parsing, the parser returns a new `FindCommand` containing this composite predicate.
 
-#### Step 3. `FindCommand` execution
+##### Step 3. `FindCommand` execution
 
 When the `LogicManager` calls `FindCommand#execute(Model model)`,  
 the command filters the current person list according to the predicate:
@@ -281,18 +281,18 @@ public CommandResult execute(Model model) {
             String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
 }
 ```
-#### Step 4. Model updates the filtered list
+##### Step 4. Model updates the filtered list
 
 The Model receives the request through `updateFilteredPersonList(predicate)` and applies the predicate to its stored list of persons.
 The updated filtered list is automatically reflected in the UI panel.
 
-#### Step 5. Command execution summary
+##### Step 5. Command execution summary
 The following sequence diagram shows how a find operation goes through the Logic component:
 ![FindSequenceDiagram](images/FindSequenceDiagram2-Logic.png)
 :information_source: **Note:** The lifeline for `FindCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
 #### Design considerations:
 
-#### Aspect: How filtering evolved from AB3
+##### Aspect: How filtering evolved from AB3
 
 * **Alternative 1 (previous AB3 implementation)**: Single-prefix search using only `NameContainsKeywordsPredicate`.
     * **Pros:** Simple and fast, performs a basic name-based keyword search.
@@ -302,7 +302,7 @@ The following sequence diagram shows how a find operation goes through the Logic
     * **Pros:** Far more flexible and supports complex searches like `find tutors sbj/Mathematics l/4 p/10-30`. Uses modular predicates for each attribute.
     * **Cons:** Slightly more complex parser and predicate logic, higher validation overhead.
 
-#### Aspect: How logical conditions are applied
+##### Aspect: How logical conditions are applied
 
 * **Alternative 1 (previous AB3 implementation)**: Used only **OR** matching across names.
     * **Pros:** Simple and intuitive for name-based search.
@@ -925,7 +925,7 @@ Use case ends.
 
 #### Definitions
 * **Tutor / Student** — Person types managed by the app (case-insensitive tokens `tutor` / `student`).
-* **Subject** — One of `{english, mathematics, chinese, science}`.
+* **Subject** — One of `{english, mathematics, science}`.
 * **Level** — Integer 1–6 (students: single level; tutors: single level or range `x-y`, 1≤x≤y≤6).
 * **Price range** — `min-max` dollars/hour, integers 1–200, `min ≤ max`, no internal spaces.
 * **Typed index** — `<INDEX>` (tutor) or `<INDEX>` (student), where `INDEX` is 1-based on the **current** list view.

@@ -1056,41 +1056,39 @@ AddressBook Level 3 (AB3). While AB3 manages a single entity type (Person), Conn
 recommendation. This multi-entity architecture increased the design, implementation, and testing complexity.
 
 1. **Difficulty and Technical Challenges**
-* **Bidirectional Matching Logic**: Implementing the match and unmatch features required maintaining consistent references between two persons, ensuring data integrity after edits, deletions, and list filtering.
+   * **Bidirectional Matching Logic**: Implementing the match and unmatch features required maintaining consistent references between two persons, ensuring data integrity after edits, deletions, and list filtering.
 
-* **Session Scheduling System**: Designing the Session class to store details like day, time, duration, and price involved careful parsing and validation, as well as conflict-checking between existing sessions.
+   * **Session Scheduling System**: Designing the Session class to store details like day, time, duration, and price involved careful parsing and validation, as well as conflict-checking between existing sessions.
 
-* **Recommendation Feature**: The recommend command required dynamic filtering across multiple attributes (subject, level, price) and logic for automatic attribute inference when prefixes were left empty.
+   * **Recommendation Feature**: The recommend command required dynamic filtering across multiple attributes (subject, level, price) and logic for automatic attribute inference when prefixes were left empty.
 
-* **Persistent Unique IDs**: Unlike AB3’s list-based indices, ConnectEd introduced a persistent ID field stored in JSON to prevent mismatches after sorting or deletions. This required modifications across the parser, model, and storage layers.
+   * **Persistent Unique IDs**: Unlike AB3’s list-based indices, ConnectEd introduced a persistent ID field stored in JSON to prevent mismatches after sorting or deletions. This required modifications across the parser, model, and storage layers.
 
 2. **Effort and Collaboration**
 
-* The project demanded extensive coordination between frontend logic, backend data modeling, and documentation.
+   * The project demanded extensive coordination between frontend logic, backend data modeling, and documentation.
 
-* Each developer was responsible for at least one major feature (for example, Match, Session, Recommend, Custom Fields, Sorting), plus cross-reviewing code through pull requests.
+   * Each developer was responsible for at least one major feature (for example, Match, Session, Recommend, Custom Fields, Sorting), plus cross-reviewing code through pull requests.
 
-* Weekly merges and conflict resolution sessions ensured integration across overlapping model components.
+   * Weekly merges and conflict resolution sessions ensured integration across overlapping model components.
 
-* Significant time was devoted to JUnit testing, Developer Guide and User Guide writing, and PE-D feedback resolution.
+   * Significant time was devoted to JUnit testing, Developer Guide and User Guide writing, and PE-D feedback resolution.
 
 3. **Reuse and Adaptation**
 
-We reused and extended several AB3 components to accelerate development:
+   * The AddressBookParser and Command framework from AB3 were retained but refactored for multi-entity commands.
 
-* The AddressBookParser and Command framework from AB3 were retained but refactored for multi-entity commands.
+   * The storage layer (JsonAdaptedPerson, JsonSerializableAddressBook) was modified to handle new attributes and IDs.
 
-* The storage layer (JsonAdaptedPerson, JsonSerializableAddressBook) was modified to handle new attributes and IDs.
-
-* 10–15% of the total effort was saved through this reuse, but substantial re-engineering was required to adapt AB3’s single-entity design to ConnectEd’s multi-role system.
+   * 10–15% of the total effort was saved through this reuse, but substantial re-engineering was required to adapt AB3’s single-entity design to ConnectEd’s multi-role system.
 
 4. **Achievements**
 
-* Designed and implemented a robust Tutor–Student relationship model with persistent matching and session tracking.
+   * Designed and implemented a robust Tutor–Student relationship model with persistent matching and session tracking.
 
-* Enhanced usability with custom fields, recommendation filters, and sorting for more efficient contact management.
+   * Enhanced usability with custom fields, recommendation filters, and sorting for more efficient contact management.
 
-* Achieved high code quality with meaningful abstractions, comprehensive test coverage, and detailed documentation.
+   * Achieved high code quality with meaningful abstractions, comprehensive test coverage, and detailed documentation.
 
 Overall, this project was a rewarding journey that pushed us far beyond AB3. It challenged us to think deeply about how data connects, how systems interact, and how to build something meaningful and reliable. Through countless iterations, we grew not only as developers but as a team committed to creating a product that truly works for its users.
 

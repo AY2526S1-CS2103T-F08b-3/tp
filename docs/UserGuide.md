@@ -105,6 +105,7 @@ list
 
 ### Viewing Only Students or Only Tutors
 Sometimes you want to see only students or only tutors:
+
 **Show only students:**
 ```
 list students
@@ -338,7 +339,7 @@ sessionadd <INDEX> d/<DAY> t/<TIME> dur/<DURATION> sbj/<SUBJECT> p/<PRICE>
 ```
 
 **Real Example:**
-Schedule a Monday session at 4:00 PM, 2 hours long, Science, $30/hour for the person with ID #1:
+Schedule a Monday session at 4:00 PM, 2 hours long, Science, $30/hour for the person at index 1:
 ```
 sessionadd 1 d/Monday t/16:00 dur/02:00 sbj/science p/30
 ```
@@ -473,6 +474,7 @@ sort reset
 
 ### Viewing Statistics
 Want to see an overview of your agency's data? Use the stats command!
+
 **Show statistics:**
 ```
 stats

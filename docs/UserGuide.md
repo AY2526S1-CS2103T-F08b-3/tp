@@ -18,6 +18,7 @@ Before you can use ConnectEd, you need to install it on your computer. Follow th
 2. Type `cmd` and press Enter. A black window will appear - this is the Command Prompt.
 3. In the black window, type exactly: `java -version`.
 4. Press Enter.
+
 #### Mac Users
 1. Type command + space bar to activate Spotlight Search.
 2. Search for `Terminal` and click on it. A black window should appear - this is the Terminal.
@@ -54,7 +55,7 @@ Now, let's start the application:
 18. Press enter.
 > ✅ **Success!**
 > <br>A pink window like the one below should appear after a few seconds. This is ConnectEd!
-   ![Ui](images/Ui.png)
+   ![ConnectEd](images/ConnectEd.png)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -95,7 +96,7 @@ Shows all your tutors and students.
 ```
 list
 ```
-![list](images/listCommandUG.jpg)
+![list](images/listUG.jpg)
 
 > 💡 **What you'll see**
 > <br>Everyone in your database will appear in the main display area.
@@ -108,13 +109,13 @@ Sometimes you want to see only students or only tutors:
 ```
 list students
 ```
-![list students](images/listStudentsCommandUG.png)
+![list students](images/listStudentsUG.png)
 
 **Show only tutors:**
 ```
 list tutors
 ```
-![list tutors](images/listTutorsCommandUG.png)
+![list tutors](images/listTutorsUG.png)
 
 ### Getting Help
 Shows a message explaining how to access the help page.
@@ -130,7 +131,7 @@ Here are the tasks you'll do most often as a tuition coordinator. Each task incl
 
 ### Adding a New Student
 When a new student registers with your agency, you need to add them to ConnectEd.
-<br> Students can only read one subject.
+<br> Students can only take one subject.
 
 > 📝 **Information you'll need**
 > * Whether they're a student or tutor 
@@ -156,7 +157,9 @@ add r/student n/Sarah Tan hp/91234567 e/sarah.tan@email.com a/Blk 123 Ang Mo Kio
 > ⚠️ **Important Rules**
 > * Each piece of information needs its label (r/, n/, hp/, etc.)
 > * Don't put spaces around the / symbol 
-> * **hp/**: Phone numbers can only be 8 digits (Singapore phone numbers), only numbers are allowed (no spaces or special characters)
+> * **hp/**: Phone numbers can only be 8 digits (Singapore phone numbers), only numbers are allowed (no spaces or special characters except between the 4th and 5th number)
+>   * 1st digit must be 9/8/6
+>   * 2nd digit if 1st digit is 9 must be from 0-8 only
 > * **sbj/**: Subject must be: english, mathematics, or science (lowercase is fine)
 > * **l/**: Level must be a single number from 1-6 for students 
 > * **p/**: Price can either be a single integer OR two numbers (min - max) with a dash: 20-30 (no spaces, no $). Accepts values from 1-200.
@@ -164,7 +167,8 @@ add r/student n/Sarah Tan hp/91234567 e/sarah.tan@email.com a/Blk 123 Ang Mo Kio
 
 > 📢 **Duplicate Entries**
 > <br> If 2 entries have the same:
-> * Phone number 
+> * Phone number
+> OR
 > * Email
 > 
 > They will be counted as the same person!
@@ -172,14 +176,17 @@ add r/student n/Sarah Tan hp/91234567 e/sarah.tan@email.com a/Blk 123 Ang Mo Kio
 ### Adding a New Tutor 
 Adding a tutor is almost the same as adding a student, with one difference: **tutors can teach multiple grade levels**.
 <br> Tutors can only teach one subject. 
+
 **Command Structure:**
 ```
-add r/tutor n/<NAME> hp/<PHONE> e/<EMAIL> a/<ADDRESS> sbj/<SUBJECT> l/<LEVEL/ LEVEL RANGE (MIN-MAX)> p/<PRICE/ PRICE RANGE( MIN-MAX)>
+add r/tutor n/<NAME> hp/<PHONE> e/<EMAIL> a/<ADDRESS> sbj/<SUBJECT> 
+l/<LEVEL/ LEVEL RANGE (MIN-MAX)> p/<PRICE/ PRICE RANGE( MIN-MAX)>
 ```
 **Real Example:**
 <br>Mary Wong is a tutor who teaches English for Primary 2-5 students, charges $30-45/hour:
 ```
-add r/tutor n/Mary Wong hp/98887777 e/mary.wong@email.com a/Blk 456 Tampines Ave 1 sbj/english l/2-5 p/30-45
+add r/tutor n/Mary Wong hp/98887777 e/mary.wong@email.com 
+a/Blk 456 Tampines Ave 1 sbj/english l/2-5 p/30-45
 ```
 ![add](images/addTutorCommandUG.jpg)
 
@@ -196,7 +203,8 @@ When you need to find tutors who match a student's requirements, and vice versa,
 
 **Command Structure:**
 ```
-find [tutors/students] [n/ NAME] [s/ SUBJECT] [l/ LEVEL (single or range)] [p/ PRICE (single or range)]
+find [tutors/students] [n/ NAME] [sbj/ SUBJECT] 
+[l/ LEVEL (single or range)] [p/ PRICE (single or range)]
 ```
 **[] = optional fields**
 
@@ -223,6 +231,13 @@ find tutors sbj/english l/5 p/25-40
 > 
 > **Price**: Finds tutors whose price range **overlaps** with your budget / finds students whose price range **includes** the given value or range. 
 > * Example: If a tutor teaches levels 2-5 and you search for level 3, that tutor will appear in the results!
+> 
+> **Things to Note**
+> <br> The find command role field (tutors or students) is optional, but it must include at least one valid prefix and its corresponding field.
+>
+> Name searches require full keywords (no partials), so "Al" will not match "Alex".
+>
+>Price and level filters can include multiple ranges, e.g. `find tutors l/1-2 4-5 p/20-30 40-50` searches for tutors teaching primary 1, 2, 4 and 5 while offering a price from \$20 to \$30 and from \$40 to \$50.
 
 ### Getting Recommendations
 ConnectEd can recommend suitable tutors for a student (or suitable students for a tutor) based on their requirements.
@@ -232,6 +247,8 @@ ConnectEd can recommend suitable tutors for a student (or suitable students for 
 recommend INDEX [sbj/] [l/] [p/]
 ```
 **[] = optional fields**
+
+**Prefixes do not need any values for `recommend` command**
 
 **Recommend tutors for the student at `index` 1:**
 ```
@@ -246,7 +263,8 @@ This will show all tutors who:
 ![recommend](images/recommend(2)UG.jpg)
 
 **Filtering Recommendations:**
-You can also ask for recommendations based on just one or two criteria:
+<br>You can also ask for recommendations based on just one or two criteria:
+
 **Recommend based on subject only:**
 ```
 recommend 1 sbj/
@@ -292,7 +310,7 @@ If a tutoring arrangement ends, you can unmatch them:
 
 **Command Structure:**
 ```
-match <id>
+unmatch <id>
 ```
 * ID can be either the student's or the tutor's ID
 
@@ -320,9 +338,9 @@ sessionadd <INDEX> d/<DAY> t/<TIME> dur/<DURATION> sbj/<SUBJECT> p/<PRICE>
 ```
 
 **Real Example:**
-Schedule a Monday session at 4:00 PM, 2 hours long, Mathematics, $30/hour for the person with ID #1:
+Schedule a Monday session at 4:00 PM, 2 hours long, Science, $30/hour for the person with ID #1:
 ```
-sessionadd 1 d/Monday t/16:00 dur/02:00 sbj/mathematics p/30
+sessionadd 1 d/Monday t/16:00 dur/02:00 sbj/science p/30
 ```
 ![session](images/session(1)UG.jpg)
 ![session](images/session(2)UG.jpg)
@@ -338,6 +356,11 @@ sessionadd 1 d/Monday t/16:00 dur/02:00 sbj/mathematics p/30
 
 #### Deleting a Session
 If you need to cancel or remove a scheduled session:
+
+**Command Structure:**
+```
+sessiondelete <INDEX>
+```
 
 **Delete the session for person #1:**
 ```
@@ -364,9 +387,9 @@ edit <INDEX> [fields to update]
 **Real Examples:**
 Update phone number and email for person #1:
 ```
-edit 1 hp/99998888 e/newemail@example.com
+edit 1 hp/90189844 e/newemail@example.com
 ```
-![edit](images/edit.jpeg)
+![edit](images/editUG.jpeg)
 
 Update price range for person #3:
 ```
@@ -391,16 +414,21 @@ edit 2 sbj/science l/4-6
 
 ### Deleting a Person
 When someone leaves your agency, you can remove them from the system.
-**Delete person with ID #3:**
+
+**Command Structure:**
+```
+delete <INDEX>
+```
+
+**Delete person at index 3:**
 ```
 delete 3
 ```
 
 > ⚠️ **Warning: Be Careful!**
 > * Deleting cannot be undone!
-> * Always double-check the ID number before deleting
-> * If the person is matched with someone, they will be automatically unmatched
-> * Their session information will also be deleted
+> * Always double-check the index before deleting
+> * If the person is matched with someone, you must unmatch them first before deleting
 
 ### Sorting Your Lists
 You can organize your tutor or student lists by price or level to find what you need more easily.
@@ -444,22 +472,23 @@ sort reset
 > * Use `sort reset` to go back to seeing everyone
 
 ### Viewing Statistics
-Want to see an overview of your agency's data? Use the stats command!
-**Show statistics:**
+Want to see an overview of your agency's data? Use the `stats` command!
 ```
 stats
 ```
 The statistics window will show you:
 * Total number of tutors and students
 * Average price for tutors and students
-* Most popular subjects
+* Most common subjects
 * Subject distribution (how many people for each subject)
 * Number of matched pairs
 
 ![stats](images/stats.png)
 
 > 📝**Note**
-> <br> Remember to close the `stats` window and use the `stats` command again in order to see the latest updated data.
+> <br>
+> * If you make changes to the address book after executing `stats`, remember to close the `stats` window and run the `stats` command again in order to see the updated statistics.
+> * If there is an equal number of subjects, the latest subject added for that role will be displayed as the most common subject.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -632,7 +661,7 @@ Don't panic if something goes wrong! Here are solutions to the most common probl
 > **Problem:** Someone with identical details is already in the system
 >
 > **Solution:**
-> - You cannot have two people with the exact same name, phone, email, and address
+> - You cannot have two people with the exact phone or email
 > - If this is genuinely a different person, change at least one detail
 > - If you're trying to update existing info, use `edit` instead of `add`
 
@@ -667,7 +696,7 @@ Your data is saved in a file called `ConnectEd.json` located in:
 
 > 📁 **Finding your data file**
 >
-> 1. Go to the folder where you put `connected.jar`
+> 1. Go to the folder where you put `ConnectEd.jar`
 > 2. Look for a folder called `data`
 > 3. Inside, you'll find `ConnectEd.json` - this is your database!
 >
@@ -713,5 +742,6 @@ A: Currently, ConnectEd supports one session per matched pair. If you add a new 
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+3. **In the statistics window**, if there is an equal number of subjects for a given role (`student` or `tutor`), the latest subject added for that role will be displayed as the most common subject.
 
 --------------------------------------------------------------------------------------------------------------------

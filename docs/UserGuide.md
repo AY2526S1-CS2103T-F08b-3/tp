@@ -339,6 +339,11 @@ sessionadd 1 d/Monday t/16:00 dur/02:00 sbj/mathematics p/30
 #### Deleting a Session
 If you need to cancel or remove a scheduled session:
 
+**Command Structure:**
+```
+sessiondelete <INDEX>
+```
+
 **Delete the session for person #1:**
 ```
 sessiondelete 1
@@ -391,7 +396,13 @@ edit 2 sbj/science l/4-6
 
 ### Deleting a Person
 When someone leaves your agency, you can remove them from the system.
-**Delete person with ID #3:**
+
+**Command Structure:**
+```
+delete <INDEX>
+```
+
+**Delete person at index 3:**
 ```
 delete 3
 ```

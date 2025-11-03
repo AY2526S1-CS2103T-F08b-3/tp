@@ -152,7 +152,7 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### **List Feature**
+### List Feature
 
 #### Implementation Details
 
@@ -164,11 +164,12 @@ It serves as a core navigation command that resets the filtered list view based 
     * The role is one of `"tutors"`, `"students"`. The role is case-insensitive.
     * If no argument is provided, it defaults to show all the persons.
     * If an invalid argument is provided, a `ParseException` is thrown with a usage message:
-      ```
-      Invalid command format!
-      list: Lists all tutors or students and displays them as a list with index numbers.
-      Parameter: 'tutors' / 'students'
-      ```
+      
+```
+  Invalid command format!
+  list: Lists all tutors or students and displays them as a list with index numbers.
+  Parameter: 'tutors' / 'students'
+  ```
 
 2. **Filtering:**  
    Before listing, the command updates the filtered person list using the appropriate predicate:
@@ -914,7 +915,7 @@ Use case ends.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4.  Should respond to any command within 2 seconds under normal load conditions.
 5.  Should provide clear and specific error messages for all invalid inputs, guiding users toward correct command format.
-6.  Should prevent all duplicate entries as defined by the duplicate handling rules (same type, name, and phone number).
+6.  Should prevent all duplicate entries as defined by the duplicate handling rules (same email **or** phone number).
 7.  Should recover gracefully from data file corruption by creating a new data file without crashing.
 8.  Should validate 100% of user inputs before any data modification to prevent invalid data entry.
 9.  Should remain fully operational after any validation error or failed command without requiring restart.
@@ -933,8 +934,9 @@ Use case ends.
 * **Level** — Integer 1–6 (students: single level; tutors: single level or range `x-y`, 1≤x≤y≤6).
 * **Price range** — `min-max` dollars/hour, integers 1–200, `min ≤ max`, no internal spaces.
 * **Typed index** — `<INDEX>` (tutor) or `<INDEX>` (student), where `INDEX` is 1-based on the **current** list view.
+* **ID** - Unique ID given to each person upon adding them into the database.
 * **Match** — A one-to-one link between a tutor and a student; **Unmatch** removes that link.
-* **Duplicate (person)** — Same type **and** same name (case-insensitive) **and** same phone; duplicates are rejected.
+* **Duplicate (person)** — Same email **or** same phone; duplicates are rejected.
 * **Recommend** — Suggest tutors to a student, or students to a tutor, based on subject, level, and price compatibility.
 * **Sort** — Arrange tutors or students by specified criteria (`p/` for price, `l/` for level) in ascending order. `sort reset` clears all filters and displays all persons.
 * **Session** — Add or delete a session to both a student and tutor who are both `matched` to each other.
@@ -1016,8 +1018,8 @@ testers are expected to do more *exploratory* testing.
 1. Matching a student and tutor shown in the list.
 
     1. Prerequisites: 
-       1. Find tutor using the `find tutor ...` command. Take note of the index of the tutor (e.g. `2`).
-       2. Find student using the `find student ...` command. Take note of the index of the student (e.g. `1`).
+       1. Find tutor using the `find tutor ...` command. Take note of the id of the tutor (e.g. `2`).
+       2. Find student using the `find student ...` command. Take note of the id of the student (e.g. `1`).
 
     2. Test case: `match 1 2`<br>
        Expected: Person with id `1` and person with id `2` are being matched.

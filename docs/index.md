@@ -6,7 +6,7 @@ title: ConnectEd
 [![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/se-edu/addressbook-level3/actions)
 [![codecov](https://codecov.io/gh/se-edu/addressbook-level3/branch/master/graph/badge.svg)](https://codecov.io/gh/se-edu/addressbook-level3)
 
-![Ui](images/ConnectEd.png)
+![Ui](images/Ui.png)
 
 
 # 💡 Welcome to **ConnectEd**
@@ -34,7 +34,7 @@ If you’re a **developer**, the [**Developer Guide**](https://ay2526s1-cs2103t-
 
 ---
 
-![ConnectEd Main Interface](images/ConnectEd.png)
+![ConnectEd Main Interface](images/Ui.png)
 
 ---
 

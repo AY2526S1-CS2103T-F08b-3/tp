@@ -306,13 +306,15 @@ recommend 1 p/
 ### Matching Students and Tutors
 Once you've found the perfect tutor for a student, you need to officially match them in the system.
 
+#### Matching
+
 **Command Structure:**
 ```
 match <id 1> <id 2>
 ```
 * IDs must correspond to one tutor and one student exactly
 
-#### Steps to Match:
+##### Steps to Match:
 1. Use `list` to see all people.
 2. Note the ID numbers of the student and tutor (the numbers shown as `id: #1`, `id: #2`, etc.)
 3. Use the match command with both ID numbers
@@ -324,25 +326,25 @@ match 2 5
 ![match](images/match(1)UG.jpg)
 ![match](images/match(2)UG.jpg)
 
-### 📋 Matching Rules (Must ALL Be Met!)
+##### 📋 Matching Rules (Must ALL Be Met!)
 
 Before you can match a student and tutor, they must have compatible requirements:
-
-#### ✅ Rule 1: Same Subject
+ 
+###### ✅ Rule 1: Same Subject
 Subject must be **identical** (case-insensitive).
 
 **Examples:**
 - Student: Mathematics ✓ Tutor: Mathematics → Can match ✅
 - Student: Mathematics ✗ Tutor: English → Cannot match ❌
 
-#### ✅ Rule 2: Compatible Levels
+###### ✅ Rule 2: Compatible Levels
 The tutor's level range must **include** the student's level.
 
 **Examples:**
 - Student: Level 3 ✓ Tutor: Level 2-5 → Can match ✅ (3 is within 2-5)
 - Student: Level 1 ✗ Tutor: Level 3-6 → Cannot match ❌ (1 is not within 3-6)
 
-#### ✅ Rule 3: Overlapping Price Ranges
+###### ✅ Rule 3: Overlapping Price Ranges
 Their price ranges must have **at least some overlap**.
 
 **Examples:**
@@ -378,31 +380,32 @@ unmatch 2
 ### Scheduling a Tutoring Session
 After matching a student and tutor, you'll want to schedule their weekly lesson.
 
-### ⚠️ Session Requirements (MUST ALL Be Met!)
+#### ⚠️ Session Requirements (MUST ALL Be Met!)
 
 Before adding a session, verify:
 
-#### ✅ Requirement 1: Already Matched
+##### ✅ Requirement 1: Already Matched
 - The student and tutor **must be matched first**
 - You cannot schedule a session for unmatched people
 - Use `match` command before `sessionadd`
 
-#### ✅ Requirement 2: Subject Must Match BOTH Persons
+##### ✅ Requirement 2: Subject Must Match BOTH Persons
 - Session subject must be **identical** to both the student's and tutor's subject
 - Example: If Student studies Math and Tutor teaches Math → Session subject must be Math ✅
 - Example: If Student studies Math and Tutor teaches English → **Cannot add session** ❌
 
-#### ✅ Requirement 3: Price Must Be Within BOTH Price Ranges
+##### ✅ Requirement 3: Price Must Be Within BOTH Price Ranges
 - Session price must fall within **both** persons' acceptable ranges
 - Example: Student ($20-30) and Tutor ($25-40) → Session price must be $25-30 ✅
 - Example: Student ($20-30) and Tutor ($35-50) → **No valid session price** ❌
 
-#### ✅ Requirement 4: Valid Duration
+##### ✅ Requirement 4: Valid Duration
 - Duration must be between **00:01 and 24:00**
 - Cannot be 00:00 (zero duration)
 - Format: HH:mm (e.g., 01:30 for 1 hour 30 minutes)
 
 #### Adding a Session
+
 **Command structure:**
 ```
 sessionadd <INDEX> d/<DAY> t/<TIME> dur/<DURATION> sbj/<SUBJECT> p/<PRICE>
@@ -433,7 +436,7 @@ If you need to cancel or remove a scheduled session:
 sessiondelete <INDEX>
 ```
 
-**Delete the session for person #1:**
+**Delete the session for person at index 1:**
 ```
 sessiondelete 1
 ```
@@ -446,7 +449,7 @@ sessiondelete 1
 ### Editing Someone's Information
 When a tutor or student's details change (new phone number, moved house, changed rates), you can update their information.
 
-### ✏️ What You Can Edit
+#### ✏️ What You Can Edit
 
 | Field | Prefix | Example |
 |-------|--------|---------|
@@ -462,7 +465,7 @@ When a tutor or student's details change (new phone number, moved house, changed
 - You don't need to include fields you're not changing
 - At least one field must be provided
 
-### ❌ What You CANNOT Edit
+#### ❌ What You CANNOT Edit
 
 These fields are **permanent** and cannot be changed:
 
@@ -546,7 +549,7 @@ You can organize your tutor or student lists by price or level to find what you 
 sort <tutors/students> <CRITERIA (see below)> OR sort reset
 ```
 
-### Sorting Criteria
+#### Sorting Criteria
 
 | Criteria | What it does | Example |
 |----------|--------------|---------|
@@ -556,7 +559,7 @@ sort <tutors/students> <CRITERIA (see below)> OR sort reset
 | `l/ p/` | Sort by level first, then by price | `sort students l/ p/` |
 | `reset` | Remove ALL sorting and filtering | `sort reset` |
 
-### Single Criteria Sorting
+#### Single Criteria Sorting
 
 **Sort tutors by price (lowest to highest):**
 ```
@@ -568,7 +571,7 @@ sort tutors p/
 ```
 sort students l/
 ```
-### Multiple Criteria Sorting
+#### Multiple Criteria Sorting
 
 You can sort by two criteria - the first is primary, second breaks ties.
 
@@ -629,7 +632,7 @@ clear
 > * ❌ Delete ALL sessions permanently 
 > * ❌ **CANNOT BE UNDONE**
 
-### ✅ When to Use (Rarely!)
+#### ✅ When to Use (Rarely!)
 
 **Use `clear` only when:**
 - You're starting completely fresh (new agency, new school year)
